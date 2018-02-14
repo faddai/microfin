@@ -9,8 +9,8 @@ These instructions will get you a copy of the project up and running on your loc
 ### Prerequisites
 
 * [Composer](https://getcomposer.org/doc/00-intro.md)
+* [Bower](https://bower.io/)
 * \>= PHP 7.1
-* Laravel [Homestead](https://laravel.com/docs/5.5/homestead) or [Valet](https://laravel.com/docs/5.5/valet)
 
 ### Installing
 
@@ -25,6 +25,9 @@ cd microfin/
 
 # install the project's dependencies using Composer
 composer install
+
+# install frontend dependencies using Bower
+bower install
 
 # make a copy of the .env.example to configure the application 
 # for your local environment
@@ -43,8 +46,18 @@ Run the setup command to create a Super admin user for the application
 ```bash
 php artisan microfin:setup
 ```
+### Running the application
 
-End with an example of getting some data out of the system or using it for a little demo
+If your development environment is set up using 
+[Homestead](https://laravel.com/docs/5.5/homestead) or [Valet](https://laravel.com/docs/5.5/valet), please follow
+the guides that come with your chosen tool. 
+
+Otherwise, you can use the development server the ships with Laravel by running, from the project root:
+
+```bash
+php artisan serve
+```
+You can visit [http://localhot:8000](http://localhot:8000) to see the application in action.
 
 ## Running the tests
 
