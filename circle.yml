@@ -1,0 +1,14 @@
+machine:
+  timezone:
+    Africa/Accra
+
+  php:
+    version: 7.1.3
+
+dependencies:
+  override:
+    - composer install --no-interaction
+
+test:
+  override:
+    - vendor/bin/phpunit --verbose --debug

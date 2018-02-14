@@ -1,0 +1,29 @@
+{
+  "name": "intelekt-loan-system",
+  "version": "1.0.0",
+  "description": "A loan application system for financial institutions",
+  "moduleType": [
+    "amd"
+  ],
+  "authors": [
+    "Francis Addai"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "fontawesome": "~4.6.3",
+    "select2": "~4.0.3",
+    "animate.css": "daneden/animate.css#~3.5.2",
+    "bootstrap-datepicker": "^1.6.4",
+    "bootstrap-daterangepicker": "^2.1.24",
+    "numeral": "numeraljs#^2.0.4",
+    "jquery-stickytabs": "^1.2.1",
+    "dropzone": "^5.1.1"
+  }
+}
