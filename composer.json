@@ -6,7 +6,7 @@
     "type": "project",
     "require": {
         "php": ">=5.6.4",
-        "laravel/framework": "5.3.*",
+        "laravel/framework": "5.4.*",
         "doctrine/dbal": "^2.5",
         "barryvdh/laravel-debugbar": "^2.3",
         "laracasts/flash": "^2.0",
@@ -18,12 +18,13 @@
         "schuppo/password-strength": "^1.9",
         "league/csv": "^8.2",
         "maatwebsite/excel": "^2.1",
-        "barryvdh/laravel-dompdf": "^0.8.0"
+        "barryvdh/laravel-dompdf": "^0.8.0",
+        "laravel/tinker": "^1.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
         "mockery/mockery": "0.9.*",
-        "phpunit/phpunit": "~5.0",
+        "phpunit/phpunit": "~5.7",
         "symfony/css-selector": "3.1.*",
         "symfony/dom-crawler": "3.1.*",
         "phpmd/phpmd": "^2.4"
