@@ -80,7 +80,7 @@ class LoanRepaymentTest extends TestCase
             );
         });
 
-        $this->artisan('loan:recalibrate-missed-deductions');
+        $this->artisan('microfin:recalibrate-missed-deductions');
 
         self::assertEquals(
             '<span class="label label-success">Paid</span>',
@@ -123,7 +123,7 @@ class LoanRepaymentTest extends TestCase
                 dispatch(new AddLoanJob($this->request));
             });
 
-        $this->artisan('loan:recalibrate-missed-deductions');
+        $this->artisan('microfin:recalibrate-missed-deductions');
 
         self::assertCount(2, $client->loans);
         self::assertCount(1, $client->loans->first()->schedule->where('status', LoanRepayment::DEFAULTED));

@@ -33,7 +33,8 @@ class LoanTest extends TestCase
 
         self::assertCount(3, $loan->schedule);
 
-        $this->artisan('loan:repay', ['dueDate' => $loan->disbursed_at->addWeekdays($loan->repaymentPlan->number_of_days)]);
+        $this->artisan('microfin:repay', ['dueDate' => $loan->disbursed_at->addWeekdays
+        ($loan->repaymentPlan->number_of_days)]);
 
         $loan = $loan->fresh();
 
@@ -236,7 +237,7 @@ class LoanTest extends TestCase
         // overwrite Client account balance
         $loan->client->update(['account_balance' => 500]);
 
-        $this->artisan('loan:repay', ['dueDate' => $loan->schedule->first()->due_date]);
+        $this->artisan('microfin:repay', ['dueDate' => $loan->schedule->first()->due_date]);
 
         self::assertEquals(14000, $loan->fresh()->getBalance(false));
         self::assertEquals('Active', $loan->fresh()->getStatus());
@@ -284,7 +285,7 @@ class LoanTest extends TestCase
         $loan->client->update(['account_balance' => 500]);
 
         // repayment with amount in Client's account
-        $this->artisan('loan:repay', ['dueDate' => $loan->schedule->first()->due_date]);
+        $this->artisan('microfin:repay', ['dueDate' => $loan->schedule->first()->due_date]);
 
         self::assertEquals(15000, $loan->fresh()->getBalance(false));
 
@@ -292,7 +293,7 @@ class LoanTest extends TestCase
         $loan->client->update(['account_balance' => 15000]);
 
         $loan->schedule->each(function (LoanRepayment $repayment) {
-            $this->artisan('loan:repay', ['dueDate' => $repayment->due_date]);
+            $this->artisan('microfin:repay', ['dueDate' => $repayment->due_date]);
         });
 
         $loan = $loan->fresh();

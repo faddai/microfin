@@ -89,10 +89,10 @@ class AddLoanStatementEntryJobTest extends TestCase
         self::assertEquals(-10000, $loan->statement->entries->first()->balance);
 
         // loan was disbursed in the past so, let's play a little catchup
-        $this->artisan('loan:recalibrate-missed-deductions');
+        $this->artisan('microfin:recalibrate-missed-deductions');
 
         // post accrued interest to loan statement
-        $this->artisan('loan:post-receivables-to-loan-statement');
+        $this->artisan('microfin:post-receivables-to-loan-statement');
 
         // add a deposit to trigger a deduction
         $this->request->replace(factory(ClientTransaction::class)->make(['cr' => 2400])->toArray());
@@ -157,10 +157,10 @@ class AddLoanStatementEntryJobTest extends TestCase
         self::assertEquals(-18000, $loan->statement->entries->first()->balance);
 
         // loan was disbursed in the past so, let's play a little catchup
-        $this->artisan('loan:recalibrate-missed-deductions');
+        $this->artisan('microfin:recalibrate-missed-deductions');
 
         // post accrued interest and fees to loan statement
-        $this->artisan('loan:post-receivables-to-loan-statement', ['--include-matured-loans' => true]);
+        $this->artisan('microfin:post-receivables-to-loan-statement', ['--include-matured-loans' => true]);
 
         $loan = $loan->fresh();
 
@@ -202,7 +202,7 @@ class AddLoanStatementEntryJobTest extends TestCase
         // Posting an entry to the loan statement should be idempotent
         collect(range(1, 3))
             ->each(function () {
-                $this->artisan('loan:post-receivables-to-loan-statement');
+                $this->artisan('microfin:post-receivables-to-loan-statement');
             });
 
         self::assertCount(1, LoanStatementEntry::all());

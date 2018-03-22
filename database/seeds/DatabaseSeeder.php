@@ -19,7 +19,8 @@ class DatabaseSeeder extends Seeder
         $this->call(Setup\BusinessSectorsTableSeeder::class);
         $this->call(Setup\ZonesTableSeeder::class);
         $this->call(Setup\RolesAndPermissionsTablesSeeder::class);
-//        $this->call(Setup\LoanProductsTableSeeder::class);
-//        $this->call(Setup\FeesTableSeeder::class);
+        $this->call(Setup\LedgersAndLedgerCategoriesTableSeeder::class);
+        $this->call(Setup\LoanProductsTableSeeder::class);
+        $this->call(Setup\FeesTableSeeder::class);
     }
 }

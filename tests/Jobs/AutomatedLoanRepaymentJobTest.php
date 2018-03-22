@@ -34,7 +34,7 @@ class AutomatedLoanRepaymentJobTest extends TestCase
         self::assertNotNull($loan->schedule);
         self::assertFalse($loan->isRunning());
 
-        $this->artisan('loan:recalibrate-missed-deductions');
+        $this->artisan('microfin:recalibrate-missed-deductions');
 
         self::assertCount(0, $loan->payments);
     }

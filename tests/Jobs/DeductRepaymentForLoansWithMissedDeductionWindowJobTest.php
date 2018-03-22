@@ -202,7 +202,7 @@ class DeductRepaymentForLoansWithMissedDeductionWindowJobTest extends TestCase
 
         dispatch(new AddClientWithdrawalJob($this->request, $loan->client));
 
-        $this->artisan('loan:recalibrate-missed-deductions');
+        $this->artisan('microfin:recalibrate-missed-deductions');
 
         $loan = $loan->fresh();
 

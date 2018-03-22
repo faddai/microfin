@@ -117,7 +117,7 @@ class AddClientDepositJobTest extends TestCase
 
         // add info to create transaction
         $this->request->merge([
-            'ledger_id' => Ledger::where('name', 'Cavmount Bank - 0800000293603')->first()->id,
+            'ledger_id' => Ledger::where('name', 'Cavmount Bank - 90897787')->first()->id,
         ]);
 
         $deposit = dispatch(new AddClientDepositJob(

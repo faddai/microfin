@@ -24,13 +24,14 @@ class LaratrustSetupTables extends Migration
         Schema::create('role_user', function (Blueprint $table) {
             $table->integer('user_id')->unsigned();
             $table->integer('role_id')->unsigned();
+            $table->string('user_type');
 
             $table->foreign('user_id')->references('id')->on('users')
                 ->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('role_id')->references('id')->on('roles')
                 ->onUpdate('cascade')->onDelete('cascade');
 
-            $table->primary(['user_id', 'role_id']);
+            $table->primary(['user_id', 'role_id', 'user_type']);
         });
 
         // Create table for storing permissions
@@ -53,6 +54,20 @@ class LaratrustSetupTables extends Migration
                 ->onUpdate('cascade')->onDelete('cascade');
 
             $table->primary(['permission_id', 'role_id']);
+        });
+
+        // Create table for associating roles to users (Many-to-Many)
+        Schema::create('permission_user', function (Blueprint $table) {
+            $table->integer('user_id')->unsigned();
+            $table->integer('permission_id')->unsigned();
+            $table->string('user_type');
+
+            $table->foreign('user_id')->references('id')->on('users')
+                ->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('permission_id')->references('id')->on('permissions')
+                ->onUpdate('cascade')->onDelete('cascade');
+
+            $table->primary(['user_id', 'permission_id', 'user_type']);
         });
     }
 

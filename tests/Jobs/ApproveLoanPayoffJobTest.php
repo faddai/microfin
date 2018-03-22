@@ -45,7 +45,7 @@ class ApproveLoanPayoffJobTest extends TestCase
 
         // repayments for the first 3 months
         $loan->schedule->take(3)->each(function (LoanRepayment $repayment) {
-            $this->artisan('loan:repay', ['dueDate' => $repayment->due_date]);
+            $this->artisan('microfin:repay', ['dueDate' => $repayment->due_date]);
         });
 
         // active & running loan
@@ -84,7 +84,7 @@ class ApproveLoanPayoffJobTest extends TestCase
         // repayments for the first 3 months
         $loan->schedule->take(3)
             ->each(function (LoanRepayment $repayment) {
-                $this->artisan('loan:repay', ['dueDate' => $repayment->due_date]);
+                $this->artisan('microfin:repay', ['dueDate' => $repayment->due_date]);
             })
             ->each(function (LoanRepayment $repayment) {
                 self::assertEquals(LoanRepayment::FULL_PAYMENT, $repayment->fresh()->status);
@@ -138,7 +138,7 @@ class ApproveLoanPayoffJobTest extends TestCase
 
         $loan->schedule
             ->each(function (LoanRepayment $repayment) {
-                $this->artisan('loan:repay', ['dueDate' => $repayment->due_date]);
+                $this->artisan('microfin:repay', ['dueDate' => $repayment->due_date]);
             })
             ->each(function (LoanRepayment $repayment, $key) {
 
@@ -235,7 +235,7 @@ class ApproveLoanPayoffJobTest extends TestCase
         $loan->client()->update(['account_balance' => 290 * 2]); // deposit enough funds to cover 2 repayments
 
         $loan->schedule->take(2)->each(function (LoanRepayment $repayment) {
-            $this->artisan('loan:repay', ['dueDate' => $repayment->due_date]);
+            $this->artisan('microfin:repay', ['dueDate' => $repayment->due_date]);
         });
 
         $loan = $loan->fresh();

@@ -200,6 +200,7 @@ return [
         Schuppo\PasswordStrength\PasswordStrengthServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
+        Laravel\Tinker\TinkerServiceProvider::class,
 
         //
 

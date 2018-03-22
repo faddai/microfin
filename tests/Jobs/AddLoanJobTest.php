@@ -232,7 +232,7 @@ class AddLoanJobTest extends TestCase
 
         self::assertEquals(
             Carbon::today()->addWeekdays($loan->repaymentPlan->number_of_days * 2),
-            $loan->maturity_date
+            $loan->maturity_date->startOfDay()
         );
     }
 

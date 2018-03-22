@@ -42,11 +42,11 @@ class ReducingBalanceInterestCalculationStrategyTest extends TestCase
         self::assertEquals(130.23, $schedule->first()->principal, '', 0.1);
         self::assertEquals(70.83, $schedule->first()->fees, '', 0.1);
         self::assertEquals(
-            $loan->created_at->copy()->addWeekdays($repaymentPlan->number_of_days)->startOfDay(),
+            $loan->created_at->copy()->addWeekdays($repaymentPlan->number_of_days),
             $schedule->first()->due_date
         );
         self::assertEquals(
-            $loan->created_at->copy()->addWeekdays($repaymentPlan->number_of_days * 2)->startOfDay(),
+            $loan->created_at->copy()->addWeekdays($repaymentPlan->number_of_days * 2),
             $schedule->get(1)->due_date
         );
         self::assertEquals(1700, $loan->getTotalFees(false));
@@ -81,11 +81,11 @@ class ReducingBalanceInterestCalculationStrategyTest extends TestCase
         self::assertEquals(19.28, $schedule->first()->principal, '', 0.1);
         self::assertEquals(17.71, $schedule->first()->fees, '', 0.1);
         self::assertEquals(
-            $loan->created_at->copy()->addWeekdays($repaymentPlan->number_of_days)->startOfDay(),
+            $loan->created_at->copy()->addWeekdays($repaymentPlan->number_of_days),
             $schedule->first()->due_date
         );
         self::assertEquals(
-            $loan->created_at->copy()->addWeekdays($repaymentPlan->number_of_days * 2)->startOfDay(),
+            $loan->created_at->copy()->addWeekdays($repaymentPlan->number_of_days * 2),
             $schedule->get(1)->due_date
         );
         self::assertEquals(1700, $loan->getTotalFees(false));

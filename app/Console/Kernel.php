@@ -38,17 +38,17 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule
-            ->command('loan:post-receivables-to-loan-statement')
+            ->command('microfin:post-receivables-to-loan-statement')
             ->weekdays()
             ->at('17:00');
 
         $schedule
-            ->command('loan:repay')
+            ->command('microfin:repay')
             ->weekdays()
             ->at('17:00');
 
         $schedule
-            ->command('loan:recalibrate-missed-deductions')
+            ->command('microfin:recalibrate-missed-deductions')
             ->weekdays()
             ->between('8:00', '17:00')
             ->when(function () {
@@ -57,7 +57,7 @@ class Kernel extends ConsoleKernel
             ->withoutOverlapping();
 
         $schedule
-            ->command('loan:accrue-daily-interest')
+            ->command('microfin:accrue-daily-interest')
             ->weekdays()
             ->at('17:00');
     }

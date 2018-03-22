@@ -374,7 +374,7 @@ class DeductLoanRepaymentAfterClientDepositTransactionTest extends TestCase
         self::assertEquals(60, $loan->schedule->first()->interest);
         self::assertEquals(666.67, $loan->schedule->first()->principal, '', 0.1);
 
-        $this->artisan('loan:recalibrate-missed-deductions');
+        $this->artisan('microfin:recalibrate-missed-deductions');
 
         $loan = $loan->fresh('payments', 'schedule');
 
@@ -434,7 +434,7 @@ class DeductLoanRepaymentAfterClientDepositTransactionTest extends TestCase
         dispatch(new AddLoanJob($this->request));
 
         // these are backdated loans, recalibrate
-        $this->artisan('loan:recalibrate-missed-deductions');
+        $this->artisan('microfin:recalibrate-missed-deductions');
 
         // credit Client's account
         $this->request->replace(
