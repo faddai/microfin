@@ -98,7 +98,7 @@ class RolesAndPermissionsTablesSeeder extends Seeder
 
     private function roleHasPermissions($rolePermissions)
     {
-        return array_key_exists('permissions', $rolePermissions) && empty($rolePermissions['permissions']);
+        return array_key_exists('permissions', $rolePermissions) && !empty($rolePermissions['permissions']);
     }
 
     /**
