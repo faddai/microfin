@@ -13,7 +13,6 @@ class ApproveLoanController extends Controller
 {
     public function approve(Request $request, Loan $loan)
     {
-        $reques
         try {
             dispatch(new ApproveLoanJob($request, $loan));
         } catch (\Exception $e) {
