@@ -31,7 +31,7 @@ class StraightLineInterestCalculationStrategyTest extends TestCase
 
         $this->request->merge($loan->toArray());
 
-        $loan = dispatch(new AddLoanJob($this->request));
+        $loan = $this->dispatch(new AddLoanJob($this->request));
 
         $schedule = $loan->schedule;
 
@@ -78,7 +78,7 @@ class StraightLineInterestCalculationStrategyTest extends TestCase
                 ->toArray()
         );
 
-        $loan = dispatch(new AddLoanJob($this->request));
+        $loan = $this->dispatch(new AddLoanJob($this->request));
 
         $schedule = $loan->schedule;
 
@@ -145,7 +145,7 @@ class StraightLineInterestCalculationStrategyTest extends TestCase
                 ->toArray()
         );
 
-        $loan = dispatch(new AddLoanJob($this->request));
+        $loan = $this->dispatch(new AddLoanJob($this->request));
 
         self::assertCount(5, $loan->schedule);
         self::assertEquals('2017-01-11', $loan->schedule->first()->due_date->format('Y-m-d'));
@@ -174,7 +174,7 @@ class StraightLineInterestCalculationStrategyTest extends TestCase
                 ->toArray()
         );
 
-        $loan = dispatch(new AddLoanJob($this->request));
+        $loan = $this->dispatch(new AddLoanJob($this->request));
 
         self::assertEquals($amount, $loan->schedule->sum('principal'));
     }

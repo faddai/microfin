@@ -59,14 +59,14 @@ class GetEffectiveLoanDeductionsJobTest extends TestCase
             ]);
 
         collect([$loan1, $loan2, $loan3])->each(function (Loan $loan) {
-            dispatch(new GenerateLoanRepaymentScheduleJob($loan));
+            $this->dispatch(new GenerateLoanRepaymentScheduleJob($loan));
         });
 
-        dispatch(new DeductRepaymentForLoansWithMissedDeductionWindowJob);
+        $this->dispatch(new DeductRepaymentForLoansWithMissedDeductionWindowJob);
 
         $this->request->merge(['disbursed_at' => Carbon::today()->subWeekday()]);
 
-        dispatch(new GetEffectiveLoanDeductionsJob($this->request));
+        $this->dispatch(new GetEffectiveLoanDeductionsJob($this->request));
 
         $loan1Schedule = LoanRepayment::schedule($loan1);
         $loan2Schedule = LoanRepayment::schedule($loan2);

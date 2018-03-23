@@ -52,7 +52,8 @@ class AddClientDepositJob
     {
         $this->request = $request;
         $this->client = $client;
-        $narration = $request->has('narration') ? $request->get('narration') : 'Client deposit - '. $this->client->account_number;
+        $narration = $request->filled('narration') ?
+            $request->get('narration') : 'Client deposit - '. $this->client->account_number;
         $this->nominal = $nominal;
 
         if ($this->request->user()->branch === null) {
@@ -109,7 +110,7 @@ class AddClientDepositJob
     private function saveDepositTransaction(): ClientTransaction
     {
         foreach ($this->transaction->getFillable() as $fillable) {
-            if ($this->request->has($fillable)) {
+            if ($this->request->filled($fillable)) {
                 $this->transaction->{$fillable} = $this->request->get($fillable);
             }
         }
@@ -126,6 +127,6 @@ class AddClientDepositJob
      */
     private function isValidCreditTransaction()
     {
-        return $this->request->has('cr') && $this->request->get('cr') > 0;
+        return $this->request->filled('cr') && $this->request->get('cr') > 0;
     }
 }

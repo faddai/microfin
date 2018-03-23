@@ -22,14 +22,17 @@ class ApproveLoanPayoffJobTest extends TestCase
                 ->toArray()
         );
 
-        return $this->approveAndDisburseLoan(dispatch(new AddLoanJob($this->request, null, false)), $this->request);
+        return $this->approveAndDisburseLoan(
+            $this->dispatch(new AddLoanJob($this->request, null, false)),
+            $this->request
+        );
     }
 
     private function payoffLoan(Loan $loan, array $data = [])
     {
         $this->request->replace(factory(LoanPayoff::class)->make($data)->toArray());
 
-        return dispatch(new AddLoanPayoffJob($this->request, $loan));
+        return $this->dispatch(new AddLoanPayoffJob($this->request, $loan));
     }
 
     public function test_that_a_paid_off_loan_ceases_being_an_active_loan()
@@ -53,7 +56,7 @@ class ApproveLoanPayoffJobTest extends TestCase
 
         $payoff = $this->payoffLoan($loan, ['principal' => 400, 'interest' => 180]);
 
-        $approved = dispatch(new ApproveLoanPayoffJob($this->request, $payoff));
+        $approved = $this->dispatch(new ApproveLoanPayoffJob($this->request, $payoff));
 
         $approvedPayoff = $approved->fresh();
 
@@ -105,7 +108,7 @@ class ApproveLoanPayoffJobTest extends TestCase
         self::assertEquals(0, $payoff->penalty);
         self::assertEquals(0, $payoff->fees);
 
-        $approved = dispatch(new ApproveLoanPayoffJob($this->request, $payoff));
+        $approved = $this->dispatch(new ApproveLoanPayoffJob($this->request, $payoff));
 
         self::assertTrue($approved->loan->isFullyPaid());
         self::assertFalse($approved->loan->isRunning()); // paid off loan ceases being active
@@ -171,7 +174,7 @@ class ApproveLoanPayoffJobTest extends TestCase
         self::assertEquals(200, $payoff->penalty);
         self::assertEquals(0, $payoff->fees);
 
-        $approved = dispatch(new ApproveLoanPayoffJob($this->request, $payoff));
+        $approved = $this->dispatch(new ApproveLoanPayoffJob($this->request, $payoff));
 
         self::assertTrue($approved->loan->isFullyPaid());
         self::assertEquals(270 + (180 + 200), $approved->loan->product->interestReceivableLedger->entries->sum('cr'));
@@ -192,7 +195,7 @@ class ApproveLoanPayoffJobTest extends TestCase
 
         $payoff = $this->payoffLoan($loan, ['principal' => 180, 'interest' => 500]);
 
-        dispatch(new ApproveLoanPayoffJob($this->request, $payoff));
+        $this->dispatch(new ApproveLoanPayoffJob($this->request, $payoff));
 
         // whatever account balance the client had before pay off should remain the same
         // realistically, a Client will have 0 balance prior to payoff
@@ -209,7 +212,7 @@ class ApproveLoanPayoffJobTest extends TestCase
 
         $payoff = $this->payoffLoan($loan, ['principal' => 180, 'interest' => 500]);
 
-        dispatch(new ApproveLoanPayoffJob($this->request, $payoff));
+        $this->dispatch(new ApproveLoanPayoffJob($this->request, $payoff));
 
         $loan = $loan->fresh();
 
@@ -252,7 +255,7 @@ class ApproveLoanPayoffJobTest extends TestCase
 
         $payoff = $this->payoffLoan($loan, ['principal' => 180, 'interest' => 500]);
 
-        dispatch(new ApproveLoanPayoffJob($this->request, $payoff));
+        $this->dispatch(new ApproveLoanPayoffJob($this->request, $payoff));
 
         $loan = $loan->fresh();
 

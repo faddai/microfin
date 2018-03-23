@@ -15,7 +15,7 @@ class LoanReportsController extends Controller
 {
     public function index()
     {
-        $reports = dispatch(new GetLoanReportListJob());
+        $reports = $this->dispatch(new GetLoanReportListJob());
 
         return view('dashboard.reports.loans.index', compact('reports'));
     }
@@ -28,7 +28,7 @@ class LoanReportsController extends Controller
 
         $sectors = BusinessSector::all();
 
-        $report = dispatch(new GetLoanReportJob($request, $report));
+        $report = $this->dispatch(new GetLoanReportJob($request, $report));
 
         return view('dashboard.reports.loans.show', compact('report', 'creditOfficers', 'loanTypes', 'sectors'));
     }
@@ -41,7 +41,7 @@ class LoanReportsController extends Controller
             'filename' => sprintf('%s-%s', $report, Carbon::today()->format('Y-m-d'))
         ];
 
-        $report = dispatch(new GetLoanReportJob($request, $report));
+        $report = $this->dispatch(new GetLoanReportJob($request, $report));
 
         return $this->export($request, $report, $options);
     }

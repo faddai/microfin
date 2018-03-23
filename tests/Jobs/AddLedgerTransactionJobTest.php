@@ -5,13 +5,11 @@ use App\Entities\Accounting\LedgerEntry;
 use App\Entities\Accounting\LedgerTransaction;
 use App\Jobs\AddLedgerTransactionJob;
 use Carbon\Carbon;
-use Illuminate\Foundation\Bus\DispatchesJobs;
 use Ramsey\Uuid\Uuid;
 
 
 class AddLedgerTransactionJobTest extends TestCase
 {
-    use DispatchesJobs;
 
     public function test_able_to_create_a_transaction_with_a_valid_transaction_id()
     {

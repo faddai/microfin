@@ -30,7 +30,7 @@ class AddClientJobTest extends TestCase
      */
     public function test_create_client_without_specifying_client_type_does_not_work()
     {
-        dispatch(new AddClientJob($this->request));
+        $this->dispatch(new AddClientJob($this->request));
     }
 
     /**
@@ -44,7 +44,7 @@ class AddClientJobTest extends TestCase
             'lastname' => faker()->lastName,
         ]);
 
-        $client = dispatch(new AddClientJob($this->request));
+        $client = $this->dispatch(new AddClientJob($this->request));
 
         self::assertInstanceOf(Client::class, $client);
         self::assertInstanceOf(IndividualClient::class, $client->clientable);
@@ -62,7 +62,7 @@ class AddClientJobTest extends TestCase
             'date_of_incorporation' => faker()->date(),
         ]);
 
-        $client = dispatch(new AddClientJob($this->request));
+        $client = $this->dispatch(new AddClientJob($this->request));
 
         self::assertInstanceOf(Client::class, $client);
         self::assertInstanceOf(CorporateClient::class, $client->clientable);
@@ -80,13 +80,13 @@ class AddClientJobTest extends TestCase
             'date_of_incorporation' => faker()->date(),
         ]);
 
-        $client = dispatch(new AddClientJob($this->request));
+        $client = $this->dispatch(new AddClientJob($this->request));
 
         $companyName = 'Acme Inc.';
         $this->request->merge(['company_name' => $companyName]);
 
         // update client
-        $updatedClient = dispatch(new AddClientJob($this->request, $client));
+        $updatedClient = $this->dispatch(new AddClientJob($this->request, $client));
 
         self::assertInstanceOf(CorporateClient::class, $updatedClient->clientable);
         self::assertEquals($companyName, $updatedClient->clientable->company_name);
@@ -104,13 +104,13 @@ class AddClientJobTest extends TestCase
             'lastname' => faker()->lastName,
         ]);
 
-        $client = dispatch(new AddClientJob($this->request));
+        $client = $this->dispatch(new AddClientJob($this->request));
 
         $firstname = 'Franco';
         $lastname = 'Kiyones';
         $this->request->merge(compact('firstname', 'lastname'));
 
-        $updatedClient = dispatch(new AddClientJob($this->request, $client));
+        $updatedClient = $this->dispatch(new AddClientJob($this->request, $client));
 
         self::assertInstanceOf(IndividualClient::class, $client->clientable);
         self::assertEquals($firstname, $updatedClient->clientable->firstname);
@@ -126,7 +126,7 @@ class AddClientJobTest extends TestCase
             'lastname'  => 'Addai',
         ]);
 
-        $client = dispatch(new AddClientJob($this->request));
+        $client = $this->dispatch(new AddClientJob($this->request));
 
         self::assertEquals('Francis Addai', $client->name);
     }
@@ -139,7 +139,7 @@ class AddClientJobTest extends TestCase
             'lastname'  => 'Addai',
         ]);
 
-        $client = dispatch(new AddClientJob($this->request));
+        $client = $this->dispatch(new AddClientJob($this->request));
 
         self::assertEquals('Francis Addai', $client->name);
 
@@ -147,7 +147,7 @@ class AddClientJobTest extends TestCase
             'lastname' => 'Agyei'
         ]);
 
-        $updatedClient = dispatch(new AddClientJob($this->request, $client));
+        $updatedClient = $this->dispatch(new AddClientJob($this->request, $client));
 
         self::assertEquals('Francis Agyei', $updatedClient->name);
         self::assertNotEquals('Francis Addai', $updatedClient->name);
@@ -161,7 +161,7 @@ class AddClientJobTest extends TestCase
             'lastname'  => 'Akwasi-Addai',
         ]);
 
-        $client = dispatch(new AddClientJob($this->request));
+        $client = $this->dispatch(new AddClientJob($this->request));
 
         self::assertEquals('FRANCIS AKWASI-ADDAI', $client->getFullName());
         self::assertEquals('Francis Akwasi-Addai', $client->getFullName(false));
@@ -176,7 +176,7 @@ class AddClientJobTest extends TestCase
             'photo' => new \Illuminate\Http\UploadedFile($filepath, 'photo.jpeg', 121212, null, true),
         ]);
 
-        $client = dispatch(new AddClientJob($this->request));
+        $client = $this->dispatch(new AddClientJob($this->request));
 
         self::assertNotEmpty($client->photo);
     }

@@ -53,7 +53,7 @@ class AddLoanProductJob
     private function saveOrUpdateProduct()
     {
         foreach ($this->product->getFillable() as $fillable) {
-            if ($this->request->has($fillable)) {
+            if ($this->request->filled($fillable)) {
                 $this->product->{$fillable} = $this->request->get($fillable);
             }
         }

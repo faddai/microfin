@@ -5,9 +5,13 @@ namespace App\Console\Commands;
 use App\Jobs\AutomatedLoanRepaymentJob;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
+use Illuminate\Foundation\Bus\DispatchesJobs;
 
 class DeductLoanRepaymentCommand extends Command
 {
+
+    use DispatchesJobs;
+
     /**
      * The name and signature of the console command.
      *
@@ -33,6 +37,6 @@ class DeductLoanRepaymentCommand extends Command
 
         $dueDate = $dueDate ? Carbon::parse($dueDate) : Carbon::today();
 
-        dispatch(new AutomatedLoanRepaymentJob($dueDate));
+        $this->dispatch(new AutomatedLoanRepaymentJob($dueDate));
     }
 }

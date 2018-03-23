@@ -26,7 +26,7 @@ class LoanRepaymentTest extends TestCase
                 'client_id' => factory(Client::class)->create(['account_balance' => 400])->id,
             ]);
 
-        $repayments = dispatch(new GenerateLoanRepaymentScheduleJob($loan));
+        $repayments = $this->dispatch(new GenerateLoanRepaymentScheduleJob($loan));
 
         $firstRepayment = $repayments->first();
 
@@ -48,7 +48,7 @@ class LoanRepaymentTest extends TestCase
                 'client_id' => factory(Client::class, 'individual')->create(['account_balance' => 400])->id,
             ]);
 
-        $repayments = dispatch(new GenerateLoanRepaymentScheduleJob($loan));
+        $repayments = $this->dispatch(new GenerateLoanRepaymentScheduleJob($loan));
 
         $firstRepayment = $repayments->first();
 
@@ -69,7 +69,7 @@ class LoanRepaymentTest extends TestCase
                 'interest_calculation_strategy' => Loan::STRAIGHT_LINE_STRATEGY,
             ]);
 
-        $schedule = dispatch(new GenerateLoanRepaymentScheduleJob($loan));
+        $schedule = $this->dispatch(new GenerateLoanRepaymentScheduleJob($loan));
 
         self::assertEquals(373.33, $schedule->first()->amount, '', 0.1);
 
@@ -120,7 +120,7 @@ class LoanRepaymentTest extends TestCase
 
                 $this->request->replace($loan->toArray());
 
-                dispatch(new AddLoanJob($this->request));
+                $this->dispatch(new AddLoanJob($this->request));
             });
 
         $this->artisan('microfin:recalibrate-missed-deductions');

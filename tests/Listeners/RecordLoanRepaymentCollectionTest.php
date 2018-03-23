@@ -20,7 +20,7 @@ class RecordLoanRepaymentCollectionTest extends TestCase
 
         $this->approveAndDisburseLoan($loan, $this->request);
 
-        dispatch(new AutomatedLoanRepaymentJob($loan->schedule->first()->due_date));
+        $this->dispatch(new AutomatedLoanRepaymentJob($loan->schedule->first()->due_date));
 
         self::assertCount(1, LoanRepaymentCollection::all());
         self::assertEquals(133.33, LoanRepaymentCollection::first()->amount, '', 0.1);
@@ -42,14 +42,14 @@ class RecordLoanRepaymentCollectionTest extends TestCase
 
         $client->update(['account_balance' => 100]);
 
-        dispatch(new AutomatedLoanRepaymentJob($loan->schedule->first()->due_date));
+        $this->dispatch(new AutomatedLoanRepaymentJob($loan->schedule->first()->due_date));
 
         self::assertCount(1, LoanRepaymentCollection::all());
         self::assertEquals(100, LoanRepaymentCollection::first()->amount);
 
         $client->increment('account_balance', 100);
 
-        dispatch(new AutomatedLoanRepaymentJob($loan->schedule->first()->due_date));
+        $this->dispatch(new AutomatedLoanRepaymentJob($loan->schedule->first()->due_date));
 
         self::assertCount(2, LoanRepaymentCollection::all());
         self::assertEquals(33.33, LoanRepaymentCollection::find(2)->amount, '', 0.1);

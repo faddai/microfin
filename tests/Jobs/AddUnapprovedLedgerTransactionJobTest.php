@@ -17,7 +17,7 @@ class AddUnapprovedLedgerTransactionJobTest extends TestCase
 
         $this->request->merge(compact('entries'));
 
-        $transaction = dispatch(new AddUnapprovedLedgerTransactionJob($this->request));
+        $transaction = $this->dispatch(new AddUnapprovedLedgerTransactionJob($this->request));
 
         self::assertInstanceOf(UnapprovedLedgerTransaction::class, $transaction);
     }

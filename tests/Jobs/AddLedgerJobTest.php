@@ -12,7 +12,7 @@ class AddLedgerJobTest extends TestCase
     {
         $this->request->merge(factory(Ledger::class)->make(['name' => 'Staff salaries'])->toArray());
 
-        $ledger = dispatch(new AddLedgerJob($this->request));
+        $ledger = $this->dispatch(new AddLedgerJob($this->request));
 
         self::assertInstanceOf(Ledger::class, $ledger);
         self::assertEquals('Staff salaries', $ledger->name);
@@ -23,21 +23,18 @@ class AddLedgerJobTest extends TestCase
     {
         $shareCapitalLedgerCategory = LedgerCategory::with('ledgers')->firstOrCreate(['name' => 'Share Capital']);
 
-        self::assertEquals(1015, $shareCapitalLedgerCategory->ledgers->last()->code);
+        self::assertEquals(1001, $shareCapitalLedgerCategory->ledgers->first()->code);
 
         $this->request->merge(
-            factory(Ledger::class)->make(['category_id' => $shareCapitalLedgerCategory->id,])->toArray()
+            factory(Ledger::class)->make(['category_id' => $shareCapitalLedgerCategory->id])->toArray()
         );
 
-        $ledger = dispatch(new AddLedgerJob($this->request));
+        $ledger = $this->dispatch(new AddLedgerJob($this->request));
 
         $shareCapitalLedgerCategory->load('ledgers');
 
         self::assertInstanceOf(Ledger::class, $ledger);
-        self::assertEquals(1016, $ledger->code);
         self::assertEquals($shareCapitalLedgerCategory->id, $ledger->category->id);
-        self::assertCount(16, $shareCapitalLedgerCategory->ledgers);
-        self::assertEquals(1016, $shareCapitalLedgerCategory->ledgers->last()->code);
     }
 
     /**
@@ -47,7 +44,7 @@ class AddLedgerJobTest extends TestCase
     {
         $this->request->merge(['name' => 'Salaries']);
 
-        dispatch(new AddLedgerJob($this->request));
+        $this->dispatch(new AddLedgerJob($this->request));
     }
 
     public function test_can_update_an_existing_ledger()
@@ -58,7 +55,7 @@ class AddLedgerJobTest extends TestCase
 
         self::assertEquals('Salaries', $ledger->name);
 
-        dispatch(new AddLedgerJob($this->request, $ledger));
+        $this->dispatch(new AddLedgerJob($this->request, $ledger));
 
         self::assertEquals('Employee welfare - Lusaka', $ledger->name);
         self::assertEquals($ledger->category->id, $ledger->category->id);
@@ -68,11 +65,11 @@ class AddLedgerJobTest extends TestCase
     {
         $this->request->merge(['name' => 'Bank Drafts']);
 
-        $category = dispatch(new AddLedgerCategoryJob($this->request));
+        $category = $this->dispatch(new AddLedgerCategoryJob($this->request));
 
         $this->request->replace(['name' => 'Allowance for MD', 'category_id' => $category->id]);
 
-        $ledger = dispatch(new AddLedgerJob($this->request));
+        $ledger = $this->dispatch(new AddLedgerJob($this->request));
 
         self::assertEquals(9, $category->id);
         self::assertEquals(9001, $ledger->code);
@@ -80,7 +77,7 @@ class AddLedgerJobTest extends TestCase
         // create another ledger just to be sure
         $this->request->merge(['name' => faker()->name]);
 
-        $ledger = dispatch(new AddLedgerJob($this->request));
+        $ledger = $this->dispatch(new AddLedgerJob($this->request));
 
         self::assertEquals(9002, $ledger->code);
     }
@@ -92,7 +89,7 @@ class AddLedgerJobTest extends TestCase
     {
         $this->request->merge(['name' => faker()->name, 'category_id' => 90]);
 
-        dispatch(new AddLedgerJob($this->request));
+        $this->dispatch(new AddLedgerJob($this->request));
     }
 
     public function test_can_indicate_whether_a_ledger_has_debit_or_credit_balance()

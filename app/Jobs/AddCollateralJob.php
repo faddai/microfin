@@ -40,12 +40,12 @@ class AddCollateralJob
     {
         $collateral = new Collateral(['loan_id' => $this->loan->id]);
 
-        if ($this->request->has('collateral_id')) {
+        if ($this->request->filled('collateral_id')) {
             $collateral = Collateral::find($this->request->get('collateral_id'));
         }
 
         foreach ($collateral->getFillable() as $fillable) {
-            if ($this->request->has($fillable)) {
+            if ($this->request->filled($fillable)) {
                 $collateral->{$fillable} = $this->request->get($fillable);
             }
         }

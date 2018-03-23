@@ -13,10 +13,14 @@ use App\Entities\Fee;
 use App\Entities\LoanRepayment;
 use App\Events\LoanRepaymentDeductedEvent;
 use App\Jobs\AddLedgerTransactionJob;
+use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Http\Request;
 
 class PostRepaymentDeductionToGeneralLedger
 {
+
+    use DispatchesJobs;
+
     /**
      * @var float
      */
@@ -112,7 +116,7 @@ class PostRepaymentDeductionToGeneralLedger
                 $this->feesPaid -= $feeDeducted;
             });
 
-        dispatch(new AddLedgerTransactionJob(new Request([
+        $this->dispatch(new AddLedgerTransactionJob(new Request([
             'branch_id' => $this->currentDeduction->loan->createdBy->branch->id,
             'entries' => $entries,
             'loan_id' => $this->currentDeduction->loan->id

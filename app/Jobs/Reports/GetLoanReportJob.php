@@ -3,12 +3,16 @@
 namespace App\Jobs\Reports;
 
 use App\Exceptions\ReportJobClassNotDefinedException;
+use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
 class GetLoanReportJob
 {
+
+    use DispatchesJobs;
+
     /**
      * @var Request
      */
@@ -58,7 +62,7 @@ class GetLoanReportJob
             return $object->{$method}();
         }
 
-        return dispatch(new $job($this->request));
+        return $this->dispatch(new $job($this->request));
     }
 
     private function isReportDownloadRequest()

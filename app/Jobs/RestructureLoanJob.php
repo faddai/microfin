@@ -4,10 +4,14 @@ namespace App\Jobs;
 
 use App\Entities\Loan;
 use Carbon\Carbon;
+use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Http\Request;
 
 class RestructureLoanJob
 {
+
+    use DispatchesJobs;
+
     /**
      * @var Request
      */
@@ -40,7 +44,7 @@ class RestructureLoanJob
     public function handle()
     {
         // create loan
-        $loanRestructure = dispatch(new AddLoanJob($this->request));
+        $loanRestructure = $this->dispatch(new AddLoanJob($this->request));
 
         // update existing loan to flag it as restructured
         $this->originalLoan->forceFill([

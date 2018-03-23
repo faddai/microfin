@@ -6,12 +6,13 @@ use App\Jobs\AddUserJob;
 use Carbon\Carbon;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Http\Request;
 use Illuminate\Queue\InteractsWithQueue;
 
 class RecordUserLastSuccessfulLogin implements ShouldQueue
 {
-    use InteractsWithQueue;
+    use InteractsWithQueue, DispatchesJobs;
 
     /**
      * Handle the event.
@@ -20,6 +21,6 @@ class RecordUserLastSuccessfulLogin implements ShouldQueue
      */
     public function handle(Login $event)
     {
-        dispatch(new AddUserJob(new Request(['last_login' => Carbon::now()]), $event->user));
+        $this->dispatch(new AddUserJob(new Request(['last_login' => Carbon::now()]), $event->user));
     }
 }

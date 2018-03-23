@@ -75,7 +75,7 @@ class AddLoanJob
             $this->addOrUpdateLoan();
 
             // generate repayment schedule
-            dispatch(new GenerateLoanRepaymentScheduleJob($this->loan));
+            dispatch_now(new GenerateLoanRepaymentScheduleJob($this->loan));
 
             if ($this->sendEmailNotification) {
                 $this->isANewLoan && event(new LoanCreatedEvent($this->loan));
@@ -88,14 +88,14 @@ class AddLoanJob
     private function addOrUpdateLoan()
     {
         // a client is required for creating loans
-        if (! $this->loan->exists && ! $this->request->has('client_id')) {
+        if (! $this->loan->exists && ! $this->request->filled('client_id')) {
             throw new BadRequestHttpException('A client is required to create a loan');
         }
 
         $client = $this->loan->exists ? $this->loan->client : Client::find($this->request->get('client_id'));
 
         foreach ($this->loan->getFillable() as $fillable) {
-            if ($this->request->has($fillable)) {
+            if ($this->request->filled($fillable)) {
                 $this->loan->{$fillable} = $this->request->get($fillable);
             }
         }
@@ -127,7 +127,7 @@ class AddLoanJob
 
             $guarantorRequestData = new Request($guarantor);
 
-            return dispatch(new AddGuarantorJob($guarantorRequestData, $this->loan));
+            return dispatch_now(new AddGuarantorJob($guarantorRequestData, $this->loan));
         });
     }
 
@@ -140,7 +140,7 @@ class AddLoanJob
 
             $collateralRequestData = new Request($collateral);
 
-            return dispatch(new AddCollateralJob($collateralRequestData, $this->loan));
+            return dispatch_now(new AddCollateralJob($collateralRequestData, $this->loan));
 
         });
     }
@@ -181,8 +181,8 @@ class AddLoanJob
      */
     private function requestHasGuarantor()
     {
-        return $this->request->has('guarantors') &&
-            $this->request->has('guarantors.*.name') &&
+        return $this->request->filled('guarantors') &&
+            $this->request->filled('guarantors.*.name') &&
             $this->request->get('guarantors')[0]['name'];
     }
 
@@ -191,8 +191,8 @@ class AddLoanJob
      */
     private function requestHasCollateral()
     {
-        return $this->request->has('collaterals') &&
-            $this->request->has('collaterals.*.label') &&
+        return $this->request->filled('collaterals') &&
+            $this->request->filled('collaterals.*.label') &&
             $this->request->get('collaterals')[0]['label'];
     }
 
@@ -201,7 +201,7 @@ class AddLoanJob
      */
     private function requestHasFees()
     {
-        return $this->request->has('fees') && $this->request->has('fees.*.rate');
+        return $this->request->filled('fees') && $this->request->filled('fees.*.rate');
     }
 
     /**

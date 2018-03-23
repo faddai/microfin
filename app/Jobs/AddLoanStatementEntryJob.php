@@ -50,7 +50,7 @@ class AddLoanStatementEntryJob
     public function handle()
     {
         foreach ($this->entry->getFillable() as $fillable) {
-            if ($this->request->has($fillable)) {
+            if ($this->request->filled($fillable)) {
                 $this->entry->{$fillable} = $this->request->get($fillable);
             }
         }

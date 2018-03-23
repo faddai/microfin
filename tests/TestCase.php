@@ -14,11 +14,15 @@ use App\Jobs\ApproveLoanJob;
 use App\Jobs\DisburseLoanJob;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Http\Request;
 
 
 abstract class TestCase extends Illuminate\Foundation\Testing\TestCase
 {
+
+    use DispatchesJobs;
+
     /**
      * The base URL to use while testing the application.
      *
@@ -129,7 +133,7 @@ abstract class TestCase extends Illuminate\Foundation\Testing\TestCase
 
         ! $request->user() && $this->setAuthenticatedUserForRequest();
 
-        return dispatch(new DisburseLoanJob($request, dispatch(new ApproveLoanJob($request, $loan))));
+        return $this->dispatch(new DisburseLoanJob($request, $this->dispatch(new ApproveLoanJob($request, $loan))));
     }
 
     /**

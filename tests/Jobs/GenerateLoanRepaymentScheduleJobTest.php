@@ -30,7 +30,7 @@ class GenerateLoanRepaymentScheduleJobTest extends TestCase
 
         list($monthlyInterest, $totalInterest, $totalLoanAmount) = $this->getLoan($plan);
 
-        $loan = dispatch(new AddLoanJob($this->request));
+        $loan = $this->dispatch(new AddLoanJob($this->request));
 
         $repaymentAmount = $totalLoanAmount / $loan->getNumberOfRepayments();
 
@@ -58,7 +58,7 @@ class GenerateLoanRepaymentScheduleJobTest extends TestCase
                 ->toArray()
             );
 
-        $loan = dispatch(new AddLoanJob($this->request));
+        $loan = $this->dispatch(new AddLoanJob($this->request));
 
         self::assertEquals(
             $disburseAt->copy()->addWeekdays($loan->repaymentPlan->number_of_days + 3),
@@ -74,7 +74,7 @@ class GenerateLoanRepaymentScheduleJobTest extends TestCase
     {
         list($monthlyInterest, $totalInterest, $totalLoanAmount) = $this->getLoan();
 
-        $loan = dispatch(new AddLoanJob($this->request));
+        $loan = $this->dispatch(new AddLoanJob($this->request));
 
         $repaymentAmount = $totalLoanAmount / $loan->getNumberOfRepayments();
         $principal = $repaymentAmount - $monthlyInterest;

@@ -15,7 +15,7 @@ class LoanSearchJobTest extends TestCase
 
         $this->request->merge(['status' => Loan::PENDING]);
 
-        $loans = dispatch(new LoanSearchJob($this->request));
+        $loans = $this->dispatch(new LoanSearchJob($this->request));
 
         self::assertEquals(1, $loans->total());
     }
@@ -39,7 +39,7 @@ class LoanSearchJobTest extends TestCase
             'endDate' => Loan::first()->created_at,
         ]);
 
-        $loans = dispatch(new LoanSearchJob($this->request));
+        $loans = $this->dispatch(new LoanSearchJob($this->request));
 
         self::assertEquals(2, $loans->total());
     }
@@ -56,7 +56,7 @@ class LoanSearchJobTest extends TestCase
                 if ($i > 2) {
                     $loan->update(['credit_officer' => $creditOfficer->id]);
 
-                    dispatch(new ApproveLoanJob($this->request, $loan));
+                    $this->dispatch(new ApproveLoanJob($this->request, $loan));
                 }
             });
 
@@ -67,7 +67,7 @@ class LoanSearchJobTest extends TestCase
             'endDate' => Loan::first()->created_at,
         ]);
 
-        $loans = dispatch(new LoanSearchJob($this->request));
+        $loans = $this->dispatch(new LoanSearchJob($this->request));
 
         self::assertEquals(2, $loans->total());
     }
@@ -91,13 +91,13 @@ class LoanSearchJobTest extends TestCase
 
         $this->request->merge(['term' => '113001901']);
 
-        $loans = dispatch(new LoanSearchJob($this->request));
+        $loans = $this->dispatch(new LoanSearchJob($this->request));
 
         self::assertEquals(1, $loans->total());
 
         $this->request->merge(['term' => '110012901']);
 
-        $loans = dispatch(new LoanSearchJob($this->request));
+        $loans = $this->dispatch(new LoanSearchJob($this->request));
 
         self::assertEquals(1, $loans->total());
     }
@@ -120,7 +120,7 @@ class LoanSearchJobTest extends TestCase
 
         $this->request->merge(['term' => 'obed']);
 
-        $loans = dispatch(new LoanSearchJob($this->request));
+        $loans = $this->dispatch(new LoanSearchJob($this->request));
 
         self::assertEquals(1, $loans->total());
     }

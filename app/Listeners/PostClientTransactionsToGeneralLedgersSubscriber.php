@@ -11,6 +11,7 @@ use App\Entities\Accounting\Ledger;
 use App\Events\ClientWithdrawalEvent;
 use App\Events\DepositAddedEvent;
 use App\Jobs\AddLedgerTransactionJob;
+use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Http\Request;
 
 
@@ -24,6 +25,9 @@ use Illuminate\Http\Request;
  */
 class PostClientTransactionsToGeneralLedgersSubscriber
 {
+
+    use DispatchesJobs;
+
     /**
      * Post ledger entry for a withdrawal transaction
      *
@@ -41,7 +45,10 @@ class PostClientTransactionsToGeneralLedgersSubscriber
                 [
                     'dr' => $event->transaction->dr,
                     'narration' => $event->transaction->narration,
-                    'ledger_id' => Ledger::where('name', 'Current Account')->first()->id,
+
+                    // @todo add ability to configure this ledger
+                    // for now, going to hard code a ledger from the short term liability category
+                    'ledger_id' => Ledger::where('code', Ledger::CURRENT_ACCOUNT_CODE)->first()->id,
                 ]
             ]
         ]);
@@ -49,7 +56,7 @@ class PostClientTransactionsToGeneralLedgersSubscriber
         $request->merge($this->getTransactionDetails($event));
 
         // entries posted when there is a withdrawal
-        dispatch(new AddLedgerTransactionJob($request));
+        $this->dispatch(new AddLedgerTransactionJob($request));
     }
 
     /**
@@ -69,14 +76,17 @@ class PostClientTransactionsToGeneralLedgersSubscriber
                 [
                     'cr' => $event->transaction->cr,
                     'narration' => $event->transaction->narration,
-                    'ledger_id' => Ledger::where('name', 'Current Account')->first()->id,
+
+                    // @todo add ability to configure this ledger
+                    // for now, going to hard code a ledger from the short term liability category
+                    'ledger_id' => Ledger::where('code', Ledger::CURRENT_ACCOUNT_CODE)->first()->id,
                 ]
             ]
         ]);
 
         $request->merge($this->getTransactionDetails($event));
 
-        dispatch(new AddLedgerTransactionJob($request));
+        $this->dispatch(new AddLedgerTransactionJob($request));
     }
 
     /**

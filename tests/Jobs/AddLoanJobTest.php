@@ -61,7 +61,7 @@ class AddLoanJobTest extends TestCase
     {
         $this->expectsEvents(LoanCreatedEvent::class);
 
-        $loan = dispatch(new AddLoanJob($this->request));
+        $loan = $this->dispatch(new AddLoanJob($this->request));
 
         self::assertInstanceOf(Loan::class, $loan);
         self::assertEquals(2.45, $loan->rate);
@@ -84,7 +84,7 @@ class AddLoanJobTest extends TestCase
     {
         $this->expectsEvents(LoanCreatedEvent::class);
 
-        $loan = dispatch(new AddLoanJob($this->request));
+        $loan = $this->dispatch(new AddLoanJob($this->request));
 
         self::assertInstanceOf(User::class, $loan->createdBy);
         self::assertNotNull($loan->createdBy->getFullName());
@@ -92,7 +92,7 @@ class AddLoanJobTest extends TestCase
 
     public function test_loan_is_created_with_status_set_to_pending()
     {
-        $loan = dispatch(new AddLoanJob($this->request));
+        $loan = $this->dispatch(new AddLoanJob($this->request));
 
         self::assertEquals(Loan::PENDING, $loan->status);
     }
@@ -105,7 +105,7 @@ class AddLoanJobTest extends TestCase
 
         $this->expectsEvents(LoanCreatedEvent::class);
 
-        $loan = dispatch(new AddLoanJob($this->request));
+        $loan = $this->dispatch(new AddLoanJob($this->request));
 
         self::assertInstanceOf(User::class, $loan->createdBy);
         self::assertEquals(Carbon::parse('7 December 2016'), $loan->start_date);
@@ -123,7 +123,7 @@ class AddLoanJobTest extends TestCase
             return $user;
         })->merge(['start_date' => Carbon::parse('January 2, 2017')]);
 
-        $updatedLoan = dispatch(new AddLoanJob($this->request, $loan));
+        $updatedLoan = $this->dispatch(new AddLoanJob($this->request, $loan));
 
         self::assertInstanceOf(Loan::class, $updatedLoan);
         self::assertEquals(Carbon::parse('January 2 2017'), $updatedLoan->start_date);
@@ -135,7 +135,7 @@ class AddLoanJobTest extends TestCase
 
     public function test_that_guarantors_for_a_loan_are_saved()
     {
-        $loan = dispatch(new AddLoanJob($this->request));
+        $loan = $this->dispatch(new AddLoanJob($this->request));
 
         self::assertInstanceOf(Guarantor::class, $loan->guarantors()->first());
         self::assertEquals(2, $loan->guarantors->count());
@@ -143,7 +143,7 @@ class AddLoanJobTest extends TestCase
 
     public function test_that_guarantors_for_a_loan_can_be_updated()
     {
-        $loan = dispatch(new AddLoanJob($this->request));
+        $loan = $this->dispatch(new AddLoanJob($this->request));
 
         self::assertInstanceOf(Guarantor::class, $loan->guarantors()->first());
         self::assertEquals(2, $loan->guarantors->count());
@@ -158,7 +158,7 @@ class AddLoanJobTest extends TestCase
             ]
         ]);
 
-        $updatedLoan = dispatch(new AddLoanJob($this->request, $loan));
+        $updatedLoan = $this->dispatch(new AddLoanJob($this->request, $loan));
 
         self::assertInstanceOf(Loan::class, $updatedLoan);
         self::assertCount(2, $updatedLoan->guarantors);
@@ -171,7 +171,7 @@ class AddLoanJobTest extends TestCase
     {
         $this->request->replace(factory(Loan::class)->make()->toArray());
 
-        $loan = dispatch(new AddLoanJob($this->request));
+        $loan = $this->dispatch(new AddLoanJob($this->request));
 
         self::assertNotInstanceOf(Guarantor::class, $loan->guarantors()->first());
         self::assertNotInstanceOf(Collateral::class, $loan->collaterals()->first());
@@ -186,7 +186,7 @@ class AddLoanJobTest extends TestCase
             ]
         ]);
 
-        $updatedLoan = dispatch(new AddLoanJob($this->request, $loan));
+        $updatedLoan = $this->dispatch(new AddLoanJob($this->request, $loan));
 
         self::assertNotInstanceOf(Guarantor::class, $updatedLoan->guarantors()->first());
         self::assertNotInstanceOf(Collateral::class, $updatedLoan->collaterals()->first());
@@ -200,7 +200,7 @@ class AddLoanJobTest extends TestCase
 
         $this->expectsEvents(LoanCreatedEvent::class);
 
-        $loan = dispatch(new AddLoanJob($this->request));
+        $loan = $this->dispatch(new AddLoanJob($this->request));
 
         self::assertInstanceOf(Loan::class, $loan);
         self::assertEquals($rate, $loan->rate);
@@ -210,7 +210,7 @@ class AddLoanJobTest extends TestCase
 
         $this->request->merge(['rate' => $rate, 'start_date' => $startDate]);
 
-        $updatedLoan = dispatch(new AddLoanJob($this->request, $loan));
+        $updatedLoan = $this->dispatch(new AddLoanJob($this->request, $loan));
 
         self::assertEquals($rate, $updatedLoan->rate);
         self::assertEquals($startDate, $updatedLoan->start_date);
@@ -228,7 +228,7 @@ class AddLoanJobTest extends TestCase
                 ->toArray()
         );
 
-        $loan = dispatch(new AddLoanJob($this->request));
+        $loan = $this->dispatch(new AddLoanJob($this->request));
 
         self::assertEquals(
             Carbon::today()->addWeekdays($loan->repaymentPlan->number_of_days * 2),
@@ -245,7 +245,7 @@ class AddLoanJobTest extends TestCase
 
         $expectedLoanStartDate = Carbon::parse($this->request->get('start_date'))->addWeekdays(3);
 
-        $loan = dispatch(new AddLoanJob($this->request));
+        $loan = $this->dispatch(new AddLoanJob($this->request));
 
         self::assertEquals($expectedLoanStartDate, $loan->start_date);
     }
@@ -263,7 +263,7 @@ class AddLoanJobTest extends TestCase
             ['fees' => [['id' => 1, 'rate' => 17], ['id' => 2, 'rate' => 2.3]]]
         ));
 
-        $loan = dispatch(new AddLoanJob($this->request));
+        $loan = $this->dispatch(new AddLoanJob($this->request));
 
         self::assertInstanceOf(Loan::class, $loan);
         self::assertInstanceOf(Fee::class, $loan->fees->first());
@@ -283,7 +283,7 @@ class AddLoanJobTest extends TestCase
             ])->toArray()
         );
 
-        $loan = dispatch(new AddLoanJob($this->request));
+        $loan = $this->dispatch(new AddLoanJob($this->request));
 
         self::assertInstanceOf(Loan::class, $loan);
         self::assertNotInstanceOf(Fee::class, $loan->fees->first());
@@ -301,7 +301,7 @@ class AddLoanJobTest extends TestCase
                 ->toArray()
         );
 
-        $loan = dispatch(new AddLoanJob($this->request));
+        $loan = $this->dispatch(new AddLoanJob($this->request));
 
         self::assertEquals(500, $loan->fees->first()->pivot->amount);
         self::assertEquals(5, $loan->fees->first()->pivot->rate);
@@ -326,7 +326,7 @@ class AddLoanJobTest extends TestCase
 
         self::assertEquals(0, Loan::count());
 
-        $loan = dispatch(new AddLoanJob($this->request));
+        $loan = $this->dispatch(new AddLoanJob($this->request));
 
         self::assertInstanceOf(Loan::class, $loan);
         self::assertNotNull($loan->number);
@@ -338,7 +338,7 @@ class AddLoanJobTest extends TestCase
 
         self::assertCount(1, Loan::all());
 
-        $loan2 = dispatch(new AddLoanJob($this->request));
+        $loan2 = $this->dispatch(new AddLoanJob($this->request));
 
         self::assertInstanceOf(Loan::class, $loan2);
         self::assertNotNull($loan2->number);
@@ -351,7 +351,7 @@ class AddLoanJobTest extends TestCase
             ->each(function (Loan $loan) {
                 $this->request->replace($loan->toArray());
 
-                dispatch(new AddLoanJob($this->request));
+                $this->dispatch(new AddLoanJob($this->request));
             });
 
         self::assertCount(23, Loan::all());
@@ -359,7 +359,7 @@ class AddLoanJobTest extends TestCase
         // add another one and check whether you'd get the right loan number
         $this->request->merge(factory(Loan::class)->make(['user_id' => null])->toArray());
 
-        $loan24 = dispatch(new AddLoanJob($this->request));
+        $loan24 = $this->dispatch(new AddLoanJob($this->request));
 
         self::assertInstanceOf(Loan::class, $loan24);
         self::assertNotNull($loan24->number);
@@ -372,7 +372,7 @@ class AddLoanJobTest extends TestCase
     {
         $this->doesntExpectEvents(LoanCreatedEvent::class);
 
-        $loan = dispatch(new AddLoanJob($this->request, null, false));
+        $loan = $this->dispatch(new AddLoanJob($this->request, null, false));
 
         self::assertInstanceOf(User::class, $loan->createdBy);
     }
@@ -387,7 +387,7 @@ class AddLoanJobTest extends TestCase
 
         $this->request->merge(['purpose' => 'hello world']);
 
-        $updatedLoan = dispatch(new AddLoanJob($this->request, $loan));
+        $updatedLoan = $this->dispatch(new AddLoanJob($this->request, $loan));
 
         self::assertInstanceOf(Loan::class, $updatedLoan);
         self::assertEquals('hello world', $updatedLoan->purpose);
@@ -405,7 +405,7 @@ class AddLoanJobTest extends TestCase
                 ->toArray()
         );
 
-        $loan = dispatch(new AddLoanJob($this->request));
+        $loan = $this->dispatch(new AddLoanJob($this->request));
 
         self::assertTrue($loan->fees->first()->isPaidUpfront());
         self::assertFalse((bool) $loan->fees->first()->pivot->is_paid_upfront);
@@ -426,7 +426,7 @@ class AddLoanJobTest extends TestCase
                 ->toArray()
         );
 
-        $loan = dispatch(new AddLoanJob($this->request));
+        $loan = $this->dispatch(new AddLoanJob($this->request));
 
         self::assertCount(1, $loan->fees);
     }

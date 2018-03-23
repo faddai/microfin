@@ -144,7 +144,7 @@ class ApproveLoanPayoffJob
         // bool flag: treat this as a nominal entry, don't post this transaction to the ledger
         // doesn't trigger repayment deductions
         // manually withdraw the deposited amount from Client account after recording the transaction
-        if (dispatch(new AddClientDepositJob($this->request, $this->payoff->loan->client, true))) {
+        if ($this->dispatch(new AddClientDepositJob($this->request, $this->payoff->loan->client, true))) {
 
             $this->request->merge([
                 'cr' => 0,
@@ -160,7 +160,7 @@ class ApproveLoanPayoffJob
     {
         $loan = $this->payoff->loan;
 
-        dispatch(new AddLoanStatementEntryJob(new Request([
+        $this->dispatch(new AddLoanStatementEntryJob(new Request([
             'cr' => $this->amounts->sum(),
             'narration' => sprintf('Loan payoff - %s', $loan->number),
             'value_date' => Carbon::now(),

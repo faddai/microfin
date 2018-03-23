@@ -20,7 +20,7 @@ class AddFeeJobTest extends TestCase
             'is_paid_upfront' => 1
         ]);
 
-        $fee = dispatch(new AddFeeJob($this->request));
+        $fee = $this->dispatch(new AddFeeJob($this->request));
 
         self::assertInstanceOf(Fee::class, $fee);
         self::assertTrue($fee->isPaidUpfront());
@@ -38,7 +38,7 @@ class AddFeeJobTest extends TestCase
             'type' => Fee::PERCENTAGE
         ]);
 
-        $fee = dispatch(new AddFeeJob($this->request, $fee));
+        $fee = $this->dispatch(new AddFeeJob($this->request, $fee));
 
         self::assertEquals(4, $fee->rate);
         self::assertTrue($fee->is_paid_upfront);
@@ -51,7 +51,7 @@ class AddFeeJobTest extends TestCase
 
         self::assertTrue($fee->isPaidUpfront());
 
-        $fee = dispatch(new AddFeeJob($this->request, $fee));
+        $fee = $this->dispatch(new AddFeeJob($this->request, $fee));
 
         self::assertFalse($fee->isPaidUpfront());
     }
@@ -60,7 +60,7 @@ class AddFeeJobTest extends TestCase
     {
         $this->request->merge(factory(Fee::class)->make(['type' => Fee::FIXED, 'rate' => 2200])->toArray());
 
-        $fee = dispatch(new AddFeeJob($this->request));
+        $fee = $this->dispatch(new AddFeeJob($this->request));
 
         self::assertEquals(Fee::FIXED, $fee->type);
         self::assertEquals(2200, $fee->rate);

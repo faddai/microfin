@@ -14,7 +14,7 @@ use Illuminate\Support\Collection;
 class GenerateCrbMonthlyReportJob implements ReportsInterface
 {
     use DecoratesReport;
-    
+
     /**
      * @var Request
      */
@@ -281,7 +281,7 @@ class GenerateCrbMonthlyReportJob implements ReportsInterface
             $this->request->get('date')->format('M-Y')
         );
 
-        return dispatch(new ExportDataToCsvJob($this->report, $filename));
+        return $this->dispatch(new ExportDataToCsvJob($this->report, $filename));
     }
 
 }

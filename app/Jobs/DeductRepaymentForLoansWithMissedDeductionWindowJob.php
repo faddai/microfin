@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Entities\LoanRepayment;
 use App\Traits\GetDueRepaymentsTrait;
+use Illuminate\Foundation\Bus\DispatchesJobs;
 
 
 /**
@@ -16,7 +17,7 @@ use App\Traits\GetDueRepaymentsTrait;
  */
 class DeductRepaymentForLoansWithMissedDeductionWindowJob
 {
-    use GetDueRepaymentsTrait;
+    use GetDueRepaymentsTrait, DispatchesJobs;
 
     /**
      * Handle the event.
@@ -28,7 +29,7 @@ class DeductRepaymentForLoansWithMissedDeductionWindowJob
         $this->getRepayments(function (LoanRepayment $repayment) {
             return $repayment->isDue() && $repayment->status === null;
         })->each(function (LoanRepayment $repayment) {
-            dispatch(new AutomatedLoanRepaymentJob($repayment->due_date));
+            $this->dispatch(new AutomatedLoanRepaymentJob($repayment->due_date));
         });
     }
 }

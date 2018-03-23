@@ -55,7 +55,7 @@ class RestructureLoanJobTest extends TestCase
 
         $restructure = $this->restructureLoan($loan);
 
-        $declinedLoan = dispatch(new DeclineLoanJob($this->request, $restructure));
+        $declinedLoan = $this->dispatch(new DeclineLoanJob($this->request, $restructure));
 
         $loan = $loan->fresh();
 
@@ -102,13 +102,13 @@ class RestructureLoanJobTest extends TestCase
 
         $this->request->merge($data);
 
-        $loan = dispatch(new AddLoanJob($this->request));
+        $loan = $this->dispatch(new AddLoanJob($this->request));
 
         $this->approveAndDisburseLoan($loan);
 
         $loan->client()->update(['account_balance' => 0]);
 
-        dispatch(new DeductRepaymentForLoansWithMissedDeductionWindowJob);
+        $this->dispatch(new DeductRepaymentForLoansWithMissedDeductionWindowJob);
 
         $loan = $loan->fresh('schedule');
 
@@ -130,7 +130,7 @@ class RestructureLoanJobTest extends TestCase
 
         $this->request->merge($data);
 
-        return dispatch(new RestructureLoanJob($this->request, $loan));
+        return $this->dispatch(new RestructureLoanJob($this->request, $loan));
     }
 
 }

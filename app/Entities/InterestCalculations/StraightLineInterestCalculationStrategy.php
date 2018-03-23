@@ -62,7 +62,7 @@ class StraightLineInterestCalculationStrategy implements LoanInterestCalculation
                 'due_date' => $dueDate
             ]);
 
-            $repayments->push(dispatch(new AddLoanRepaymentJob($request)));
+            $repayments->push($this->dispatch(new AddLoanRepaymentJob($request)));
         }
 
         return $repayments;

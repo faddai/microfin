@@ -15,7 +15,7 @@ class LedgersAndLedgerCategoriesTableSeeder extends Seeder
      *
      * @return array
      */
-    function generateFakeLedgers ($minCode, $maxCode) {
+    private static function generateFakeLedgers($minCode, $maxCode) {
 
         return collect(range($minCode, $maxCode))->map(function ($code) {
             return [
@@ -28,13 +28,13 @@ class LedgersAndLedgerCategoriesTableSeeder extends Seeder
     /**
      * @return  array
      */
-    function getChartOfAccounts () {
+    public static function getChartOfAccounts() {
         return [
-            'Share Capital' => $this->generateFakeLedgers(1001, 1010),
+            'Share Capital' => static::generateFakeLedgers(1001, 1010),
 
-            'Non Current Liabilities' => $this->generateFakeLedgers(2001, 2006),
+            'Non Current Liabilities' => static::generateFakeLedgers(2001, 2006),
 
-            'Short Term Liabilities' => $this->generateFakeLedgers(3001, 3006),
+            'Short Term Liabilities' => static::generateFakeLedgers(3001, 3006),
 
             'Non-Current Assets' => [
                 ['code' => 4001, 'name' => 'Motor Vehicles - Net Value'],

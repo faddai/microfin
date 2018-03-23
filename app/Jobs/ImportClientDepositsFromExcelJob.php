@@ -5,6 +5,7 @@ namespace App\Jobs;
 use App\Entities\Accounting\Ledger;
 use App\Entities\Branch;
 use App\Entities\Client;
+use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -14,6 +15,9 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class ImportClientDepositsFromExcelJob
 {
+
+    use DispatchesJobs;
+
     /**
      * @var Request
      */
@@ -74,7 +78,7 @@ class ImportClientDepositsFromExcelJob
                             return $this->request->user();
                         });
 
-                        dispatch(new AddClientDepositJob($request, $transaction->client));
+                        $this->dispatch(new AddClientDepositJob($request, $transaction->client));
 
                         logger('Transaction', $transaction->toArray());
                     });

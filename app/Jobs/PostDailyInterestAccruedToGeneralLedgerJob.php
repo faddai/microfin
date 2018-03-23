@@ -10,12 +10,15 @@ namespace App\Jobs;
 use App\Entities\Loan;
 use App\Exceptions\LedgerEntryException;
 use Carbon\Carbon;
+use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 
 class PostDailyInterestAccruedToGeneralLedgerJob
 {
+    use DispatchesJobs;
+
     /**
      * @var Carbon
      */
@@ -88,7 +91,7 @@ class PostDailyInterestAccruedToGeneralLedgerJob
 
         logger($narration, compact('dailyInterest', 'valueDate'));
 
-        return dispatch(new AddLedgerTransactionJob(new Request([
+        return $this->dispatch(new AddLedgerTransactionJob(new Request([
             'branch_id' => $loan->createdBy->branch->id,
             'loan_id' => $loan->id,
             'entries' => [

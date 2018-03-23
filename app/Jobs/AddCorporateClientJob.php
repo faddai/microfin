@@ -41,7 +41,7 @@ class AddCorporateClientJob
     public function handle()
     {
         foreach ($this->client->getFillable() as $fillable) {
-            if ($this->request->has($fillable)) {
+            if ($this->request->filled($fillable)) {
                 $this->client->{$fillable} = $this->request->get($fillable);
             }
         }

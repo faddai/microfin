@@ -10,11 +10,15 @@ namespace App\Jobs\Reports;
 use App\Entities\Accounting\Ledger;
 use App\Entities\Accounting\LedgerCategory;
 use Carbon\Carbon;
+use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 
 class GenerateBalanceSheetReportJob
 {
+
+    use DispatchesJobs;
+
     /**
      * @var Request
      */
@@ -120,7 +124,7 @@ class GenerateBalanceSheetReportJob
 
                     $this->request->merge(['startDate' => Carbon::today()->startOfYear(), 'endDate' => $date]);
 
-                    $collection->first()->get('ledgers')['Net Profit/Loss'] = dispatch(
+                    $collection->first()->get('ledgers')['Net Profit/Loss'] = $this->dispatch(
                         new GenerateIncomeStatementReportJob($this->request)
                     )->net_profit;
                 }

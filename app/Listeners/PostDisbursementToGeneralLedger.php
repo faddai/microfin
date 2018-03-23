@@ -67,7 +67,7 @@ class PostDisbursementToGeneralLedger
                 ]);
             });
 
-        return dispatch(new AddLedgerTransactionJob(new Request([
+        return dispatch_now(new AddLedgerTransactionJob(new Request([
             'user_id' => $loan->disbursedBy->id,
             'branch_id' => $loan->disbursedBy->branch->id,
             'loan_id' => $loan->id,

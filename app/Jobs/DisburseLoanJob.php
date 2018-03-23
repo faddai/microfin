@@ -7,12 +7,16 @@ use App\Events\LoanDisbursedEvent;
 use App\Exceptions\LoanDisbursalException;
 use App\Notifications\LoanDisbursedClientNotification;
 use Carbon\Carbon;
+use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 
 class DisburseLoanJob
 {
+
+    use DispatchesJobs;
+
     /**
      * @var Request
      */
@@ -55,7 +59,7 @@ class DisburseLoanJob
 
             event(new LoanDisbursedEvent($loan));
 
-            if ($this->request->has('notify_client_of_disbursement')) {
+            if ($this->request->filled('notify_client_of_disbursement')) {
                 $loan->client->notify(new LoanDisbursedClientNotification($loan));
             }
 
@@ -90,7 +94,7 @@ class DisburseLoanJob
      */
     private function regenerateRepaymentScheduleForLoan(Loan $loan)
     {
-        return dispatch(new GenerateLoanRepaymentScheduleJob($loan, true, $this->loanIsBackdated));
+        return $this->dispatch(new GenerateLoanRepaymentScheduleJob($loan, true, $this->loanIsBackdated));
     }
 
     /**

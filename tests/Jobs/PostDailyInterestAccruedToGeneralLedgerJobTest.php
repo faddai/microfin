@@ -35,12 +35,12 @@ class PostDailyInterestAccruedToGeneralLedgerJobTest extends TestCase
                 ->toArray()
         );
 
-        $loan = dispatch(new AddLoanJob($this->request));
+        $loan = $this->dispatch(new AddLoanJob($this->request));
 
         self::assertInstanceOf(Loan::class, $loan);
         self::assertCount(1, Loan::running());
 
-        $processed = dispatch(new PostDailyInterestAccruedToGeneralLedgerJob($loan->schedule->first()->due_date));
+        $processed = $this->dispatch(new PostDailyInterestAccruedToGeneralLedgerJob($loan->schedule->first()->due_date));
 
         self::assertEquals(1, $processed);
     }
@@ -67,12 +67,12 @@ class PostDailyInterestAccruedToGeneralLedgerJobTest extends TestCase
                 ->toArray()
         );
 
-        $loan = dispatch(new AddLoanJob($this->request));
+        $loan = $this->dispatch(new AddLoanJob($this->request));
 
         self::assertInstanceOf(Loan::class, $loan);
         self::assertCount(1, Loan::running());
 
-        $processed = dispatch(new PostDailyInterestAccruedToGeneralLedgerJob);
+        $processed = $this->dispatch(new PostDailyInterestAccruedToGeneralLedgerJob);
 
         self::assertEquals(0, $processed);
     }
@@ -100,14 +100,14 @@ class PostDailyInterestAccruedToGeneralLedgerJobTest extends TestCase
             ->each(function (Loan $loan) {
                 $this->request->merge($loan->toArray());
 
-                dispatch(new AddLoanJob($this->request));
+                $this->dispatch(new AddLoanJob($this->request));
             });
 
         self::assertCount(3, Loan::running());
 
         // all these loans have disbursal dates in the past so let's go through them
         // and post missed accruals
-        $processed = dispatch(new PostDailyInterestAccruedToGeneralLedgerJob(
+        $processed = $this->dispatch(new PostDailyInterestAccruedToGeneralLedgerJob(
             $disbursedAt->copy()->addWeekdays(Loan::first()->repaymentPlan->number_of_days)
         ));
 
@@ -139,11 +139,11 @@ class PostDailyInterestAccruedToGeneralLedgerJobTest extends TestCase
                 ->toArray()
         );
 
-        dispatch(new AddLoanJob($this->request));
+        $this->dispatch(new AddLoanJob($this->request));
 
         // let's make sure there is at least 1 running loan
         self::assertCount(1, Loan::running());
 
-        dispatch(new PostDailyInterestAccruedToGeneralLedgerJob);
+        $this->dispatch(new PostDailyInterestAccruedToGeneralLedgerJob);
     }
 }

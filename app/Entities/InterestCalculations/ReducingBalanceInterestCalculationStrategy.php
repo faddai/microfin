@@ -56,7 +56,7 @@ class ReducingBalanceInterestCalculationStrategy implements LoanInterestCalculat
                 'due_date' => $dueDate
             ]);
 
-            $repayments->push(dispatch(new AddLoanRepaymentJob($request)));
+            $repayments->push($this->dispatch(new AddLoanRepaymentJob($request)));
 
             $loanAmount = $loanAmount - $principal < 0 ? 0 : $loanAmount - $principal;
         }

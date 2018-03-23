@@ -25,12 +25,12 @@ class PostDeductedLoanRepaymentAmountToClientTransactionsTest extends TestCase
                 'client_id' => factory(Client::class, 'individual')->create(['account_balance' => 3000])->id,
             ]);
 
-        dispatch(new GenerateLoanRepaymentScheduleJob($loan));
+        $this->dispatch(new GenerateLoanRepaymentScheduleJob($loan));
 
         self::assertCount(1, Loan::running());
         self::assertEquals(2500, $loan->schedule->first()->amount);
 
-        dispatch(new AutomatedLoanRepaymentJob($loan->schedule->first()->due_date));
+        $this->dispatch(new AutomatedLoanRepaymentJob($loan->schedule->first()->due_date));
 
         self::assertInstanceOf(ClientTransaction::class, $loan->client->transactions->first());
         self::assertEquals(2500, $loan->client->transactions->first()->dr);

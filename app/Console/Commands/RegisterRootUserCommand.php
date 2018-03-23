@@ -5,10 +5,14 @@ namespace App\Console\Commands;
 use App\Entities\User;
 use App\Jobs\AddUserJob;
 use Illuminate\Console\Command;
+use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Http\Request;
 
 class RegisterRootUserCommand extends Command
 {
+
+    use DispatchesJobs;
+
     /**
      * The name and signature of the console command.
      *
@@ -105,7 +109,7 @@ class RegisterRootUserCommand extends Command
     {
         $request = new Request($user);
 
-        return dispatch(new AddUserJob($request, null, false));
+        return $this->dispatch(new AddUserJob($request, null, false));
     }
 
     private function isValidRegistration(array $user, $passwordConfirmation)

@@ -15,19 +15,6 @@ use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
 class Kernel extends ConsoleKernel
 {
-    /**
-     * The Artisan commands provided by your application.
-     *
-     * @var array
-     */
-    protected $commands = [
-        RegisterRootUserCommand::class,
-        PostAccruedReceivablesToLoanAccountStatementCommand::class,
-        DeductLoanRepaymentCommand::class,
-        DeductRepaymentForLoansWithMissedDeductionWindowCommand::class,
-        PostDailyInterestAccruedToGeneralLedgerCommand::class,
-        AccrueInterestAndFeesFromBeginningOfYearUpToDate::class,
-    ];
 
     /**
      * Define the application's command schedule.
@@ -70,5 +57,7 @@ class Kernel extends ConsoleKernel
     protected function commands()
     {
         require base_path('routes/console.php');
+
+        $this->load(__DIR__.'/Commands');
     }
 }

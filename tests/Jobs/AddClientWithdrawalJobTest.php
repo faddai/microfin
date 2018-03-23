@@ -22,7 +22,7 @@ class AddClientWithdrawalJobTest extends TestCase
 
         $this->request->merge(factory(ClientTransaction::class)->make(['dr' => 1200])->toArray());
 
-        $transaction = dispatch(new AddClientWithdrawalJob($this->request, $client));
+        $transaction = $this->dispatch(new AddClientWithdrawalJob($this->request, $client));
 
         self::assertInstanceOf(ClientTransaction::class, $transaction);
         self::assertTrue($transaction->isWithdrawal());
@@ -41,7 +41,7 @@ class AddClientWithdrawalJobTest extends TestCase
 
         $this->request->merge(factory(ClientTransaction::class)->make(['dr' => 1200])->toArray());
 
-        $transaction = dispatch(new AddClientWithdrawalJob($this->request, $client));
+        $transaction = $this->dispatch(new AddClientWithdrawalJob($this->request, $client));
 
         self::assertInstanceOf(ClientTransaction::class, $transaction);
         self::assertTrue($transaction->isWithdrawal());
@@ -63,7 +63,7 @@ class AddClientWithdrawalJobTest extends TestCase
 
         $this->request->merge(factory(ClientTransaction::class)->make(['dr' => 0])->toArray());
 
-        dispatch(new AddClientWithdrawalJob($this->request, $client));
+        $this->dispatch(new AddClientWithdrawalJob($this->request, $client));
     }
 
     /**
@@ -81,7 +81,7 @@ class AddClientWithdrawalJobTest extends TestCase
 
         $this->request->merge(factory(ClientTransaction::class)->make(['dr' => 80000])->toArray());
 
-        dispatch(new AddClientWithdrawalJob($this->request, $client));
+        $this->dispatch(new AddClientWithdrawalJob($this->request, $client));
     }
 
     /**
@@ -98,7 +98,7 @@ class AddClientWithdrawalJobTest extends TestCase
 
         $this->request->merge(factory(ClientTransaction::class)->make(['dr' => 1030])->toArray());
 
-        dispatch(new AddClientWithdrawalJob($this->request, factory(Client::class)->create()));
+        $this->dispatch(new AddClientWithdrawalJob($this->request, factory(Client::class)->create()));
     }
 
     public function test_a_withdraw_has_a_transaction_and_value_dates()
@@ -109,7 +109,7 @@ class AddClientWithdrawalJobTest extends TestCase
 
         $this->request->merge(factory(ClientTransaction::class)->make(['dr' => 200])->toArray());
 
-        $deposit = dispatch(new AddClientWithdrawalJob(
+        $deposit = $this->dispatch(new AddClientWithdrawalJob(
             $this->request,
             factory(Client::class, 'individual')->create(['account_balance' => 200]))
         );

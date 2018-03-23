@@ -10,9 +10,12 @@ namespace App\Console\Commands;
 use App\Jobs\PostDailyInterestAccruedToGeneralLedgerJob;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
+use Illuminate\Foundation\Bus\DispatchesJobs;
 
 class PostDailyInterestAccruedToGeneralLedgerCommand extends Command
 {
+
+    use DispatchesJobs;
 
     /**
      * The name and signature of the console command.
@@ -39,7 +42,7 @@ class PostDailyInterestAccruedToGeneralLedgerCommand extends Command
 
         $this->info('Posting accrued daily interest');
 
-        $processed = dispatch(new PostDailyInterestAccruedToGeneralLedgerJob($date));
+        $processed = $this->dispatch(new PostDailyInterestAccruedToGeneralLedgerJob($date));
 
         $this->info('Total loans processed: '. $processed);
     }

@@ -47,7 +47,7 @@ class AddLoanPayoffJob
         }
 
         foreach ($this->payoff->getFillable() as $fillable) {
-            if ($this->request->has($fillable)) {
+            if ($this->request->filled($fillable)) {
 
                 $data = $this->request->get($fillable);
 

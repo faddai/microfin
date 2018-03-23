@@ -51,12 +51,12 @@ class AddLedgerJob
      */
     private function addOrUpdateAccount()
     {
-        if (! $this->ledger->exists && ! $this->request->has('category_id')) {
+        if (! $this->ledger->exists && ! $this->request->filled('category_id')) {
             throw new \Exception('You must specify a ledger category');
         }
 
         foreach ($this->ledger->getFillable() as $fillable) {
-            if ($this->request->has($fillable)) {
+            if ($this->request->filled($fillable)) {
                 $this->ledger->{$fillable} = $this->request->get($fillable);
             }
         }

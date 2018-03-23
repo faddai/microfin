@@ -23,7 +23,7 @@ class AddLoanStatementEntryJobTest extends TestCase
 
         $this->request->merge(factory(Loan::class, 'staff')->make()->toArray());
 
-        $loan = dispatch(new AddLoanJob($this->request));
+        $loan = $this->dispatch(new AddLoanJob($this->request));
 
         self::assertInstanceOf(Loan::class, $loan);
 
@@ -32,7 +32,7 @@ class AddLoanStatementEntryJobTest extends TestCase
             'narration' => 'Loan repayment',
         ]);
 
-        $entry = dispatch(new AddLoanStatementEntryJob($this->request, $loan));
+        $entry = $this->dispatch(new AddLoanStatementEntryJob($this->request, $loan));
 
         self::assertInstanceOf(LoanStatementEntry::class, $entry);
         self::assertEquals(2000, $entry->dr);
@@ -66,16 +66,16 @@ class AddLoanStatementEntryJobTest extends TestCase
                 ->toArray()
         );
 
-        $loan = dispatch(new AddLoanJob($this->request));
+        $loan = $this->dispatch(new AddLoanJob($this->request));
 
         $this->request->replace(['disbursed_at' => $disbursedAt, 'approved_at' => $disbursedAt]);
 
-        dispatch(new DisburseLoanJob($this->request, dispatch(new ApproveLoanJob($this->request, $loan))));
+        $this->dispatch(new DisburseLoanJob($this->request, $this->dispatch(new ApproveLoanJob($this->request, $loan))));
 
         // Withdraw money from Client's account
         $this->request->replace(factory(ClientTransaction::class)->make(['dr' => 10000])->toArray());
 
-        dispatch(new AddClientWithdrawalJob($this->request, $loan->client));
+        $this->dispatch(new AddClientWithdrawalJob($this->request, $loan->client));
 
         $loan = $loan->fresh();
 
@@ -97,7 +97,7 @@ class AddLoanStatementEntryJobTest extends TestCase
         // add a deposit to trigger a deduction
         $this->request->replace(factory(ClientTransaction::class)->make(['cr' => 2400])->toArray());
 
-        dispatch(new AddClientDepositJob($this->request, $loan->client));
+        $this->dispatch(new AddClientDepositJob($this->request, $loan->client));
 
         $loan = Loan::first();
 
@@ -132,18 +132,18 @@ class AddLoanStatementEntryJobTest extends TestCase
                 ->toArray()
         );
 
-        $loan = dispatch(new AddLoanJob($this->request));
+        $loan = $this->dispatch(new AddLoanJob($this->request));
 
         $this->request->replace(['disbursed_at' => $disbursedAt, 'approved_at' => $disbursedAt]);
 
-        dispatch(new DisburseLoanJob($this->request, dispatch(new ApproveLoanJob($this->request, $loan))));
+        $this->dispatch(new DisburseLoanJob($this->request, $this->dispatch(new ApproveLoanJob($this->request, $loan))));
 
         // Withdraw whatever remains in Client's account after upfront fees deductions
         $this->request->replace(
             factory(ClientTransaction::class)->make(['dr' => $loan->client->getAccountBalance(false)])->toArray()
         );
 
-        dispatch(new AddClientWithdrawalJob($this->request, $loan->client));
+        $this->dispatch(new AddClientWithdrawalJob($this->request, $loan->client));
 
         $loan = $loan->fresh();
 
@@ -194,7 +194,7 @@ class AddLoanStatementEntryJobTest extends TestCase
                 ->toArray()
         );
 
-        $loan = dispatch(new AddLoanJob($this->request));
+        $loan = $this->dispatch(new AddLoanJob($this->request));
 
         self::assertTrue($loan->isDisbursed());
 

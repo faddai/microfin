@@ -4,9 +4,13 @@ namespace App\Console\Commands;
 
 use App\Jobs\DeductRepaymentForLoansWithMissedDeductionWindowJob;
 use Illuminate\Console\Command;
+use Illuminate\Foundation\Bus\DispatchesJobs;
 
 class DeductRepaymentForLoansWithMissedDeductionWindowCommand extends Command
 {
+
+    use DispatchesJobs;
+
     /**
      * The name and signature of the console command.
      *
@@ -28,7 +32,7 @@ class DeductRepaymentForLoansWithMissedDeductionWindowCommand extends Command
      */
     public function handle()
     {
-        dispatch(new DeductRepaymentForLoansWithMissedDeductionWindowJob);
+        $this->dispatch(new DeductRepaymentForLoansWithMissedDeductionWindowJob);
 
         $this->info('Deductions have finished processing');
     }

@@ -44,12 +44,12 @@ class AddFeeJob
     public function handle()
     {
         // set fee that was previously paid upfront to otherwise
-        if ($this->fee->exists && ! $this->request->has('is_paid_upfront')) {
+        if ($this->fee->exists && ! $this->request->filled('is_paid_upfront')) {
             $this->fee->is_paid_upfront = 0;
         }
 
         foreach ($this->fee->getFillable() as $fillable) {
-            if ($this->request->has($fillable)) {
+            if ($this->request->filled($fillable)) {
                 $this->fee->{$fillable} = $this->request->get($fillable);
             }
         }

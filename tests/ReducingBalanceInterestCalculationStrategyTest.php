@@ -32,7 +32,7 @@ class ReducingBalanceInterestCalculationStrategyTest extends TestCase
 
         $this->request->merge($loan->toArray());
 
-        $loan = dispatch(new AddLoanJob($this->request));
+        $loan = $this->dispatch(new AddLoanJob($this->request));
 
         $schedule = $loan->schedule;
 
@@ -71,7 +71,7 @@ class ReducingBalanceInterestCalculationStrategyTest extends TestCase
 
         $this->request->merge($loan->toArray());
 
-        $loan = dispatch(new AddLoanJob($this->request));
+        $loan = $this->dispatch(new AddLoanJob($this->request));
 
         $schedule = $loan->schedule;
 
@@ -106,7 +106,7 @@ class ReducingBalanceInterestCalculationStrategyTest extends TestCase
                 ->toArray()
         );
 
-        $loan = dispatch(new AddLoanJob($this->request));
+        $loan = $this->dispatch(new AddLoanJob($this->request));
 
         self::assertEquals(6000, $loan->schedule->sum('principal'));
     }
@@ -134,7 +134,7 @@ class ReducingBalanceInterestCalculationStrategyTest extends TestCase
 
         $this->request->merge($loan->toArray());
 
-        $loan = dispatch(new AddLoanJob($this->request));
+        $loan = $this->dispatch(new AddLoanJob($this->request));
 
         $schedule = $loan->schedule;
 

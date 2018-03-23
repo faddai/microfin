@@ -19,7 +19,7 @@ class NotifyUsersWhoCanApproveLoanListenerTest extends TestCase
 
         $this->request->merge(factory(Loan::class)->make()->toArray());
 
-        dispatch(new AddLoanJob($this->request));
+        $this->dispatch(new AddLoanJob($this->request));
 
         Notification::assertSentTo($approvers, NewLoanCreatedNotification::class);
     }
@@ -39,7 +39,7 @@ class NotifyUsersWhoCanApproveLoanListenerTest extends TestCase
             'client_id' => $loan->client->id,
         ])->toArray());
 
-        dispatch(new AddLoanJob($this->request, $loan));
+        $this->dispatch(new AddLoanJob($this->request, $loan));
 
         Notification::assertNotSentTo($approver, NewLoanCreatedNotification::class);
     }

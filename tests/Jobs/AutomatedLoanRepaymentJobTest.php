@@ -29,7 +29,7 @@ class AutomatedLoanRepaymentJobTest extends TestCase
             ])->toArray()
         );
 
-        $loan = dispatch(new AddLoanJob($this->request));
+        $loan = $this->dispatch(new AddLoanJob($this->request));
 
         self::assertNotNull($loan->schedule);
         self::assertFalse($loan->isRunning());
@@ -66,7 +66,7 @@ class AutomatedLoanRepaymentJobTest extends TestCase
                 ->toArray()
         );
 
-        $loan = dispatch(new AddLoanJob($this->request));
+        $loan = $this->dispatch(new AddLoanJob($this->request));
 
         $this->approveAndDisburseLoan($loan);
 
@@ -75,7 +75,7 @@ class AutomatedLoanRepaymentJobTest extends TestCase
         self::assertEquals($dueDate, $loan->schedule->first()->due_date);
 
         // do deductions
-        dispatch(new AutomatedLoanRepaymentJob($dueDate));
+        $this->dispatch(new AutomatedLoanRepaymentJob($dueDate));
 
         $loan = $loan->fresh();
 
@@ -111,7 +111,7 @@ class AutomatedLoanRepaymentJobTest extends TestCase
                 ->toArray()
         );
 
-        $loan = dispatch(new AddLoanJob($this->request));
+        $loan = $this->dispatch(new AddLoanJob($this->request));
 
         $this->approveAndDisburseLoan($loan);
 
@@ -119,7 +119,7 @@ class AutomatedLoanRepaymentJobTest extends TestCase
         self::assertCount(12, $loan->schedule); // check to make sure the right number of repayments is generated
 
         // effect repayment
-        dispatch(new AutomatedLoanRepaymentJob($dueDate));
+        $this->dispatch(new AutomatedLoanRepaymentJob($dueDate));
 
         $repayment = $loan->fresh()->payments->first();
 
@@ -156,7 +156,7 @@ class AutomatedLoanRepaymentJobTest extends TestCase
             ->toArray()
         );
 
-        $loan = dispatch(new AddLoanJob($this->request));
+        $loan = $this->dispatch(new AddLoanJob($this->request));
 
         $this->approveAndDisburseLoan($loan);
 
@@ -164,7 +164,7 @@ class AutomatedLoanRepaymentJobTest extends TestCase
         self::assertEquals($dueDate, $loan->schedule->first()->due_date);
 
         // effect repayment
-        dispatch(new AutomatedLoanRepaymentJob($dueDate));
+        $this->dispatch(new AutomatedLoanRepaymentJob($dueDate));
 
         $repayment = $loan->fresh()->payments->first();
 
@@ -218,12 +218,12 @@ class AutomatedLoanRepaymentJobTest extends TestCase
                 ->toArray()
         );
 
-        $loan = dispatch(new AddLoanJob($this->request));
+        $loan = $this->dispatch(new AddLoanJob($this->request));
 
         $this->approveAndDisburseLoan($loan);
 
         // effect repayment
-        dispatch(new AutomatedLoanRepaymentJob($dueDate));
+        $this->dispatch(new AutomatedLoanRepaymentJob($dueDate));
 
         $repayment = $loan->payments->first();
 
@@ -262,7 +262,7 @@ class AutomatedLoanRepaymentJobTest extends TestCase
             ->toArray()
         );
 
-        $loan = dispatch(new AddLoanJob($this->request));
+        $loan = $this->dispatch(new AddLoanJob($this->request));
 
         $this->approveAndDisburseLoan($loan);
 
@@ -296,7 +296,7 @@ class AutomatedLoanRepaymentJobTest extends TestCase
             ->toArray()
         );
 
-        $loan = dispatch(new AddLoanJob($this->request));
+        $loan = $this->dispatch(new AddLoanJob($this->request));
 
         self::assertCount(5, $loan->schedule);
 
@@ -308,14 +308,14 @@ class AutomatedLoanRepaymentJobTest extends TestCase
         self::assertEquals(204, $loan->schedule->first()->fees);
 
         // do deductions
-        dispatch(new AutomatedLoanRepaymentJob($dueDate));
+        $this->dispatch(new AutomatedLoanRepaymentJob($dueDate));
 
         self::assertEquals(LoanRepayment::DEFAULTED, $loan->fresh()->schedule->first()->status);
 
         // Update Client's account balance to be able to cover part of fees for the first repayment
         $loan->client()->update(['account_balance' => 200]);
 
-        dispatch(new AutomatedLoanRepaymentJob($dueDate));
+        $this->dispatch(new AutomatedLoanRepaymentJob($dueDate));
 
         $firstScheduledRepayment = $loan->fresh()->schedule->first();
 
@@ -326,7 +326,7 @@ class AutomatedLoanRepaymentJobTest extends TestCase
         // add enough funds to pay off fees and part of interest
         $loan->client()->update(['account_balance' => 500]);
 
-        dispatch(new AutomatedLoanRepaymentJob($dueDate));
+        $this->dispatch(new AutomatedLoanRepaymentJob($dueDate));
 
         $firstScheduledRepayment = $loan->fresh()->schedule->first();
 
@@ -339,7 +339,7 @@ class AutomatedLoanRepaymentJobTest extends TestCase
 
         $loan->client()->update(['account_balance' => 1000]);
 
-        dispatch(new AutomatedLoanRepaymentJob($dueDate));
+        $this->dispatch(new AutomatedLoanRepaymentJob($dueDate));
 
         $firstScheduledRepayment = $loan->fresh()->schedule->first();
 
@@ -369,7 +369,7 @@ class AutomatedLoanRepaymentJobTest extends TestCase
                 ->toArray()
         );
 
-        $loan = dispatch(new AddLoanJob($this->request));
+        $loan = $this->dispatch(new AddLoanJob($this->request));
 
         $loan->schedule->each(function (LoanRepayment $repayment) {
             self::assertEquals(0, $repayment->getFees());
@@ -400,13 +400,13 @@ class AutomatedLoanRepaymentJobTest extends TestCase
                 ->toArray()
         );
 
-        $loan = dispatch(new AddLoanJob($this->request));
+        $loan = $this->dispatch(new AddLoanJob($this->request));
 
         $amortizedFeeOnRepayment = 0.05 * 6000 / 5;
         $adminFee = 0.05 * 6000;
         $arrangementFee = 0.05 * 6000;
 
-        dispatch(new AutomatedLoanRepaymentJob($loan->schedule->first()->due_date));
+        $this->dispatch(new AutomatedLoanRepaymentJob($loan->schedule->first()->due_date));
 
         $firstRepayment = $loan->fresh()->schedule->first();
 
@@ -452,13 +452,13 @@ class AutomatedLoanRepaymentJobTest extends TestCase
                 ->toArray()
         );
 
-        $loan = dispatch(new AddLoanJob($this->request));
+        $loan = $this->dispatch(new AddLoanJob($this->request));
 
         $disbursementFeeForRepayment = (5 / 100) * $loan->amount / $loan->tenure->number_of_months; // 60
         $arrangementFeeForRepayment = (7 / 100) * $loan->amount / $loan->tenure->number_of_months; // 84
         $amortizedFees = $disbursementFeeForRepayment + $arrangementFeeForRepayment;
 
-        dispatch(new AutomatedLoanRepaymentJob($loan->schedule->first()->due_date));
+        $this->dispatch(new AutomatedLoanRepaymentJob($loan->schedule->first()->due_date));
 
         $loan = $loan->fresh('schedule');
 
@@ -485,7 +485,7 @@ class AutomatedLoanRepaymentJobTest extends TestCase
         // let's credit this Client's account and continue with repayment
         $loan->client->update(['account_balance' => 2000]);
 
-        dispatch(new AutomatedLoanRepaymentJob($firstRepayment->due_date));
+        $this->dispatch(new AutomatedLoanRepaymentJob($firstRepayment->due_date));
 
         $entries = LedgerEntry::all();
 
@@ -518,9 +518,9 @@ class AutomatedLoanRepaymentJobTest extends TestCase
                 ->toArray()
         );
 
-        $loan = dispatch(new AddLoanJob($this->request));
+        $loan = $this->dispatch(new AddLoanJob($this->request));
 
-        dispatch(new AutomatedLoanRepaymentJob($loan->schedule->first()->due_date));
+        $this->dispatch(new AutomatedLoanRepaymentJob($loan->schedule->first()->due_date));
 
         $loan = $loan->fresh('schedule');
 
@@ -541,7 +541,7 @@ class AutomatedLoanRepaymentJobTest extends TestCase
         // let's credit this Client's account and continue with repayment
         $loan->client->update(['account_balance' => 2000]);
 
-        dispatch(new AutomatedLoanRepaymentJob($firstRepayment->due_date));
+        $this->dispatch(new AutomatedLoanRepaymentJob($firstRepayment->due_date));
 
         $entries = LedgerEntry::all();
 
@@ -578,9 +578,9 @@ class AutomatedLoanRepaymentJobTest extends TestCase
                 ->toArray()
         );
 
-        $loan = dispatch(new AddLoanJob($this->request));
+        $loan = $this->dispatch(new AddLoanJob($this->request));
 
-        dispatch(new AutomatedLoanRepaymentJob($loan->schedule->first()->due_date));
+        $this->dispatch(new AutomatedLoanRepaymentJob($loan->schedule->first()->due_date));
 
         $loan = $loan->fresh('schedule');
 
@@ -602,7 +602,7 @@ class AutomatedLoanRepaymentJobTest extends TestCase
         // let's credit this Client's account and continue with repayment
         $loan->client->update(['account_balance' => 2000]);
 
-        dispatch(new AutomatedLoanRepaymentJob($firstRepayment->due_date));
+        $this->dispatch(new AutomatedLoanRepaymentJob($firstRepayment->due_date));
 
         $entries = LedgerEntry::all();
 
@@ -631,7 +631,7 @@ class AutomatedLoanRepaymentJobTest extends TestCase
                 ->toArray()
         );
 
-        $loan = dispatch(new AddLoanJob($this->request));
+        $loan = $this->dispatch(new AddLoanJob($this->request));
 
         $disbursed_at = $approved_at = Carbon::today()->subWeekdays(24);
 
@@ -641,13 +641,13 @@ class AutomatedLoanRepaymentJobTest extends TestCase
 
         $loan->client->update(['account_balance' => 100]);
 
-        dispatch(new AutomatedLoanRepaymentJob($loan->schedule->first()->due_date));
+        $this->dispatch(new AutomatedLoanRepaymentJob($loan->schedule->first()->due_date));
 
         $loan = $loan->fresh('schedule');
 
         self::assertEquals(LoanRepayment::PART_PAYMENT, $loan->schedule->first()->status);
 
-        dispatch(new AutomatedLoanRepaymentJob($loan->schedule->first()->due_date));
+        $this->dispatch(new AutomatedLoanRepaymentJob($loan->schedule->first()->due_date));
 
         $loan = $loan->fresh();
 

@@ -26,11 +26,11 @@ class ApproveLoanJobTest extends TestCase
 
         $this->request->merge(factory(Loan::class)->make()->toArray());
 
-        $loan = dispatch(new AddLoanJob($this->request));
+        $loan = $this->dispatch(new AddLoanJob($this->request));
 
         $this->expectsEvents(LoanApprovedEvent::class);
 
-        dispatch(new ApproveLoanJob($this->request, $loan));
+        $this->dispatch(new ApproveLoanJob($this->request, $loan));
 
         self::assertNotNull($loan->approver_id);
         self::assertNotNull($loan->maturity_date);

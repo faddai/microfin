@@ -59,7 +59,7 @@ class AddLoanRepaymentJob
         }
 
         foreach ($this->repayment->getFillable() as $fillable) {
-            if ($this->request->has($fillable)) {
+            if ($this->request->filled($fillable)) {
                 $this->repayment->{$fillable} = $this->request->get($fillable);
             }
         }

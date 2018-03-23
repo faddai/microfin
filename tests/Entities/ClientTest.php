@@ -33,7 +33,7 @@ class ClientTest extends TestCase
             ->toArray()
         );
 
-        dispatch(new AddClientDepositJob($this->request, $client));
+        $this->dispatch(new AddClientDepositJob($this->request, $client));
 
         self::assertEquals(3200, $client->getAccountBalance(false));
     }
@@ -54,7 +54,7 @@ class ClientTest extends TestCase
             ->toArray()
         );
 
-        dispatch(new AddClientDepositJob($this->request, $client));
+        $this->dispatch(new AddClientDepositJob($this->request, $client));
 
         self::assertTrue($client->isDeductable());
     }
@@ -73,7 +73,7 @@ class ClientTest extends TestCase
             factory(Client::class)->make()->toArray() + ['type' => 'individual']
         );
 
-        $client = dispatch(new AddClientJob($this->request));
+        $client = $this->dispatch(new AddClientJob($this->request));
 
         self::assertEquals('00100001', $client->account_number);
 
@@ -82,7 +82,7 @@ class ClientTest extends TestCase
             ->each(function (Client $client) {
                 $this->request->replace(array_merge($client->toArray(), ['type' => 'corporate']));
 
-                dispatch(new AddClientJob($this->request));
+                $this->dispatch(new AddClientJob($this->request));
             });
 
         self::assertCount(4, Client::all());

@@ -51,6 +51,6 @@ class CreditClientAccountWithDisbursedAmount
 
         $request->setUserResolver(function () use ($loan) { return $loan->disbursedBy; });
 
-        return dispatch(new AddClientDepositJob($request, $loan->client, true));
+        return dispatch_now(new AddClientDepositJob($request, $loan->client, true));
     }
 }

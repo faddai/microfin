@@ -26,9 +26,9 @@ class LoanRepaymentsControllerTest extends TestCase
 
                 $this->expectsEvents(LoanCreatedEvent::class, LoanApprovedEvent::class);
 
-                $loan = dispatch(new AddLoanJob($this->request));
+                $loan = $this->dispatch(new AddLoanJob($this->request));
 
-                dispatch(new ApproveLoanJob($this->request, $loan));
+                $this->dispatch(new ApproveLoanJob($this->request, $loan));
             });
 
         $this->actingAs(factory(User::class)->create())

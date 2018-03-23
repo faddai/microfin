@@ -11,7 +11,7 @@ use Setup\LedgersAndLedgerCategoriesTableSeeder;
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 $factory->define(Ledger::class, function (Faker\Generator $faker) {
 
-    $categories = array_keys(LedgersAndLedgerCategoriesTableSeeder::chartOfAccounts);
+    $categories = array_keys(LedgersAndLedgerCategoriesTableSeeder::getChartOfAccounts());
 
     return [
         'name' => $faker->name,

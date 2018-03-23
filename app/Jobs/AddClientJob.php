@@ -71,7 +71,7 @@ class AddClientJob
     private function addOrUpdateClient(): Client
     {
         foreach ($this->client->getFillable() as $fillable) {
-            if ($this->request->has($fillable)) {
+            if ($this->request->filled($fillable)) {
                 $this->client->{$fillable} = $this->request->get($fillable);
             }
         }
@@ -94,11 +94,11 @@ class AddClientJob
         switch ($clientType) {
             case 'individual':
                 $this->setIndividualClientName($client);
-                $clientable = dispatch(new AddIndividualClientJob($this->request, $client->clientable));
+                $clientable = dispatch_now(new AddIndividualClientJob($this->request, $client->clientable));
                 break;
             case 'corporate':
                 $this->setCorporateClientName($client);
-                $clientable = dispatch(new AddCorporateClientJob($this->request, $client->clientable));
+                $clientable = dispatch_now(new AddCorporateClientJob($this->request, $client->clientable));
                 break;
             default:
                 throw new BadRequestHttpException(

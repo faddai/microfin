@@ -29,7 +29,7 @@ class LoanTest extends TestCase
                 'client_id' => factory(Client::class, 'individual')->create(['account_balance' => 1160])->id,
             ]);
 
-        dispatch(new GenerateLoanRepaymentScheduleJob($loan));
+        $this->dispatch(new GenerateLoanRepaymentScheduleJob($loan));
 
         self::assertCount(3, $loan->schedule);
 
@@ -57,7 +57,7 @@ class LoanTest extends TestCase
 
                 $this->request->replace($loan->toArray());
 
-                dispatch(new AddLoanJob($this->request));
+                $this->dispatch(new AddLoanJob($this->request));
             });
 
         $this->request->replace([
@@ -66,7 +66,7 @@ class LoanTest extends TestCase
             'endDate' => $createdAt,
         ]);
 
-        $loans = dispatch(new LoanSearchJob($this->request));
+        $loans = $this->dispatch(new LoanSearchJob($this->request));
 
         self::assertCount(3, $loans);
 
@@ -82,13 +82,13 @@ class LoanTest extends TestCase
         $loans = factory(Loan::class, 3)->make()->each(function (Loan $loan) {
             $this->request->replace($loan->toArray());
 
-            return dispatch(new AddLoanJob($this->request));
+            return $this->dispatch(new AddLoanJob($this->request));
         });
 
         $loans->each(function (Loan $loan) {
             $this->request->merge(['approved_at' => Carbon::today()]);
 
-            return dispatch(new ApproveLoanJob($this->request, $loan));
+            return $this->dispatch(new ApproveLoanJob($this->request, $loan));
         });
 
         $this->request->replace([
@@ -97,7 +97,7 @@ class LoanTest extends TestCase
             'endDate' => Carbon::today(),
         ]);
 
-        $approvedLoans = dispatch(new LoanSearchJob($this->request));
+        $approvedLoans = $this->dispatch(new LoanSearchJob($this->request));
 
         self::assertCount(3, $approvedLoans);
 
@@ -120,12 +120,12 @@ class LoanTest extends TestCase
 
             $this->request->replace($loan->toArray());
 
-            return dispatch(new AddLoanJob($this->request));
+            return $this->dispatch(new AddLoanJob($this->request));
         });
 
         $loans->each(function (Loan $loan) use ($createdAt) {
             $this->request->merge(['approved_at' => $createdAt]);
-            return dispatch(new ApproveLoanJob($this->request, $loan));
+            return $this->dispatch(new ApproveLoanJob($this->request, $loan));
         });
 
         $this->request->replace([
@@ -134,12 +134,12 @@ class LoanTest extends TestCase
             'endDate' => $createdAt,
         ]);
 
-        $approvedLoans = dispatch(new LoanSearchJob($this->request));
+        $approvedLoans = $this->dispatch(new LoanSearchJob($this->request));
 
         $disbursedLoans = $approvedLoans->each(function (Loan $loan, $_) {
 
             if ($_ < 2) {
-                return dispatch(new DisburseLoanJob($this->request, $loan));
+                return $this->dispatch(new DisburseLoanJob($this->request, $loan));
             }
 
             return $loan;
@@ -170,7 +170,7 @@ class LoanTest extends TestCase
                 ->toArray()
         );
 
-        $loan = dispatch(new AddLoanJob($this->request));
+        $loan = $this->dispatch(new AddLoanJob($this->request));
 
         self::assertInstanceOf(Loan::class, $loan);
         self::assertEquals(Loan::STRAIGHT_LINE_STRATEGY, $loan->interest_calculation_strategy);
@@ -194,7 +194,7 @@ class LoanTest extends TestCase
                 ->toArray()
         );
 
-        $loan = dispatch(new AddLoanJob($this->request));
+        $loan = $this->dispatch(new AddLoanJob($this->request));
 
         self::assertInstanceOf(Loan::class, $loan);
         self::assertEquals(Loan::REDUCING_BALANCE_STRATEGY, $loan->interest_calculation_strategy);
@@ -219,7 +219,7 @@ class LoanTest extends TestCase
                 ->toArray()
         );
 
-        $loan = dispatch(new AddLoanJob($this->request));
+        $loan = $this->dispatch(new AddLoanJob($this->request));
 
         $this->request->replace(compact('approved_at', 'disbursed_at'));
 
@@ -265,7 +265,7 @@ class LoanTest extends TestCase
                 ->toArray()
         );
 
-        $loan = dispatch(new AddLoanJob($this->request));
+        $loan = $this->dispatch(new AddLoanJob($this->request));
 
         $this->request->replace(compact('approved_at', 'disbursed_at'));
 

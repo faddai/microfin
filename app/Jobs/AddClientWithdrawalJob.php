@@ -44,7 +44,8 @@ class AddClientWithdrawalJob
     {
         $this->request = $request;
         $this->client = $client;
-        $narration = $request->has('narration') ? $request->get('narration') : 'Client withdrawal - '. $this->client->account_number;
+        $narration = $request->filled('narration') ?
+            $request->get('narration') : 'Client withdrawal - '. $this->client->account_number;
         $this->nominal = $nominal;
 
         if ($this->request->user()->branch === null) {
@@ -88,7 +89,7 @@ class AddClientWithdrawalJob
     private function saveWithdrawalTransaction()
     {
         foreach ($this->transaction->getFillable() as $fillable) {
-            if ($this->request->has($fillable)) {
+            if ($this->request->filled($fillable)) {
                 $this->transaction->{$fillable} = $this->request->get($fillable);
             }
         }
@@ -113,7 +114,7 @@ class AddClientWithdrawalJob
      */
     private function isValidDebitTransaction()
     {
-        return $this->request->has('dr') &&
+        return $this->request->filled('dr') &&
             $this->request->get('dr') > 0 &&
             $this->client->isDeductable($this->request->get('dr'));
     }

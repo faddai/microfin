@@ -29,7 +29,7 @@ class AddClientDepositJobTest extends TestCase
             factory(ClientTransaction::class)->make(['cr' => 800])->toArray()
         );
 
-        $deposit = dispatch(new AddClientDepositJob(
+        $deposit = $this->dispatch(new AddClientDepositJob(
             $this->request, factory(Client::class, 'individual')->create(['account_balance' => 200]))
         );
 
@@ -50,7 +50,7 @@ class AddClientDepositJobTest extends TestCase
             factory(ClientTransaction::class)->make(['cr' => 800])->toArray()
         );
 
-        $deposit = dispatch(new AddClientDepositJob(
+        $deposit = $this->dispatch(new AddClientDepositJob(
             $this->request, factory(Client::class, 'individual')->create(['account_balance' => 200]))
         );
 
@@ -70,7 +70,7 @@ class AddClientDepositJobTest extends TestCase
 
         $this->doesntExpectEvents(DepositAddedEvent::class);
 
-        dispatch(new AddClientDepositJob($this->request, factory(Client::class)->create()));
+        $this->dispatch(new AddClientDepositJob($this->request, factory(Client::class)->create()));
     }
 
     public function test_logged_in_user_gets_all_deposits_transacted_by_him()
@@ -88,7 +88,7 @@ class AddClientDepositJobTest extends TestCase
             ->make()->each(function ($deposit) {
                 $this->request->replace($deposit->toArray());
 
-                dispatch(new AddClientDepositJob($this->request, $deposit->client));
+                $this->dispatch(new AddClientDepositJob($this->request, $deposit->client));
             });
 
         self::assertCount(3, $authUser->clientTransactions);
@@ -102,7 +102,7 @@ class AddClientDepositJobTest extends TestCase
 
         $this->request->merge(factory(ClientTransaction::class)->make(['cr' => 2000])->toArray());
 
-        $deposit = dispatch(new AddClientDepositJob($this->request, $client));
+        $deposit = $this->dispatch(new AddClientDepositJob($this->request, $client));
 
         self::assertInstanceOf(ClientTransaction::class, $deposit);
         self::assertEquals(2000, $deposit->cr);
@@ -120,7 +120,7 @@ class AddClientDepositJobTest extends TestCase
             'ledger_id' => Ledger::where('name', 'Cavmount Bank - 90897787')->first()->id,
         ]);
 
-        $deposit = dispatch(new AddClientDepositJob(
+        $deposit = $this->dispatch(new AddClientDepositJob(
             $this->request, factory(Client::class, 'individual')->create(['account_balance' => 0]))
         );
 
@@ -145,6 +145,6 @@ class AddClientDepositJobTest extends TestCase
 
         $this->doesntExpectEvents(DepositAddedEvent::class, LoanRepaymentDeductedEvent::class);
 
-        dispatch(new AddClientDepositJob($this->request, factory(Client::class)->create()));
+        $this->dispatch(new AddClientDepositJob($this->request, factory(Client::class)->create()));
     }
 }

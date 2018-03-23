@@ -19,7 +19,7 @@ class AddLoanPayoffJobTest extends TestCase
             'remarks' => 'Lorem ipsum'
         ]);
 
-        $payoff = dispatch(new AddLoanPayoffJob($this->request, $loan));
+        $payoff = $this->dispatch(new AddLoanPayoffJob($this->request, $loan));
 
         self::assertInstanceOf(LoanPayoff::class, $payoff);
         self::assertEquals(LoanPayoff::PENDING, $payoff->status);
@@ -44,11 +44,11 @@ class AddLoanPayoffJobTest extends TestCase
             'remarks' => 'Lorem ipsum'
         ]);
 
-        $payoff = dispatch(new AddLoanPayoffJob($this->request, $loan));
+        $payoff = $this->dispatch(new AddLoanPayoffJob($this->request, $loan));
 
         $this->request->merge(['principal' => 1000, 'remarks' => 'All done']);
 
-        $payoff = dispatch(new AddLoanPayoffJob($this->request, $loan, $payoff));
+        $payoff = $this->dispatch(new AddLoanPayoffJob($this->request, $loan, $payoff));
 
         self::assertEquals(1000, $payoff->principal);
         self::assertEquals(1150, $payoff->amount);
@@ -68,7 +68,7 @@ class AddLoanPayoffJobTest extends TestCase
             'fees' => '50.23'
         ]);
 
-        $payoff = dispatch(new AddLoanPayoffJob($this->request, $loan));
+        $payoff = $this->dispatch(new AddLoanPayoffJob($this->request, $loan));
 
         self::assertEquals(1200, $payoff->principal);
         self::assertEquals(1350.23, $payoff->amount);

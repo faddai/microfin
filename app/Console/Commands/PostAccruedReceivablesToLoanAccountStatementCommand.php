@@ -5,9 +5,13 @@ namespace App\Console\Commands;
 use App\Entities\Loan;
 use App\Jobs\PostAccruedReceivablesToLoanAccountStatementJob;
 use Illuminate\Console\Command;
+use Illuminate\Foundation\Bus\DispatchesJobs;
 
 class PostAccruedReceivablesToLoanAccountStatementCommand extends Command
 {
+
+    use DispatchesJobs;
+
     /**
      * The name and signature of the console command.
      *
@@ -40,7 +44,7 @@ class PostAccruedReceivablesToLoanAccountStatementCommand extends Command
         }
 
         $loans->each(function (Loan $loan) {
-            dispatch(new PostAccruedReceivablesToLoanAccountStatementJob($loan));
+            $this->dispatch(new PostAccruedReceivablesToLoanAccountStatementJob($loan));
         });
     }
 }

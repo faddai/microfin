@@ -35,7 +35,7 @@ class AddUnapprovedLedgerTransactionJob
     public function handle()
     {
         foreach ($this->transaction->getFillable() as $fillable) {
-            if ($this->request->has($fillable)) {
+            if ($this->request->filled($fillable)) {
                 $this->transaction->{$fillable} = $this->request->get($fillable);
             }
         }

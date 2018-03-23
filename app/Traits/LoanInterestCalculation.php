@@ -8,8 +8,13 @@
 namespace App\Traits;
 
 
+use Illuminate\Foundation\Bus\DispatchesJobs;
+
 trait LoanInterestCalculation
 {
+
+    use DispatchesJobs;
+
     /**
      * @return mixed
      */

@@ -9,7 +9,9 @@ class Ledger extends Model
 {
     protected $fillable = ['category_id', 'name', 'code', 'is_bank_or_cash', 'is_left', 'is_right'];
 
-    const CURRENT_ACCOUNT_CODE = 3007;
+    // @todo add ability to configure this ledger
+    // for now, going to hard code a ledger from the short term liability category
+    const CURRENT_ACCOUNT_CODE = 3001;
 
     protected $casts = [
         'is_left' => 'boolean',

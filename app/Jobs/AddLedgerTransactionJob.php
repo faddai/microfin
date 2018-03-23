@@ -6,6 +6,7 @@ use App\Entities\Accounting\LedgerTransaction;
 use App\Exceptions\UnbalancedLedgerEntryException;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Http\Request;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Collection;
@@ -15,7 +16,7 @@ use Ramsey\Uuid\Uuid;
 
 class AddLedgerTransactionJob implements ShouldQueue
 {
-    use InteractsWithQueue, Queueable;
+    use InteractsWithQueue, Queueable, DispatchesJobs;
 
     /**
      * @var Request
@@ -66,7 +67,7 @@ class AddLedgerTransactionJob implements ShouldQueue
 
                 $entry = collect($entry);
 
-                dispatch(new AddLedgerEntryJob(new Request([
+                $this->dispatch(new AddLedgerEntryJob(new Request([
                     'transaction_id' => $this->transaction->uuid,
                     'dr' => $entry->get('dr', 0),
                     'cr' => $entry->get('cr', 0),
@@ -96,12 +97,12 @@ class AddLedgerTransactionJob implements ShouldQueue
         }
 
         foreach ($this->transaction->getFillable() as $fillable) {
-            if ($this->request->has($fillable)) {
+            if ($this->request->filled($fillable)) {
                 $this->transaction->{$fillable} = $this->request->get($fillable);
             }
         }
 
-        if (! $this->request->has('uuid')) {
+        if (! $this->request->filled('uuid')) {
             $this->transaction->uuid = Uuid::uuid4()->toString();
         }
 

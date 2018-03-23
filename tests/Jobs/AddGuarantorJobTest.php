@@ -18,17 +18,29 @@ class AddGuarantorJobTest extends TestCase
     {
         $loan = factory(Loan::class)->create();
 
-        $guarantor = dispatch(new AddGuarantorJob($this->request, $loan));
+        $guarantor = $this->dispatch(new AddGuarantorJob($this->request, $loan));
 
         self::assertInstanceOf(Guarantor::class, $guarantor);
         self::assertEquals($this->request->name, $guarantor->name);
+    }
+
+    /**
+     * @expectedException Symfony\Component\HttpKernel\Exception\BadRequestHttpException
+     */
+    public function test_should_fail_to_add_guarantor()
+    {
+        $this->request->replace(['name' => '']);
+
+        $loan = factory(Loan::class)->create();
+
+        $this->dispatch(new AddGuarantorJob($this->request, $loan));
     }
 
     public function test_update_guarantor()
     {
         $loan = factory(Loan::class)->create();
 
-        $guarantor = dispatch(new AddGuarantorJob($this->request, $loan));
+        $guarantor = $this->dispatch(new AddGuarantorJob($this->request, $loan));
 
         self::assertInstanceOf(Guarantor::class, $guarantor);
         self::assertEquals($this->request->name, $guarantor->name);
@@ -39,7 +51,7 @@ class AddGuarantorJobTest extends TestCase
             'job_title' => 'Web Developer'
         ]);
 
-        $updatedGuarantor = dispatch(new AddGuarantorJob($this->request, $loan));
+        $updatedGuarantor = $this->dispatch(new AddGuarantorJob($this->request, $loan));
 
         self::assertInstanceOf(Guarantor::class, $updatedGuarantor);
         self::assertEquals('Web Developer', $updatedGuarantor->job_title);

@@ -14,7 +14,7 @@ class AddLedgerEntryJobTest extends TestCase
     {
         $this->request->merge(factory(LedgerEntry::class)->make()->toArray());
 
-        dispatch(new AddLedgerEntryJob($this->request));
+        $this->dispatch(new AddLedgerEntryJob($this->request));
     }
 
     /**
@@ -26,7 +26,7 @@ class AddLedgerEntryJobTest extends TestCase
 
         $this->request->merge(factory(LedgerEntry::class)->make()->toArray());
 
-        dispatch(new AddLedgerEntryJob($this->request));
+        $this->dispatch(new AddLedgerEntryJob($this->request));
     }
 
     public function test_save_a_valid_entry()
@@ -35,7 +35,7 @@ class AddLedgerEntryJobTest extends TestCase
 
         $this->request->merge(factory(LedgerEntry::class)->make(['cr' => 20])->toArray());
 
-        $entry = dispatch(new AddLedgerEntryJob($this->request));
+        $entry = $this->dispatch(new AddLedgerEntryJob($this->request));
 
         self::assertInstanceOf(LedgerEntry::class, $entry);
         self::assertEquals(0, $entry->dr);

@@ -33,7 +33,7 @@ class LoanDisbursalListenerTest extends TestCase
                 ->toArray()
         );
 
-        $loan = dispatch(new AddLoanJob($this->request));
+        $loan = $this->dispatch(new AddLoanJob($this->request));
 
         self::assertEquals(0, $loan->client->getAccountBalance(false));
 
@@ -73,7 +73,7 @@ class LoanDisbursalListenerTest extends TestCase
                 ->toArray()
         );
 
-        $loan = dispatch(new AddLoanJob($this->request));
+        $loan = $this->dispatch(new AddLoanJob($this->request));
 
         self::assertEquals(500, $loan->getTotalFees());
         self::assertEquals(350, $loan->getUpfrontFees());
@@ -84,7 +84,10 @@ class LoanDisbursalListenerTest extends TestCase
 
         self::assertEquals($transaction->entries->sum('dr'), $transaction->entries->sum('cr'));
         self::assertEquals(9650, $loan->client->getAccountBalance(false));
-        self::assertEquals(9650, LedgerEntry::where('ledger_id', Ledger::whereName('Current Account')->first()->id)->first()->cr);
+        self::assertEquals(
+            9650,
+            LedgerEntry::where('ledger_id', Ledger::whereCode(Ledger::CURRENT_ACCOUNT_CODE)->first()->id)->first()->cr
+        );
         self::assertEquals(250, LedgerEntry::where('ledger_id', $loan->fees->first()->incomeLedger->id)->first()->cr);
         self::assertEquals(100, LedgerEntry::where('ledger_id', $loan->fees->last()->incomeLedger->id)->first()->cr);
         self::assertEquals(10000, LedgerEntry::where('ledger_id', $loan->product->principalLedger->id)->first()->dr);
@@ -121,7 +124,7 @@ class LoanDisbursalListenerTest extends TestCase
                 ->toArray()
         );
 
-        $loan = dispatch(new AddLoanJob($this->request));
+        $loan = $this->dispatch(new AddLoanJob($this->request));
 
         self::assertEquals(400, $loan->getTotalFees());
         self::assertEquals(0, $loan->getUpfrontFees());

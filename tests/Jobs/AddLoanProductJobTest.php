@@ -17,7 +17,7 @@ class AddLoanProductJobTest extends TestCase
             factory(LoanProduct::class)->make(['name' => 'Staff Loan', 'code' => 2312])->toArray()
         );
 
-        $product = dispatch(new AddLoanProductJob($this->request));
+        $product = $this->dispatch(new AddLoanProductJob($this->request));
 
         self::assertInstanceOf(LoanProduct::class, $product);
     }
@@ -35,7 +35,7 @@ class AddLoanProductJobTest extends TestCase
             'code' => 11122
         ]);
 
-        $product = dispatch(new AddLoanProductJob($this->request, $product));
+        $product = $this->dispatch(new AddLoanProductJob($this->request, $product));
 
         self::assertInstanceOf(LoanProduct::class, $product);
         self::assertNotEquals('Gentle Borrowers', $product->name);

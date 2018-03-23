@@ -67,14 +67,14 @@ class AddUserJob
         return DB::transaction(function () {
 
             foreach ($this->user->getFillable() as $fillable) {
-                if ($this->request->has($fillable)) {
+                if ($this->request->filled($fillable)) {
                     $this->user->{$fillable} = $this->request->get($fillable);
                 }
             }
 
             $this->user->save();
 
-            if ($this->request->has('roles')) {
+            if ($this->request->filled('roles')) {
                 $this->user->syncRoles($this->request->get('roles'));
             }
 

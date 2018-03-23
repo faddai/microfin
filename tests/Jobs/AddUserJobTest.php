@@ -18,7 +18,7 @@ class AddUserJobTest extends TestCase
             'password' => 'secret'
         ]);
 
-        $user = dispatch(new AddUserJob($this->request));
+        $user = $this->dispatch(new AddUserJob($this->request));
 
         self::assertInstanceOf(User::class, $user);
         Notification::assertSentTo($user, NewUserAccountCreatedNotification::class);
@@ -34,7 +34,7 @@ class AddUserJobTest extends TestCase
             'password' => 'secret'
         ]);
 
-        $user = dispatch(new AddUserJob($this->request, null, false));
+        $user = $this->dispatch(new AddUserJob($this->request, null, false));
 
         self::assertInstanceOf(User::class, $user);
         Notification::assertNotSentTo($user, NewUserAccountCreatedNotification::class);
@@ -48,7 +48,7 @@ class AddUserJobTest extends TestCase
 
         $this->request->merge(['name' => 'Gentle Jack']);
 
-        $updatedUser = dispatch(new AddUserJob($this->request, $user));
+        $updatedUser = $this->dispatch(new AddUserJob($this->request, $user));
 
         self::assertEquals('Gentle Jack', $updatedUser->name);
         Notification::assertNotSentTo($user, NewUserAccountCreatedNotification::class);
@@ -62,7 +62,7 @@ class AddUserJobTest extends TestCase
 
         self::assertTrue($user->isActive());
 
-        $updatedUser = dispatch(new AddUserJob($this->request, $user));
+        $updatedUser = $this->dispatch(new AddUserJob($this->request, $user));
 
         self::assertFalse($updatedUser->isActive());
     }

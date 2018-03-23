@@ -27,7 +27,7 @@ class NotifyUsersWhoCanDisburseLoanListenerTest extends TestCase
 
         $loan = factory(Loan::class)->create();
 
-        dispatch(new ApproveLoanJob($this->request, $loan));
+        $this->dispatch(new ApproveLoanJob($this->request, $loan));
 
         Notification::assertSentTo($accountants, LoanApprovedNotification::class);
     }

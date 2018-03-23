@@ -10,10 +10,14 @@ namespace App\Listeners;
 
 use App\Events\LoanRepaymentDeductedEvent;
 use App\Jobs\AddLoanStatementEntryJob;
+use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Http\Request;
 
 class PostLoanRepaymentDeductionToLoanAccountStatement
 {
+
+    use DispatchesJobs;
+
     /**
      * When a loan repayment is deducted, record total amount paid as Credit
      * @param LoanRepaymentDeductedEvent $event
@@ -35,7 +39,7 @@ class PostLoanRepaymentDeductionToLoanAccountStatement
         if ($totalPaid > 0) {
             logger('Add repayment deduction to loan statement', array_merge($request->all(), ['loan_id' => $event->currentRepaymentDeduction->loan->id]));
 
-            return dispatch(new AddLoanStatementEntryJob($request, $event->currentRepaymentDeduction->loan));
+            return $this->dispatch(new AddLoanStatementEntryJob($request, $event->currentRepaymentDeduction->loan));
         }
     }
 }

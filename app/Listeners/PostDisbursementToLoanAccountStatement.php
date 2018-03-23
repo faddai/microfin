@@ -11,17 +11,21 @@ namespace App\Listeners;
 use App\Events\LoanDisbursedEvent;
 use App\Jobs\AddLoanStatementEntryJob;
 use App\Jobs\PostAccruedReceivablesToLoanAccountStatementJob;
+use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class PostDisbursementToLoanAccountStatement
 {
+
+    use DispatchesJobs;
+
     public function handle(LoanDisbursedEvent $event)
     {
         DB::transaction(function () use ($event) {
             $loan = $event->loan;
 
-            dispatch(new AddLoanStatementEntryJob(new Request([
+            $this->dispatch(new AddLoanStatementEntryJob(new Request([
                 'dr' => $loan->amount,
                 'narration' => 'Loan disbursed',
                 'value_date' => $loan->disbursed_at,
@@ -29,7 +33,7 @@ class PostDisbursementToLoanAccountStatement
             ]), $loan));
 
             // Post interest accrued to the loan statement for backdated loans
-            $loan->isBackdated() && dispatch(new PostAccruedReceivablesToLoanAccountStatementJob($loan));
+            $loan->isBackdated() && $this->dispatch(new PostAccruedReceivablesToLoanAccountStatementJob($loan));
         });
     }
 }

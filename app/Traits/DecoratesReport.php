@@ -8,9 +8,13 @@
 namespace App\Traits;
 
 use Carbon\Carbon;
+use Illuminate\Foundation\Bus\DispatchesJobs;
 
 trait DecoratesReport
 {
+
+    use DispatchesJobs;
+
     /**
      * @return void
      */

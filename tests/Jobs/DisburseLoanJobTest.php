@@ -20,13 +20,13 @@ class DisburseLoanJobTest extends TestCase
 
         $this->request->merge(factory(Loan::class, 'customer')->make()->toArray());
 
-        $loan = dispatch(new AddLoanJob($this->request));
+        $loan = $this->dispatch(new AddLoanJob($this->request));
 
-        dispatch(new ApproveLoanJob($this->request, $loan));
+        $this->dispatch(new ApproveLoanJob($this->request, $loan));
 
         self::assertEquals(Loan::APPROVED, $loan->fresh()->status);
 
-        dispatch(new DisburseLoanJob($this->request, $loan));
+        $this->dispatch(new DisburseLoanJob($this->request, $loan));
 
         $loan = $loan->fresh();
 
@@ -47,7 +47,7 @@ class DisburseLoanJobTest extends TestCase
             'disbursal_remarks' => faker()->sentence
         ])->toArray());
 
-        $loan = dispatch(new AddLoanJob($this->request));
+        $loan = $this->dispatch(new AddLoanJob($this->request));
 
         $this->approveAndDisburseLoan($loan);
 
@@ -63,7 +63,7 @@ class DisburseLoanJobTest extends TestCase
 
         $loan = factory(Loan::class)->create();
 
-        dispatch(new DisburseLoanJob($this->request, $loan));
+        $this->dispatch(new DisburseLoanJob($this->request, $loan));
     }
 
     public function test_can_deduct_upfront_loan_fees_during_disbursal()
@@ -86,7 +86,7 @@ class DisburseLoanJobTest extends TestCase
                 ->toArray()
         );
 
-        $loan = dispatch(new AddLoanJob($this->request));
+        $loan = $this->dispatch(new AddLoanJob($this->request));
 
         self::assertEquals(150.0, $loan->fees->first()->pivot->amount);
         self::assertFalse((bool) $loan->fees->first()->pivot->is_paid_upfront);
@@ -120,7 +120,7 @@ class DisburseLoanJobTest extends TestCase
                 ->toArray()
         );
 
-        $loan = dispatch(new AddLoanJob($this->request));
+        $loan = $this->dispatch(new AddLoanJob($this->request));
 
         self::assertEquals(150.0, $loan->fees->first()->pivot->amount);
         self::assertEquals(200.0, $loan->fees->last()->pivot->amount);
@@ -150,7 +150,7 @@ class DisburseLoanJobTest extends TestCase
                 ->toArray()
         );
 
-        $loan = dispatch(new AddLoanJob($this->request));
+        $loan = $this->dispatch(new AddLoanJob($this->request));
 
         self::assertCount(6, $loan->schedule);
 
@@ -191,13 +191,13 @@ class DisburseLoanJobTest extends TestCase
                 ->toArray()
         );
 
-        $loan = dispatch(new AddLoanJob($this->request));
+        $loan = $this->dispatch(new AddLoanJob($this->request));
 
         self::assertCount(6, $loan->schedule);
 
         $this->request->replace(['disbursed_at' => Carbon::today()->subWeekdays(100)]); // disbursed 100 days ago
 
-        dispatch(new DisburseLoanJob($this->request, dispatch(new ApproveLoanJob($this->request, $loan))));
+        $this->dispatch(new DisburseLoanJob($this->request, $this->dispatch(new ApproveLoanJob($this->request, $loan))));
 
         $loan = $loan->fresh();
         $entries = LoanStatementEntry::all();

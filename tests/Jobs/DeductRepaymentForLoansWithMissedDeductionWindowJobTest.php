@@ -42,7 +42,7 @@ class DeductRepaymentForLoansWithMissedDeductionWindowJobTest extends TestCase
                 'client_id' => $client->id
             ]);
 
-        $schedule = dispatch(new GenerateLoanRepaymentScheduleJob($loan));
+        $schedule = $this->dispatch(new GenerateLoanRepaymentScheduleJob($loan));
 
         // we expect 5 repayments to be made
         self::assertCount(5, $schedule);
@@ -52,7 +52,7 @@ class DeductRepaymentForLoansWithMissedDeductionWindowJobTest extends TestCase
             self::assertNull($repayment->status);
         });
 
-        dispatch(new DeductRepaymentForLoansWithMissedDeductionWindowJob);
+        $this->dispatch(new DeductRepaymentForLoansWithMissedDeductionWindowJob);
 
         $loan = $loan->fresh('payments');
 
@@ -86,7 +86,7 @@ class DeductRepaymentForLoansWithMissedDeductionWindowJobTest extends TestCase
                 'client_id' => $client->id
             ]);
 
-        $schedule = dispatch(new GenerateLoanRepaymentScheduleJob($loan));
+        $schedule = $this->dispatch(new GenerateLoanRepaymentScheduleJob($loan));
 
         // we expect 5 repayments to be made
         self::assertCount(5, $schedule);
@@ -102,9 +102,9 @@ class DeductRepaymentForLoansWithMissedDeductionWindowJobTest extends TestCase
             ->toArray()
         );
 
-        dispatch(new AddClientDepositJob($this->request, $client));
+        $this->dispatch(new AddClientDepositJob($this->request, $client));
 
-        dispatch(new DeductRepaymentForLoansWithMissedDeductionWindowJob);
+        $this->dispatch(new DeductRepaymentForLoansWithMissedDeductionWindowJob);
 
         // Client now has an account balance of 4530 which can fully repay the first 3 repayments
         $loan = $loan->fresh('payments');
@@ -136,7 +136,7 @@ class DeductRepaymentForLoansWithMissedDeductionWindowJobTest extends TestCase
          */
         $this->request->merge(['cr' => 150]);
 
-        dispatch(new AddClientDepositJob($this->request, $client));
+        $this->dispatch(new AddClientDepositJob($this->request, $client));
 
         $loan = $loan->fresh('payments', 'schedule');
 
@@ -159,7 +159,7 @@ class DeductRepaymentForLoansWithMissedDeductionWindowJobTest extends TestCase
          */
         $this->request->merge(['cr' => 3000]);
 
-        dispatch(new AddClientDepositJob($this->request, $client));
+        $this->dispatch(new AddClientDepositJob($this->request, $client));
 
         $loan = $loan->fresh('payments', 'client');
 
@@ -182,7 +182,7 @@ class DeductRepaymentForLoansWithMissedDeductionWindowJobTest extends TestCase
                 ->toArray()
         );
 
-        $loan = dispatch(new AddLoanJob($this->request));
+        $loan = $this->dispatch(new AddLoanJob($this->request));
 
         self::assertEquals(2092.53, $loan->schedule->first()->amount, '', 0.1);
 
@@ -200,7 +200,7 @@ class DeductRepaymentForLoansWithMissedDeductionWindowJobTest extends TestCase
                 ->toArray()
         );
 
-        dispatch(new AddClientWithdrawalJob($this->request, $loan->client));
+        $this->dispatch(new AddClientWithdrawalJob($this->request, $loan->client));
 
         $this->artisan('microfin:recalibrate-missed-deductions');
 
@@ -216,7 +216,7 @@ class DeductRepaymentForLoansWithMissedDeductionWindowJobTest extends TestCase
 
         // make a deposit for Client
         $this->request->replace(factory(ClientTransaction::class)->states('deposit')->make(['cr' => 23870])->toArray());
-        dispatch(new AddClientDepositJob($this->request, $loan->client));
+        $this->dispatch(new AddClientDepositJob($this->request, $loan->client));
 
         $loan = $loan->fresh();
 

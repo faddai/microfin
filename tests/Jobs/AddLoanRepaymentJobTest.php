@@ -30,7 +30,7 @@ class AddLoanRepaymentJobTest extends TestCase
             factory(LoanRepayment::class)->make(['loan_id' => $loan->id])->toArray()
         );
 
-        $repayment = dispatch(new AddLoanRepaymentJob($this->request));
+        $repayment = $this->dispatch(new AddLoanRepaymentJob($this->request));
 
         self::assertInstanceOf(LoanRepayment::class, $repayment);
         self::assertNull($repayment->repayment_timestamp);

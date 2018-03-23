@@ -61,7 +61,7 @@ class ClientsControllerTest extends TestCase
             ]
         ])->map(function (array $client) {
             $this->request->replace($client);
-            return dispatch(new AddClientJob($this->request));
+            return $this->dispatch(new AddClientJob($this->request));
         });
     }
 
@@ -71,7 +71,7 @@ class ClientsControllerTest extends TestCase
 
         $this->request->merge(['type' => 'individual', 'account_number' => 3333]);
 
-        $client = dispatch(new AddClientJob($this->request));
+        $client = $this->dispatch(new AddClientJob($this->request));
 
         // search for client with account number containing 33 and since there's only a single
         // occurrence of such client, get redirected to view the client's details
@@ -87,7 +87,7 @@ class ClientsControllerTest extends TestCase
 
         $this->request->merge(['type' => 'individual', 'account_number' => 3333]);
 
-        $client = dispatch(new AddClientJob($this->request));
+        $client = $this->dispatch(new AddClientJob($this->request));
 
         $this->actingAs(factory(User::class)->create())
             ->get('clients/'. $client['id'])

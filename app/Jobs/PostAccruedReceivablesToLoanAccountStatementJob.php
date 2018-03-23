@@ -14,6 +14,7 @@ use App\Entities\LoanStatement;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Http\Request;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
@@ -21,7 +22,7 @@ use Illuminate\Support\Facades\DB;
 
 class PostAccruedReceivablesToLoanAccountStatementJob implements ShouldQueue
 {
-    use InteractsWithQueue, Queueable, SerializesModels;
+    use InteractsWithQueue, Queueable, SerializesModels, DispatchesJobs;
 
     /**
      * @var Loan
@@ -73,7 +74,7 @@ class PostAccruedReceivablesToLoanAccountStatementJob implements ShouldQueue
                             'created_at' => $repayment->due_date
                         ]);
 
-                        dispatch(new AddLoanStatementEntryJob($request, $repayment->loan));
+                        $this->dispatch(new AddLoanStatementEntryJob($request, $repayment->loan));
 
                         $posted++;
 
@@ -88,7 +89,7 @@ class PostAccruedReceivablesToLoanAccountStatementJob implements ShouldQueue
 
                             if ($fee->pivot->amount > 0) {
 
-                                dispatch(new AddLoanStatementEntryJob(new Request([
+                                $this->dispatch(new AddLoanStatementEntryJob(new Request([
                                     'narration' => $fee->name,
                                     'dr' => $fee->pivot->amount / $repayment->loan->tenure->number_of_months,
                                     'value_date' => $repayment->due_date,

@@ -13,9 +13,9 @@ class DeclineLoanJobTest extends TestCase
 
         $this->request->merge(factory(Loan::class)->make()->toArray());
 
-        $loan = dispatch(new AddLoanJob($this->request));
+        $loan = $this->dispatch(new AddLoanJob($this->request));
 
-        dispatch(new DeclineLoanJob($this->request, $loan));
+        $this->dispatch(new DeclineLoanJob($this->request, $loan));
 
         $loan = $loan->fresh();
 

@@ -23,9 +23,9 @@ class GenerateCollateralReportJobTest extends TestCase
                 ->toArray()
         );
 
-        $loan = dispatch(new AddLoanJob($this->request));
+        $loan = $this->dispatch(new AddLoanJob($this->request));
 
-        $report = dispatch(new GenerateCollateralReportJob($this->request));
+        $report = $this->dispatch(new GenerateCollateralReportJob($this->request));
 
         $expected = collect();
 
@@ -85,9 +85,9 @@ class GenerateCollateralReportJobTest extends TestCase
                 ->toArray()
         );
 
-        $loan = dispatch(new AddLoanJob($this->request));
+        $loan = $this->dispatch(new AddLoanJob($this->request));
 
-        $report = dispatch(new GenerateCollateralReportJob($this->request));
+        $report = $this->dispatch(new GenerateCollateralReportJob($this->request));
 
         $expected = collect();
 

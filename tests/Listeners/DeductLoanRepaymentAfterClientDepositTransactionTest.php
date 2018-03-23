@@ -40,7 +40,7 @@ class DeductLoanRepaymentAfterClientDepositTransactionTest extends TestCase
                 ->toArray()
         );
 
-        $loan = dispatch(new AddLoanJob($this->request));
+        $loan = $this->dispatch(new AddLoanJob($this->request));
 
         $firstScheduledRepayment = $loan->schedule->first();
 
@@ -52,7 +52,7 @@ class DeductLoanRepaymentAfterClientDepositTransactionTest extends TestCase
         self::assertEquals(1200, $firstScheduledRepayment->principal);
 
         // do deductions
-        dispatch(new AutomatedLoanRepaymentJob($dueDate));
+        $this->dispatch(new AutomatedLoanRepaymentJob($dueDate));
 
         $repayment = $loan->fresh()->schedule->first();
 
@@ -65,7 +65,7 @@ class DeductLoanRepaymentAfterClientDepositTransactionTest extends TestCase
             factory(ClientTransaction::class)->states('deposit')->make(['cr' => 2000])->toArray()
         );
 
-        $deposit = dispatch(new AddClientDepositJob($this->request, $client));
+        $deposit = $this->dispatch(new AddClientDepositJob($this->request, $client));
 
         $loan = $loan->fresh('payments', 'schedule');
 
@@ -103,13 +103,13 @@ class DeductLoanRepaymentAfterClientDepositTransactionTest extends TestCase
                 'client_id' => $client->id
             ]);
 
-        $scheduledRepayments = dispatch(new GenerateLoanRepaymentScheduleJob($loan));
+        $scheduledRepayments = $this->dispatch(new GenerateLoanRepaymentScheduleJob($loan));
 
         // we expect 5 repayments to be made
         self::assertCount(5, $scheduledRepayments); // I = 270, P = 1200, A = 1470
 
         // do deductions
-        dispatch(new AutomatedLoanRepaymentJob($dueDate));
+        $this->dispatch(new AutomatedLoanRepaymentJob($dueDate));
 
         $repayment = $loan->schedule->first();
 
@@ -122,7 +122,7 @@ class DeductLoanRepaymentAfterClientDepositTransactionTest extends TestCase
             factory(ClientTransaction::class)->states('deposit')->make(['cr' => 1300])->toArray()
         );
 
-        dispatch(new AddClientDepositJob($this->request, $client));
+        $this->dispatch(new AddClientDepositJob($this->request, $client));
 
         $loan = $loan->fresh('payments');
 
@@ -137,7 +137,7 @@ class DeductLoanRepaymentAfterClientDepositTransactionTest extends TestCase
         // deposit some money into Client's account
         $this->request->merge(['cr' => 100]);
 
-        dispatch(new AddClientDepositJob($this->request, $client));
+        $this->dispatch(new AddClientDepositJob($this->request, $client));
 
         $loan = $loan->fresh('payments');
 
@@ -172,7 +172,7 @@ class DeductLoanRepaymentAfterClientDepositTransactionTest extends TestCase
                 'client_id' => $client->id
             ]);
 
-        $schedule = dispatch(new GenerateLoanRepaymentScheduleJob($loan));
+        $schedule = $this->dispatch(new GenerateLoanRepaymentScheduleJob($loan));
 
         // we expect 5 repayments to be made
         self::assertCount(5, $schedule);
@@ -182,7 +182,7 @@ class DeductLoanRepaymentAfterClientDepositTransactionTest extends TestCase
         self::assertEquals(1200, $schedule->first()->getPrincipal(false)); // repayment principal = 1470 - (0.045 * 6000)
 
         // do deductions
-        dispatch(new AutomatedLoanRepaymentJob($dueDate));
+        $this->dispatch(new AutomatedLoanRepaymentJob($dueDate));
 
         $repayment = $loan->schedule->first();
 
@@ -195,7 +195,7 @@ class DeductLoanRepaymentAfterClientDepositTransactionTest extends TestCase
             factory(ClientTransaction::class)->states('deposit')->make(['cr' => 400])->toArray()
         );
 
-        dispatch(new AddClientDepositJob($this->request, $client));
+        $this->dispatch(new AddClientDepositJob($this->request, $client));
 
         $loan = $loan->fresh('payments');
 
@@ -232,10 +232,10 @@ class DeductLoanRepaymentAfterClientDepositTransactionTest extends TestCase
                 'client_id' => $client->id
             ]);
 
-        dispatch(new GenerateLoanRepaymentScheduleJob($loan));
+        $this->dispatch(new GenerateLoanRepaymentScheduleJob($loan));
 
         // effect repayment
-        dispatch(new AutomatedLoanRepaymentJob($dueDate));
+        $this->dispatch(new AutomatedLoanRepaymentJob($dueDate));
 
         $repayment = $loan->payments->first();
 
@@ -255,7 +255,7 @@ class DeductLoanRepaymentAfterClientDepositTransactionTest extends TestCase
             factory(ClientTransaction::class)->states('deposit')->make(['cr' => 60])->toArray()
         );
 
-        dispatch(new AddClientDepositJob($this->request, $client));
+        $this->dispatch(new AddClientDepositJob($this->request, $client));
 
         self::assertEquals(0.0, $loan->client->getAccountBalance(false));
 
@@ -299,10 +299,10 @@ class DeductLoanRepaymentAfterClientDepositTransactionTest extends TestCase
                 'client_id' => $client->id
             ]);
 
-        dispatch(new GenerateLoanRepaymentScheduleJob($loan));
+        $this->dispatch(new GenerateLoanRepaymentScheduleJob($loan));
 
         // effect repayment
-        dispatch(new AutomatedLoanRepaymentJob($dueDate));
+        $this->dispatch(new AutomatedLoanRepaymentJob($dueDate));
 
         $repayment = $loan->payments->first();
 
@@ -323,7 +323,7 @@ class DeductLoanRepaymentAfterClientDepositTransactionTest extends TestCase
             factory(ClientTransaction::class)->states('deposit')->make(['cr' => 60])->toArray()
         );
 
-        dispatch(new AddClientDepositJob($this->request, $client));
+        $this->dispatch(new AddClientDepositJob($this->request, $client));
 
         self::assertEquals(0.0, $loan->client->getAccountBalance());
 
@@ -342,7 +342,7 @@ class DeductLoanRepaymentAfterClientDepositTransactionTest extends TestCase
          */
         $this->request->merge(['cr' => 960]);
 
-        dispatch(new AddClientDepositJob($this->request, $client));
+        $this->dispatch(new AddClientDepositJob($this->request, $client));
 
         $loan = $loan->fresh();
 
@@ -368,7 +368,7 @@ class DeductLoanRepaymentAfterClientDepositTransactionTest extends TestCase
 
         $this->request->merge($loan->toArray());
 
-        $loan = dispatch(new AddLoanJob($this->request));
+        $loan = $this->dispatch(new AddLoanJob($this->request));
 
         self::assertEquals(726.67, $loan->schedule->first()->amount, '', 0.1);
         self::assertEquals(60, $loan->schedule->first()->interest);
@@ -415,7 +415,7 @@ class DeductLoanRepaymentAfterClientDepositTransactionTest extends TestCase
 
                 $this->request->replace($loan->toArray());
 
-                dispatch(new AddLoanJob($this->request));
+                $this->dispatch(new AddLoanJob($this->request));
             });
 
         $this->request->merge(
@@ -431,7 +431,7 @@ class DeductLoanRepaymentAfterClientDepositTransactionTest extends TestCase
                 ->toArray()
         );
 
-        dispatch(new AddLoanJob($this->request));
+        $this->dispatch(new AddLoanJob($this->request));
 
         // these are backdated loans, recalibrate
         $this->artisan('microfin:recalibrate-missed-deductions');
@@ -441,7 +441,7 @@ class DeductLoanRepaymentAfterClientDepositTransactionTest extends TestCase
             factory(ClientTransaction::class)->states('deposit')->make(['cr' => 1250])->toArray()
         );
 
-        dispatch(new AddClientDepositJob($this->request, Loan::all()->last()->client));
+        $this->dispatch(new AddClientDepositJob($this->request, Loan::all()->last()->client));
 
         $loan = Loan::all()->last();
 
@@ -476,14 +476,14 @@ class DeductLoanRepaymentAfterClientDepositTransactionTest extends TestCase
                 'client_id' => $client->id
             ]);
 
-        $schedule = dispatch(new GenerateLoanRepaymentScheduleJob($loan));
+        $schedule = $this->dispatch(new GenerateLoanRepaymentScheduleJob($loan));
 
         // we expect 5 repayments to be made
         self::assertCount(5, $schedule);
         self::assertEquals($dueDate, $schedule->first()->due_date);
 
         // do deductions
-        dispatch(new AutomatedLoanRepaymentJob($dueDate));
+        $this->dispatch(new AutomatedLoanRepaymentJob($dueDate));
 
         $repayments = $loan->schedule;
 
@@ -495,7 +495,7 @@ class DeductLoanRepaymentAfterClientDepositTransactionTest extends TestCase
             factory(ClientTransaction::class)->states('deposit')->make(['cr' => 2000])->toArray()
         );
 
-        dispatch(new AddClientDepositJob($this->request, $client));
+        $this->dispatch(new AddClientDepositJob($this->request, $client));
 
         $loan = $loan->fresh('payments');
 

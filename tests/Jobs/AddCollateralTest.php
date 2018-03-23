@@ -11,11 +11,9 @@ class AddCollateralTest extends TestCase
     {
         $loan = factory(Loan::class)->create();
 
-        $this->request->merge([
-            'market_value' => 300, 'label' => 'Mobile Phone'
-        ]);
+        $this->request->merge(['market_value' => 300, 'label' => 'Mobile Phone']);
 
-        $collateral = dispatch(new AddCollateralJob($this->request, $loan));
+        $collateral = $this->dispatch(new AddCollateralJob($this->request, $loan));
 
         self::assertInstanceOf(Collateral::class, $collateral);
         self::assertEquals(300, $collateral->value());
@@ -31,7 +29,7 @@ class AddCollateralTest extends TestCase
             'market_value' => 300, 'label' => 'Mobile Phone'
         ]);
 
-        $collateral = dispatch(new AddCollateralJob($this->request, $loan));
+        $collateral = $this->dispatch(new AddCollateralJob($this->request, $loan));
 
         $this->request->merge([
             'collateral_id' => $collateral->id,
@@ -39,7 +37,7 @@ class AddCollateralTest extends TestCase
             'market_value' => 600
         ]);
 
-        $updatedCollateral = dispatch(new AddCollateralJob($this->request, $loan));
+        $updatedCollateral = $this->dispatch(new AddCollateralJob($this->request, $loan));
 
         self::assertInstanceOf(Collateral::class, $updatedCollateral);
         self::assertEquals(600, $updatedCollateral->value());

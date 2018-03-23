@@ -53,7 +53,7 @@ class AddIndividualClientJob
     private function saveOrUpdateIndividualClient()
     {
         foreach ($this->client->getFillable() as $fillable) {
-            if ($this->request->has($fillable)) {
+            if ($this->request->filled($fillable)) {
                 $this->client->{$fillable} = $this->request->get($fillable);
             }
         }
