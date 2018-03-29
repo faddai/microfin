@@ -33,6 +33,8 @@ class StraightLineInterestCalculationStrategyTest extends TestCase
 
         $loan = $this->dispatch(new AddLoanJob($this->request));
 
+        $loanCreatedAt = $loan->created_at->copy()->startOfDay(); // we don't care about what time it was created
+
         $schedule = $loan->schedule;
 
         self::assertCount(24, $schedule);
@@ -46,11 +48,11 @@ class StraightLineInterestCalculationStrategyTest extends TestCase
         });
 
         self::assertEquals(
-            $loan->created_at->copy()->addWeekdays($loan->repaymentPlan->number_of_days),
+            $loanCreatedAt->copy()->addWeekdays($loan->repaymentPlan->number_of_days),
             $schedule->first()->due_date
         );
         self::assertEquals(
-            $loan->created_at->copy()->addWeekdays($loan->repaymentPlan->number_of_days * 2),
+            $loanCreatedAt->copy()->addWeekdays($loan->repaymentPlan->number_of_days * 2),
             $schedule->get(1)->due_date
         );
         self::assertEquals(1700, $loan->getTotalFees(false));
@@ -80,6 +82,8 @@ class StraightLineInterestCalculationStrategyTest extends TestCase
 
         $loan = $this->dispatch(new AddLoanJob($this->request));
 
+        $loanCreatedAt = $loan->created_at->copy()->startOfDay(); // we don't care about what time it was created
+
         $schedule = $loan->schedule;
 
         self::assertCount(24, $schedule);
@@ -93,12 +97,12 @@ class StraightLineInterestCalculationStrategyTest extends TestCase
         });
 
         self::assertEquals(
-            $loan->created_at->copy()->addWeekdays($repaymentPlan->number_of_days),
-            $schedule->first()->due_date, '', 1
+            $loanCreatedAt->copy()->addWeekdays($repaymentPlan->number_of_days),
+            $schedule->first()->due_date
         );
 
         self::assertEquals(
-            $loan->created_at->copy()->addWeekdays($repaymentPlan->number_of_days * 2),
+            $loanCreatedAt->copy()->addWeekdays($repaymentPlan->number_of_days * 2),
             $schedule->get(1)->due_date
         );
 
@@ -106,6 +110,8 @@ class StraightLineInterestCalculationStrategyTest extends TestCase
 
         // disburse loan and run assertions all over again
         $loan = $this->approveAndDisburseLoan($loan);
+
+        $loanDisbursedAt = $loan->disbursed_at->copy()->startOfDay();
 
         $loan->schedule->each(function (LoanRepayment $repayment) {
             self::assertEquals(1387.50, $repayment->amount, '', 0.1);
@@ -115,12 +121,12 @@ class StraightLineInterestCalculationStrategyTest extends TestCase
         });
 
         self::assertEquals(
-            $loan->disbursed_at->copy()->addWeekdays($repaymentPlan->number_of_days),
-            $schedule->first()->due_date, '', 1
+            $loanDisbursedAt->copy()->addWeekdays($repaymentPlan->number_of_days),
+            $schedule->first()->due_date
         );
 
         self::assertEquals(
-            $loan->disbursed_at->copy()->addWeekdays($repaymentPlan->number_of_days * 2),
+            $loanDisbursedAt->copy()->addWeekdays($repaymentPlan->number_of_days * 2),
             $schedule->get(1)->due_date
         );
 

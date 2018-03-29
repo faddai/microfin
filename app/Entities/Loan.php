@@ -741,7 +741,7 @@ class Loan extends Model
      */
     public function getNextRepaymentDueDatePerPlan($dueDate)
     {
-        return Carbon::parse($dueDate)->addWeekdays($this->repaymentPlan->number_of_days);
+        return Carbon::parse($dueDate)->startOfDay()->addWeekdays($this->repaymentPlan->number_of_days);
     }
 
     /**
