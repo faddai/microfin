@@ -5,6 +5,7 @@
  * Date: 15/10/2016
  * Time: 23:14
  */
+namespace Tests;
 
 use App\Entities\Loan;
 use App\Entities\Permission;
@@ -15,20 +16,15 @@ use App\Jobs\DisburseLoanJob;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Bus\DispatchesJobs;
+use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use Illuminate\Http\Request;
 
 
-abstract class TestCase extends Illuminate\Foundation\Testing\TestCase
+
+abstract class TestCase extends BaseTestCase
 {
 
-    use DispatchesJobs;
-
-    /**
-     * The base URL to use while testing the application.
-     *
-     * @var string
-     */
-    protected $baseUrl = 'http://localhost';
+    use DispatchesJobs, CreatesApplication;
 
     /**
      * @var Request
@@ -42,20 +38,6 @@ abstract class TestCase extends Illuminate\Foundation\Testing\TestCase
         $this->request = new Request();
 
         $this->runMigrationsAndSeed();
-    }
-
-    /**
-     * Creates the application.
-     *
-     * @return \Illuminate\Foundation\Application
-     */
-    public function createApplication()
-    {
-        $app = require __DIR__.'/../bootstrap/app.php';
-
-        $app->make(Illuminate\Contracts\Console\Kernel::class)->bootstrap();
-
-        return $app;
     }
 
     /**
