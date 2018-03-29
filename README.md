@@ -2,6 +2,9 @@
 
 A micro-finance solution written using the Laravel web framework.
 
+[![Build Status](https://travis-ci.org/faddai/microfin.svg?branch=master)](https://travis-ci.org/faddai/microfin)
+[![codecov](https://codecov.io/gh/faddai/microfin/branch/master/graph/badge.svg)](https://codecov.io/gh/faddai/microfin)
+
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
