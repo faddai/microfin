@@ -94,7 +94,7 @@ class StraightLineInterestCalculationStrategyTest extends TestCase
 
         self::assertEquals(
             $loan->created_at->copy()->addWeekdays($repaymentPlan->number_of_days),
-            $schedule->first()->due_date
+            $schedule->first()->due_date, '', 1
         );
 
         self::assertEquals(
@@ -116,7 +116,7 @@ class StraightLineInterestCalculationStrategyTest extends TestCase
 
         self::assertEquals(
             $loan->disbursed_at->copy()->addWeekdays($repaymentPlan->number_of_days),
-            $schedule->first()->due_date
+            $schedule->first()->due_date, '', 1
         );
 
         self::assertEquals(
