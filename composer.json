@@ -6,9 +6,8 @@
     "type": "project",
     "require": {
         "php": ">=7.0.0",
-        "laravel/framework": "5.5.*",
+        "laravel/framework": "5.6.*",
         "doctrine/dbal": "^2.5",
-        "barryvdh/laravel-debugbar": "^2.3",
         "laracasts/flash": "^2.0",
         "santigarcor/laratrust": "^3.0",
         "guzzlehttp/guzzle": "^6.2",
@@ -19,20 +18,23 @@
         "league/csv": "^8.2",
         "maatwebsite/excel": "^2.1",
         "barryvdh/laravel-dompdf": "^0.8.0",
-        "laravel/tinker": "^1.0"
+        "laravel/tinker": "^1.0",
+        "fideloper/proxy": "~4.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
         "mockery/mockery": "0.9.*",
-        "phpunit/phpunit": "~6.0",
+        "phpunit/phpunit": "~7.0",
         "symfony/css-selector": "3.1.*",
         "symfony/dom-crawler": "3.1.*",
         "phpmd/phpmd": "^2.4",
-        "filp/whoops": "~2.0"
+        "filp/whoops": "~2.0",
+        "barryvdh/laravel-debugbar": "^3.1"
     },
     "autoload": {
         "classmap": [
-            "database"
+            "database/seeds",
+            "database/factories"
         ],
         "psr-4": {
             "App\\": "app/"
@@ -40,9 +42,6 @@
         "files": ["app/helpers.php"]
     },
     "autoload-dev": {
-        "classmap": [
-            "tests/TestCase.php"
-        ],
         "psr-4": {
             "Tests\\": "tests/"
         }
