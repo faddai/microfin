@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "22d6479be7d830408f2318a80fc14611",
+    "content-hash": "efa3e8fbdd5272b65866b2342b1a5ef8",
     "packages": [
         {
             "name": "barryvdh/laravel-dompdf",
@@ -1255,16 +1255,16 @@
         },
         {
             "name": "laravel/framework",
-            "version": "v5.6.14",
+            "version": "v5.6.15",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "fba33e59fd43661933e9cecb84dfb0a64c5323ce"
+                "reference": "baa42cf6bdd942523fafece21ec16a1843c6db0f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/fba33e59fd43661933e9cecb84dfb0a64c5323ce",
-                "reference": "fba33e59fd43661933e9cecb84dfb0a64c5323ce",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/baa42cf6bdd942523fafece21ec16a1843c6db0f",
+                "reference": "baa42cf6bdd942523fafece21ec16a1843c6db0f",
                 "shasum": ""
             },
             "require": {
@@ -1389,7 +1389,7 @@
                 "framework",
                 "laravel"
             ],
-            "time": "2018-03-28T14:17:03+00:00"
+            "time": "2018-03-30T13:29:58+00:00"
         },
         {
             "name": "laravel/tinker",
@@ -2284,16 +2284,16 @@
         },
         {
             "name": "psy/psysh",
-            "version": "v0.8.17",
+            "version": "v0.8.18",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bobthecow/psysh.git",
-                "reference": "5069b70e8c4ea492c2b5939b6eddc78bfe41cfec"
+                "reference": "5357b1cffc8fb375d6a9e3c86d5c82dd38a40834"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bobthecow/psysh/zipball/5069b70e8c4ea492c2b5939b6eddc78bfe41cfec",
-                "reference": "5069b70e8c4ea492c2b5939b6eddc78bfe41cfec",
+                "url": "https://api.github.com/repos/bobthecow/psysh/zipball/5357b1cffc8fb375d6a9e3c86d5c82dd38a40834",
+                "reference": "5357b1cffc8fb375d6a9e3c86d5c82dd38a40834",
                 "shasum": ""
             },
             "require": {
@@ -2352,7 +2352,7 @@
                 "interactive",
                 "shell"
             ],
-            "time": "2017-12-28T16:14:16+00:00"
+            "time": "2018-04-02T05:41:44+00:00"
         },
         {
             "name": "ramsey/uuid",
@@ -2480,38 +2480,46 @@
         },
         {
             "name": "santigarcor/laratrust",
-            "version": "3.2.4",
+            "version": "5.0.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/santigarcor/laratrust.git",
-                "reference": "d4836f9ae5515a9c2d04048bd3546d3d0dee54c3"
+                "reference": "526cc3e8970c35b97c71a7a6d8b63c2073568bb1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/santigarcor/laratrust/zipball/d4836f9ae5515a9c2d04048bd3546d3d0dee54c3",
-                "reference": "d4836f9ae5515a9c2d04048bd3546d3d0dee54c3",
+                "url": "https://api.github.com/repos/santigarcor/laratrust/zipball/526cc3e8970c35b97c71a7a6d8b63c2073568bb1",
+                "reference": "526cc3e8970c35b97c71a7a6d8b63c2073568bb1",
                 "shasum": ""
             },
             "require": {
-                "illuminate/cache": "~5.1",
-                "illuminate/console": "~5.1",
-                "illuminate/support": "~5.1",
+                "illuminate/auth": "~5.2",
+                "illuminate/cache": "~5.2",
+                "illuminate/console": "~5.2",
+                "illuminate/database": "^5.2.32",
+                "illuminate/support": "~5.2",
                 "kkszymanowski/traitor": "^0.2.0",
                 "php": ">=5.5.9"
             },
             "require-dev": {
-                "illuminate/database": "~5.1",
-                "mockery/mockery": "~0.9.2",
-                "phpunit/phpunit": "~4.1",
-                "satooshi/php-coveralls": "^1.0"
+                "mockery/mockery": ">=0.9.9",
+                "orchestra/testbench": "~3.2",
+                "phpunit/phpunit": ">=4.1"
             },
             "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Laratrust\\LaratrustServiceProvider"
+                    ],
+                    "aliases": {
+                        "Laratrust": "Laratrust\\LaratrustFacade"
+                    }
+                }
+            },
             "autoload": {
-                "classmap": [
-                    "src/commands"
-                ],
                 "psr-4": {
-                    "Laratrust\\": "src/Laratrust/"
+                    "Laratrust\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -2520,42 +2528,24 @@
             ],
             "authors": [
                 {
-                    "name": "Andrew Elkins",
-                    "homepage": "http://andrewelkins.com"
-                },
-                {
-                    "name": "Zizaco Zizuini",
-                    "email": "zizaco@gmail.com"
-                },
-                {
-                    "name": "Ben Batschelet",
-                    "homepage": "http://github.com/bbatsche"
-                },
-                {
-                    "name": "Michele Angioni",
-                    "email": "michele.angioni@gmail.com"
-                },
-                {
                     "name": "Santiago Garcia",
                     "homepage": "http://santigarcor.me"
-                },
-                {
-                    "name": "Mateo Calle",
-                    "homepage": "https://github.com/Mathius17"
                 }
             ],
             "description": "This package provides a flexible way to add Role-based Permissions to Laravel",
             "keywords": [
+                "Teams",
                 "acl",
                 "authorization",
                 "laratrust",
                 "laravel",
+                "multiusers",
                 "permissions",
                 "php",
                 "rbac",
                 "roles"
             ],
-            "time": "2017-06-01T03:31:42+00:00"
+            "time": "2018-03-05T13:21:52+00:00"
         },
         {
             "name": "schuppo/password-strength",
@@ -6071,7 +6061,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=7.0.0"
+        "php": "^7.1.3"
     },
     "platform-dev": []
 }

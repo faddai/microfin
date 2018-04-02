@@ -2,7 +2,7 @@
 
 namespace App\Entities;
 
-use Laratrust\LaratrustRole;
+use Laratrust\Models\LaratrustRole;
 
 class Role extends LaratrustRole
 {
