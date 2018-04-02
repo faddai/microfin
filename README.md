@@ -1,23 +1,25 @@
 # microfin
 
-A micro-finance solution written using the Laravel web framework.
+A simple micro-finance solution to help you manage your Customers, Loans, Investments and Savings. microFin has an 
+integrated real time accounting and financial reporting you need in your financial institution.
 
 [![Build Status](https://travis-ci.org/faddai/microfin.svg?branch=master)](https://travis-ci.org/faddai/microfin)
 [![codecov](https://codecov.io/gh/faddai/microfin/branch/master/graph/badge.svg)](https://codecov.io/gh/faddai/microfin)
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+These instructions will get you a copy of the project up and running on your local machine for development and testing 
+purposes. See deployment for notes on how to deploy the project on a live system.
 
 ### Prerequisites
 
 * [Composer](https://getcomposer.org/doc/00-intro.md)
 * [Bower](https://bower.io/)
-* \>= PHP 7.1
+* \>= PHP 7.1.3
 
-### Installing
+### Installation
 
-Please run the following commands to setup your development env up.
+Please run the following commands to setup up your development environment.
 
 ```bash
 # clone this repository
@@ -52,23 +54,30 @@ php artisan microfin:setup
 ### Running the application
 
 If your development environment is set up using 
-[Homestead](https://laravel.com/docs/5.5/homestead) or [Valet](https://laravel.com/docs/5.5/valet), please follow
-the guides that come with your chosen tool. 
+[Homestead](https://laravel.com/docs/5.5/homestead) or [Valet](https://laravel.com/docs/5.5/valet), please follow 
+their respective guide to run the project in the web browser.
 
 Otherwise, you can use the development server the ships with Laravel by running, from the project root:
 
 ```bash
 php artisan serve
 ```
-You can visit [http://localhot:8000](http://localhot:8000) to see the application in action.
+You can then visit [http://localhot:8000](http://localhot:8000) to see the application in action.
 
 ## Running the tests
 
-There are tests for some Controllers, Jobs, Entities and Listeners available in the `tests/` directory.
+The tests have been grouped into Unit (Jobs, Entities and Listeners), Feature (Controllers) and Browser (end-to-end) 
+inside the `tests/` directory.
 
 ```bash
-# to run all tests
-phpunit tests/
+# to run all Unit tests
+phpunit tests/Unit
+
+# to run all Feature tests
+phpunit tests/Feature
+
+# to run Browser tests
+php artisan dusk
 ```
 
 ## Deployment

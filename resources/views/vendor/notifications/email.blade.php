@@ -71,7 +71,7 @@ $style = [
                     <tr>
                         <td style="{{ $style['email-masthead'] }}">
                             <div style="{{ $fontFamily }} {{ $style['email-masthead_name'] }}">
-                                <img src="http://www.betternowfinance.co.zm/wp-content/themes/betternowfinance/img/logo.png" alt="{{ config('app.company') }}" style="margin-bottom: 11px"> <br> {{ config('app.address') }}
+                                {{ config('app.company') }} <br /> {{ config('app.address') }}
                             </div>
                         </td>
                     </tr>
