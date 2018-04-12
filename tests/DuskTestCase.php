@@ -6,10 +6,11 @@ use Laravel\Dusk\TestCase as BaseTestCase;
 use Facebook\WebDriver\Chrome\ChromeOptions;
 use Facebook\WebDriver\Remote\RemoteWebDriver;
 use Facebook\WebDriver\Remote\DesiredCapabilities;
+use Tests\Browser\SeedsDuskTestDatabase;
 
 abstract class DuskTestCase extends BaseTestCase
 {
-    use CreatesApplication;
+    use CreatesApplication, SeedsDuskTestDatabase;
 
     /**
      * Prepare for Dusk test execution.
@@ -39,6 +40,20 @@ abstract class DuskTestCase extends BaseTestCase
                 ChromeOptions::CAPABILITY, $options
             )
         );
+    }
+
+    public function setUp()
+    {
+        $this->createDatabase();
+
+        parent::setUp();
+    }
+
+    protected function setUpTraits()
+    {
+        parent::setUpTraits();
+
+        $this->seedDatabase();
     }
 
 }
