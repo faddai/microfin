@@ -11,14 +11,16 @@ use DatabaseSeeder;
 
 trait SeedsDuskTestDatabase
 {
+    // Unable to use database_path because the app wouldn't
+    // have been bootstrapped by the time this gets called
+    private $testDatabaseFile = __DIR__.'/../../database/testing.sqlite';
+
     /**
      * Creates an empty database for testing
      */
     protected function createDatabase()
     {
-        // Unable to use database_path because the app wouldn't
-        // have been bootstrapped by the time this gets called
-        touch(__DIR__.'/../../database/testing.sqlite');
+        touch($this->testDatabaseFile);
     }
 
     protected function seedDatabase()
@@ -30,9 +32,7 @@ trait SeedsDuskTestDatabase
 
     protected function removeDatabase()
     {
-        $db = $this->app->make('db')->connection();
-
-        unlink($db->getDatabaseName());
+        unlink($this->testDatabaseFile);
     }
 
 }

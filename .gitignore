@@ -10,3 +10,4 @@ Homestead.yaml
 public/libs
 coverage
 storage/debugbar
+.env.dusk.local
