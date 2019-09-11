@@ -23,7 +23,7 @@ class GetDataForLoanStatementExport
      * Create a new job instance.
      *
      * @param Request $request
-     * @param Loan $loan
+     * @param Loan    $loan
      */
     public function __construct(Request $request, Loan $loan)
     {
@@ -43,29 +43,27 @@ class GetDataForLoanStatementExport
         $balance = 0;
 
         $statement = $loan->statement->entries->map(function (LoanStatementEntry $entry, $i) use (&$balance) {
-
             $balance += array_sum([$entry->dr * -1, $entry->cr]);
 
             return [
-                '#' => $i + 1,
-                'Txn Date' => $entry->created_at ? $entry->created_at->format(config('microfin.dateFormat')) : 'n/a',
+                '#'          => $i + 1,
+                'Txn Date'   => $entry->created_at ? $entry->created_at->format(config('microfin.dateFormat')) : 'n/a',
                 'Value Date' => $entry->value_date ? $entry->value_date->format(config('microfin.dateFormat')) : 'n/a',
-                'Narration' => $entry->narration,
-                'Debit' => $entry->getDebitAmount(),
-                'Credit' => $entry->getCreditAmount(),
-                'Balance' => number_format($balance, 2),
+                'Narration'  => $entry->narration,
+                'Debit'      => $entry->getDebitAmount(),
+                'Credit'     => $entry->getCreditAmount(),
+                'Balance'    => number_format($balance, 2),
             ];
-
         });
 
         $statement->meta = collect([
-            'Customer Name' => $loan->client->getFullName(),
-            'Customer Number' => '\''. $loan->client->account_number, // make a number appear as string so it doesn't get truncated
-            'Loan Number' => '\''. $loan->number,
-            'Maturity Date' => $loan->maturity_date ? '"'. $loan->maturity_date->format(config('microfin.dateFormat')) .'"' : 'n/a',
-            'Balance' => '"'. number_format($loan->getBalance(false) * -1, 2) .'"',
-            'From Date' => '"'. $statement->first()['Value Date'] .'"',
-            'To Date' => '"'. $statement->last()['Value Date'] .'"',
+            'Customer Name'   => $loan->client->getFullName(),
+            'Customer Number' => '\''.$loan->client->account_number, // make a number appear as string so it doesn't get truncated
+            'Loan Number'     => '\''.$loan->number,
+            'Maturity Date'   => $loan->maturity_date ? '"'.$loan->maturity_date->format(config('microfin.dateFormat')).'"' : 'n/a',
+            'Balance'         => '"'.number_format($loan->getBalance(false) * -1, 2).'"',
+            'From Date'       => '"'.$statement->first()['Value Date'].'"',
+            'To Date'         => '"'.$statement->last()['Value Date'].'"',
         ]);
 
         return $statement;

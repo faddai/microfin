@@ -6,7 +6,6 @@ use App\Entities\LoanRepayment;
 use App\Entities\User;
 use App\Http\Requests\GetDueRepaymentsFormRequest;
 
-
 class LoanRepaymentsController extends Controller
 {
     public function due(GetDueRepaymentsFormRequest $request)

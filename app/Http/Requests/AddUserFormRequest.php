@@ -20,7 +20,7 @@ class AddUserFormRequest extends FormRequest
      * Get the validation rules that apply to the request.
      * NB: sometimes is applied because some of the requests don't
      * post every data required. For example, when suspending a
-     * user account
+     * user account.
      *
      * todo Add a Controller to manage User account suspension since it is sidestepping roles.required during update
      *
@@ -31,12 +31,12 @@ class AddUserFormRequest extends FormRequest
         $isUpdate = request()->route()->hasParameter('user');
 
         return [
-            'name' => 'sometimes|required|max:255',
-            'email' => $isUpdate ? 'sometimes|required|email|max:255' : 'required|email|max:255|unique:users',
-            'password' => 'sometimes|required|min:8|confirmed',
+            'name'      => 'sometimes|required|max:255',
+            'email'     => $isUpdate ? 'sometimes|required|email|max:255' : 'required|email|max:255|unique:users',
+            'password'  => 'sometimes|required|min:8|confirmed',
             'branch_id' => 'sometimes|required',
-            'roles' => $isUpdate ? 'sometimes|array' : 'array|required',
-            'roles.*' => $isUpdate ? 'sometimes|numeric' : 'numeric'
+            'roles'     => $isUpdate ? 'sometimes|array' : 'array|required',
+            'roles.*'   => $isUpdate ? 'sometimes|numeric' : 'numeric',
         ];
     }
 
@@ -44,7 +44,7 @@ class AddUserFormRequest extends FormRequest
     {
         return [
             'branch_id.required' => 'You must assign a user to a branch',
-            'roles.required' => 'You must assign at least 1 role to the user',
+            'roles.required'     => 'You must assign at least 1 role to the user',
         ];
     }
 }

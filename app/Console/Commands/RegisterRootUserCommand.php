@@ -10,7 +10,6 @@ use Illuminate\Http\Request;
 
 class RegisterRootUserCommand extends Command
 {
-
     use DispatchesJobs;
 
     /**
@@ -49,15 +48,10 @@ class RegisterRootUserCommand extends Command
         $confirmation = $this->secret('Repeat Password');
 
         while (!$this->isValidRegistration($user, $confirmation)) {
-
             if (!$this->isAcceptableLength($user['password'])) {
-
                 $this->error('Password cannot be shorter than 8 characters');
-
-            } else if (!$this->passwordMatches($user['password'], $confirmation)) {
-
+            } elseif (!$this->passwordMatches($user['password'], $confirmation)) {
                 $this->error('Passwords do not match. Please try again');
-
             }
 
             $user['password'] = $this->secret('Password');

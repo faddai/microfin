@@ -22,7 +22,7 @@ class AddBranchJob
      * Create a new job instance.
      *
      * @param Request $request
-     * @param Branch $branch
+     * @param Branch  $branch
      */
     public function __construct(Request $request, Branch $branch = null)
     {
@@ -46,7 +46,6 @@ class AddBranchJob
     private function addOrUpdateBranch()
     {
         return DB::transaction(function () {
-
             $branch = $this->branch ?: new Branch();
 
             foreach ($branch->getFillable() as $fillable) {
@@ -62,5 +61,4 @@ class AddBranchJob
             return $branch;
         });
     }
-
 }

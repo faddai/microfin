@@ -7,7 +7,6 @@ use App\Exceptions\LedgerEntryException;
 use App\Http\Requests\AddLedgerTransactionFormRequest;
 use App\Jobs\AddUnapprovedLedgerTransactionJob;
 
-
 class UnApprovedTransactionsController extends Controller
 {
     public function index()
@@ -43,7 +42,7 @@ class UnApprovedTransactionsController extends Controller
 
             $transaction->delete() && flash()->success('The transaction has been cancelled and deleted');
         } catch (\Exception $exception) {
-            flash()->error('The transaction could not be cancelled. Error: '. $exception->getMessage());
+            flash()->error('The transaction could not be cancelled. Error: '.$exception->getMessage());
         }
 
         return back();

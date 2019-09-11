@@ -12,7 +12,6 @@ use App\Jobs\DisburseLoanJob;
 use Carbon\Carbon;
 use Tests\TestCase;
 
-
 class DisburseLoanJobTest extends TestCase
 {
     public function test_loan_is_able_to_be_disbursed()
@@ -45,7 +44,7 @@ class DisburseLoanJobTest extends TestCase
         $this->setAuthenticatedUserForRequest();
 
         $this->request->merge(factory(Loan::class, 'customer')->make([
-            'disbursal_remarks' => faker()->sentence
+            'disbursal_remarks' => faker()->sentence,
         ])->toArray());
 
         $loan = $this->dispatch(new AddLoanJob($this->request));
@@ -74,15 +73,15 @@ class DisburseLoanJobTest extends TestCase
         $fees = collect([
             Fee::whereName(Fee::ARRANGEMENT)->first()->fill(['rate' => 1.5]),
             Fee::whereName(Fee::ADMINISTRATION)->first()->fill(['rate' => 2.5]),
-            Fee::whereName(Fee::PROCESSING)->first()->fill(['rate' => 2])
+            Fee::whereName(Fee::PROCESSING)->first()->fill(['rate' => 2]),
         ])->toArray();
 
         $this->request->merge(
             factory(Loan::class, 'customer')
                 ->make([
-                    'amount' => 10000,
+                    'amount'    => 10000,
                     'client_id' => factory(Client::class, 'individual')->create(['account_balance' => 0])->id,
-                    'fees' => $fees,
+                    'fees'      => $fees,
                 ])
                 ->toArray()
         );
@@ -108,15 +107,15 @@ class DisburseLoanJobTest extends TestCase
         $fees = collect([
             Fee::whereName(Fee::ARRANGEMENT)->first()->fill(['rate' => 1.5]),
             Fee::whereName(Fee::ADMINISTRATION)->first()->fill(['rate' => 2.5]),
-            Fee::whereName(Fee::PROCESSING)->first()->fill(['rate' => 2])
+            Fee::whereName(Fee::PROCESSING)->first()->fill(['rate' => 2]),
         ])->toArray();
 
         $this->request->merge(
             factory(Loan::class, 'customer')
                 ->make([
-                    'amount' => 10000,
+                    'amount'    => 10000,
                     'client_id' => factory(Client::class, 'individual')->create(['account_balance' => 0])->id,
-                    'fees' => $fees,
+                    'fees'      => $fees,
                 ])
                 ->toArray()
         );
@@ -143,8 +142,8 @@ class DisburseLoanJobTest extends TestCase
         $this->request->merge(
             factory(Loan::class, 'grz')
                 ->make([
-                    'amount' => 10000,
-                    'rate' => 9,
+                    'amount'    => 10000,
+                    'rate'      => 9,
                     'tenure_id' => Tenure::whereNumberOfMonths(6)->first()->id,
                     'client_id' => factory(Client::class)->create(['account_balance' => 0])->id,
                 ])
@@ -184,8 +183,8 @@ class DisburseLoanJobTest extends TestCase
         $this->request->merge(
             factory(Loan::class, 'grz')
                 ->make([
-                    'amount' => 10000,
-                    'rate' => 9,
+                    'amount'    => 10000,
+                    'rate'      => 9,
                     'tenure_id' => Tenure::whereNumberOfMonths(6)->first()->id,
                     'client_id' => factory(Client::class, 'individual')->create(['account_balance' => 0])->id,
                 ])
@@ -225,5 +224,4 @@ class DisburseLoanJobTest extends TestCase
         self::assertEquals(900, $entries->get(4)->dr);
         self::assertEquals(-13600, $entries->get(4)->balance);
     }
-
 }

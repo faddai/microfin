@@ -24,13 +24,13 @@ class AddIndividualClientJob
     /**
      * Create a new job instance.
      *
-     * @param Request $request
+     * @param Request          $request
      * @param IndividualClient $client
      */
     public function __construct(Request $request, IndividualClient $client = null)
     {
         $this->request = $request;
-        $this->client = null === $client ? new IndividualClient : $client;
+        $this->client = null === $client ? new IndividualClient() : $client;
     }
 
     /**
@@ -41,9 +41,7 @@ class AddIndividualClientJob
     public function handle()
     {
         return DB::transaction(function () {
-
             return $this->saveOrUpdateIndividualClient();
-
         });
     }
 

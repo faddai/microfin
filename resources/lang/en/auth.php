@@ -13,6 +13,6 @@ return [
     |
     */
 
-    'failed' => 'These credentials do not match our records. Your account may be suspended. Please contact the Administrator',
+    'failed'   => 'These credentials do not match our records. Your account may be suspended. Please contact the Administrator',
     'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
 ];

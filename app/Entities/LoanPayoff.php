@@ -63,17 +63,17 @@ class LoanPayoff extends Model
 
     /**
      * @param Request $request
+     *
      * @return mixed
      */
     public function approve(Request $request)
     {
         $this->forceFill([
-            'status' => self::APPROVED,
-            'remarks' => $request->get('remarks'),
+            'status'      => self::APPROVED,
+            'remarks'     => $request->get('remarks'),
             'approved_by' => $request->user()->id,
-            'approved_at' => Carbon::now()
+            'approved_at' => Carbon::now(),
         ])->save();
-
 
         return $this->loan->markAsPaidOff();
     }

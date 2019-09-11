@@ -9,11 +9,11 @@ use Illuminate\Http\Request;
 
 class ZonesController extends Controller
 {
-
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -35,7 +35,8 @@ class ZonesController extends Controller
      * Update the specified resource in storage.
      *
      * @param AddZoneFormRequest|Request $request
-     * @param Zone $zone
+     * @param Zone                       $zone
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(AddZoneFormRequest $request, Zone $zone)
@@ -57,6 +58,7 @@ class ZonesController extends Controller
      * Remove the specified resource from storage.
      *
      * @param Zone $zone
+     *
      * @return \Illuminate\Http\Response
      */
     public function destroy(Zone $zone)

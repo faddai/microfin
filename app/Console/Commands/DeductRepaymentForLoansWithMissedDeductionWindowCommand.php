@@ -8,7 +8,6 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 
 class DeductRepaymentForLoansWithMissedDeductionWindowCommand extends Command
 {
-
     use DispatchesJobs;
 
     /**
@@ -32,7 +31,7 @@ class DeductRepaymentForLoansWithMissedDeductionWindowCommand extends Command
      */
     public function handle()
     {
-        $this->dispatch(new DeductRepaymentForLoansWithMissedDeductionWindowJob);
+        $this->dispatch(new DeductRepaymentForLoansWithMissedDeductionWindowJob());
 
         $this->info('Deductions have finished processing');
     }

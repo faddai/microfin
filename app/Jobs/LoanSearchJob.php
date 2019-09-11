@@ -2,11 +2,10 @@
 /**
  * Author: Francis Addai <me@faddai.com>
  * Date: 21/03/2017
- * Time: 01:43
+ * Time: 01:43.
  */
 
 namespace App\Jobs;
-
 
 use App\Entities\Loan;
 use Carbon\Carbon;
@@ -21,6 +20,7 @@ class LoanSearchJob
 
     /**
      * LoanSearchJob constructor.
+     *
      * @param Request $request
      */
     public function __construct(Request $request)
@@ -29,8 +29,9 @@ class LoanSearchJob
     }
 
     /**
-     * @return mixed
      * @throws \InvalidArgumentException
+     *
+     * @return mixed
      */
     public function handle()
     {
@@ -49,7 +50,6 @@ class LoanSearchJob
                 return $query->whereStatus($status);
             })
             ->when($status && $startDate && $endDate, function ($query) use ($status, $startDate, $endDate) {
-
                 $status = $status === Loan::PENDING ? 'created_at' : "{$status}_at";
 
                 return $query->whereBetween($status, [$startDate->copy()->startOfDay(), $endDate->copy()->endOfDay()]);

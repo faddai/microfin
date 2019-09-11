@@ -2,7 +2,7 @@
 /**
  * Author: Francis Addai <me@faddai.com>
  * Date: 06/11/2016
- * Time: 1:49 PM
+ * Time: 1:49 PM.
  */
 
 namespace App\Entities;
@@ -13,7 +13,6 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
-
 
 class Loan extends Model
 {
@@ -41,6 +40,7 @@ class Loan extends Model
 
     /**
      * @param Builder $query
+     *
      * @return mixed
      */
     public function scopeActive(Builder $query)
@@ -50,8 +50,11 @@ class Loan extends Model
 
     /**
      * @todo rename this to active
+     *
      * @deprecated use scopeActive instead of this
+     *
      * @param $query
+     *
      * @return mixed
      */
     public function scopeDisbursed(Builder $query)
@@ -63,6 +66,7 @@ class Loan extends Model
 
     /**
      * @param $query
+     *
      * @return mixed
      */
     public function scopePaidOff(Builder $query)
@@ -70,13 +74,14 @@ class Loan extends Model
         return $query->where('status', self::PAID_OFF)
             ->whereHas('payoff', function (Builder $query) {
                 return $query->whereNotNull('created_at')->whereNotNull('created_by');
-
             });
     }
 
     /**
      * @todo return a chunk of the result set
+     *
      * @param Builder $query
+     *
      * @return mixed
      */
     public function scopeRunning(Builder $query)
@@ -87,6 +92,7 @@ class Loan extends Model
     /**
      * @param Builder $query
      * @param Request $request
+     *
      * @return mixed
      */
     public function scopeBook(Builder $query, Request $request)
@@ -122,6 +128,7 @@ class Loan extends Model
     /**
      * @param $query
      * @param Request $request
+     *
      * @return mixed
      */
     public function scopeCollection(Builder $query, Request $request)
@@ -130,7 +137,7 @@ class Loan extends Model
             'repaymentCollections' => function ($query) use ($request) {
                 $query->whereBetween('collected_at', [$request->get('startDate'), $request->get('endDate')]);
             },
-            'schedule', 'fees', 'client.clientable', 'creditOfficer'])
+            'schedule', 'fees', 'client.clientable', 'creditOfficer', ])
             ->when($request->get('credit_officer'), function (Builder $query) use ($request) {
                 return $query->whereHas('creditOfficer', function (Builder $query) use ($request) {
                     return $query->where('id', $request->get('credit_officer'));
@@ -163,6 +170,7 @@ class Loan extends Model
     /**
      * @param Builder $query
      * @param Request $request
+     *
      * @return mixed
      */
     public function scopeCrb(Builder $query, Request $request)
@@ -192,6 +200,7 @@ class Loan extends Model
     /**
      * @param Builder $query
      * @param Request $request
+     *
      * @return mixed
      */
     public function scopeMaturityLadder(Builder $query, Request $request)
@@ -221,6 +230,7 @@ class Loan extends Model
     /**
      * @param Builder $query
      * @param Request $request
+     *
      * @return mixed
      */
     public function scopeBusinessSector(Builder $query, Request $request)
@@ -253,6 +263,7 @@ class Loan extends Model
     /**
      * @param Builder $query
      * @param Request $request
+     *
      * @return mixed
      */
     public function scopeDaysToMaturity(Builder $query, Request $request)
@@ -280,7 +291,7 @@ class Loan extends Model
 
     /**
      * The loan that was restructured if this loan was created as a result of
-     * a Loan Restructure
+     * a Loan Restructure.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
@@ -292,7 +303,7 @@ class Loan extends Model
     /**
      * Get all the restructures for this loan.
      * Ideally, there'd be only 1 restructure out of a Loan. In cases, where 1 or more requests to
-     * restructure a Loan is declined, they'd still be attached to the Loan out of which this Loan was created
+     * restructure a Loan is declined, they'd still be attached to the Loan out of which this Loan was created.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
@@ -456,9 +467,10 @@ class Loan extends Model
     }
 
     /**
-     * Calculates the amount to pay as interest on monthly basis using the monthly rate
+     * Calculates the amount to pay as interest on monthly basis using the monthly rate.
      *
      * @param bool $format
+     *
      * @return mixed|string
      */
     public function getMonthlyInterest($format = true)
@@ -469,9 +481,10 @@ class Loan extends Model
     }
 
     /**
-     * Calculates the interest accumulated over the tenure of the loan
+     * Calculates the interest accumulated over the tenure of the loan.
      *
      * @param bool $format
+     *
      * @return string|float
      */
     public function getTotalInterest($format = true)
@@ -483,9 +496,10 @@ class Loan extends Model
 
     /**
      * Calculates the sum total of the loan amount, interest and fees payable
-     * throughout the lifetime of the Loan
+     * throughout the lifetime of the Loan.
      *
      * @param bool $format
+     *
      * @return mixed|string
      */
     public function getTotalLoanAmount($format = true)
@@ -496,9 +510,10 @@ class Loan extends Model
     }
 
     /**
-     * Gets the actual loan amount with optional formatting
+     * Gets the actual loan amount with optional formatting.
      *
      * @param bool $format
+     *
      * @return mixed|string
      */
     public function getPrincipalAmount($format = true)
@@ -508,6 +523,7 @@ class Loan extends Model
 
     /**
      * @param bool $format
+     *
      * @return mixed|string
      */
     public function getBalance($format = true)
@@ -523,9 +539,10 @@ class Loan extends Model
     }
 
     /**
-     * Calculates the total amount of fees applied to this loan
+     * Calculates the total amount of fees applied to this loan.
      *
      * @param bool $format
+     *
      * @return float
      */
     public function getTotalFees($format = true)
@@ -537,6 +554,7 @@ class Loan extends Model
 
     /**
      * @param bool $format
+     *
      * @return float|string
      */
     public function getTotalFeesWithoutUpfrontFees($format = true)
@@ -547,9 +565,10 @@ class Loan extends Model
     }
 
     /**
-     * Get the total amount of money repaid so far
+     * Get the total amount of money repaid so far.
      *
      * @param bool $format
+     *
      * @return mixed
      */
     public function getAmountPaid($format = true)
@@ -573,7 +592,7 @@ class Loan extends Model
 
     public function getStatus()
     {
-        switch(strtolower($this->status)) {
+        switch (strtolower($this->status)) {
             case self::PENDING:
             case self::APPROVED:
                 $label = 'Inactive';
@@ -607,7 +626,7 @@ class Loan extends Model
     }
 
     /**
-     * The total loan amount is fully paid
+     * The total loan amount is fully paid.
      *
      * @return bool
      */
@@ -621,19 +640,20 @@ class Loan extends Model
      */
     public function isPaidOff()
     {
-        return $this->status === Loan::PAID_OFF;
+        return $this->status === self::PAID_OFF;
     }
 
     public function markAsPaidOff()
     {
-        return $this->update(['status' => Loan::PAID_OFF]);
+        return $this->update(['status' => self::PAID_OFF]);
     }
 
     /**
      * If no loan start date is provided, use current date.
-     * Apply grace period for loan to the loan start date
+     * Apply grace period for loan to the loan start date.
      *
      * @param $value
+     *
      * @return static
      */
     public function setStartDateAttribute($value)
@@ -646,7 +666,7 @@ class Loan extends Model
     }
 
     /**
-     * Get loan maturity date
+     * Get loan maturity date.
      *
      * Loan matures from the time it is disbursed + grace period if applicable + the tenure selected by Client
      * Currently, this calculation is handled by @see GenerateLoanRepaymentScheduleJob so the due_date of the last
@@ -660,9 +680,10 @@ class Loan extends Model
     }
 
     /**
-     * Calculate how much to pay every month for the loan
+     * Calculate how much to pay every month for the loan.
      *
      * @param bool $format
+     *
      * @return float|string
      */
     public function getRepaymentAmount($format = true)
@@ -673,7 +694,7 @@ class Loan extends Model
     }
 
     /**
-     * Calculate the number of expected payments to be made till the loan is fully paid
+     * Calculate the number of expected payments to be made till the loan is fully paid.
      *
      * @example A $1000 loan with a 3 month tenure and weekly payments would be 3 * (4 weeks)
      * because 4 weeks makes a month.
@@ -734,9 +755,10 @@ class Loan extends Model
     }
 
     /**
-     * Set the next repayment due date
+     * Set the next repayment due date.
      *
      * @param $dueDate
+     *
      * @return mixed
      */
     public function getNextRepaymentDueDatePerPlan($dueDate)
@@ -757,6 +779,7 @@ class Loan extends Model
 
     /**
      * @param $rate
+     *
      * @return mixed|string
      */
     public function getFeeAmount($rate)
@@ -766,9 +789,10 @@ class Loan extends Model
 
     /**
      * Get the amount of money that goes towards the repayment of fees
-     * on each repayment
+     * on each repayment.
      *
      * @param bool $format
+     *
      * @return float
      */
     public function getFeesComponentOnRepayment($format = false)
@@ -799,12 +823,13 @@ class Loan extends Model
 
     /**
      * @param bool $format
+     *
      * @return mixed
      */
     public function getUpfrontFees($format = true)
     {
         $amount = $this->fees->filter(function (Fee $fee) {
-            return (bool)$fee->pivot->is_paid_upfront;
+            return (bool) $fee->pivot->is_paid_upfront;
         })->sum('pivot.amount');
 
         return $format ? number_format($amount, 2) : $amount;
@@ -815,12 +840,14 @@ class Loan extends Model
      */
     public function isRunning()
     {
-        return $this->isDisbursed() && ! $this->isFullyPaid();
+        return $this->isDisbursed() && !$this->isFullyPaid();
     }
 
     /**
-     * Get the daily interest for this loan for a particular month and year
+     * Get the daily interest for this loan for a particular month and year.
+     *
      * @param Carbon $date
+     *
      * @return float
      */
     public function getDailyInterestForTheMonth(Carbon $date)
@@ -834,7 +861,8 @@ class Loan extends Model
     }
 
     /**
-     * Loan has elapsed its maturity date
+     * Loan has elapsed its maturity date.
+     *
      * @return bool
      */
     public function isMatured()
@@ -861,11 +889,12 @@ class Loan extends Model
     /**
      * @param $column
      * @param bool $format
+     *
      * @return string
      */
     public function getOutstanding($column, $format = true)
     {
-        $outstanding = $this->schedule->sum($column) - $this->schedule->sum('paid_'. $column);
+        $outstanding = $this->schedule->sum($column) - $this->schedule->sum('paid_'.$column);
 
         return $format ? number_format($outstanding, 2) : $outstanding;
     }
@@ -885,5 +914,4 @@ class Loan extends Model
     {
         return $this->status === self::RESTRUCTURED && $this->restructured_at !== null && $this->restructured_by !== null;
     }
-
 }

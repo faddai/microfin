@@ -4,7 +4,6 @@ namespace App\Entities\Accounting;
 
 use Illuminate\Database\Eloquent\Model;
 
-
 class LedgerCategory extends Model
 {
     protected $fillable = ['name', 'type'];
@@ -62,9 +61,10 @@ class LedgerCategory extends Model
 
     /**
      * Guess what type this category is. This is useful to the seeder.
-     * It is required to be supplied from the UI
+     * It is required to be supplied from the UI.
      *
      * @param $category
+     *
      * @return mixed|string
      */
     public static function getCategoryType($category)

@@ -3,9 +3,8 @@
 /**
  * Author: Francis Addai <me@faddai.com>
  * Date: 15/10/2016
- * Time: 23:14
+ * Time: 23:14.
  */
-
 use App\Entities\Client;
 use App\Entities\Loan;
 use App\Entities\LoanRepayment;
@@ -60,12 +59,12 @@ class LoanRepaymentTest extends TestCase
         $loan = factory(Loan::class, 'customer')
             ->states('approved', 'disbursed')
             ->create([
-                'disbursed_at' => Carbon::parse('Jan 25, 2016'),
-                'client_id' => factory(Client::class, 'individual')->create(['account_balance' => 400])->id,
-                'repayment_plan_id' => RepaymentPlan::firstOrCreate(['label' => RepaymentPlan::MONTHLY])->id,
-                'amount' => 1000,
-                'rate' => 4,
-                'tenure_id' => Tenure::firstOrCreate(['number_of_months' => 3])->id,
+                'disbursed_at'                  => Carbon::parse('Jan 25, 2016'),
+                'client_id'                     => factory(Client::class, 'individual')->create(['account_balance' => 400])->id,
+                'repayment_plan_id'             => RepaymentPlan::firstOrCreate(['label' => RepaymentPlan::MONTHLY])->id,
+                'amount'                        => 1000,
+                'rate'                          => 4,
+                'tenure_id'                     => Tenure::firstOrCreate(['number_of_months' => 3])->id,
                 'interest_calculation_strategy' => Loan::STRAIGHT_LINE_STRATEGY,
             ]);
 
@@ -103,7 +102,7 @@ class LoanRepaymentTest extends TestCase
      * Backdate first loan to 24 days ago and the second, 46 days ago
      * Loan 1 should have 1 defaulting repayment
      * Loan 2 should have 2 defaulting repayments
-     * In all, Client should have 3 defaulting repayments
+     * In all, Client should have 3 defaulting repayments.
      */
     public function test_scopeGetDueRepaymentsForAClient()
     {
@@ -115,7 +114,6 @@ class LoanRepaymentTest extends TestCase
             ->states('approved', 'disbursed')
             ->make(['client_id' => $client->id, 'tenure_id' => Tenure::whereNumberOfMonths(5)->first()->id])
             ->each(function (Loan $loan, $i) {
-
                 $loan->fill(['disbursed_at' => Carbon::today()->subWeekdays($i === 1 ? 46 : 24)]);
 
                 $this->request->replace($loan->toArray());

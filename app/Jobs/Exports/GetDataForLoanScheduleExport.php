@@ -21,8 +21,9 @@ class GetDataForLoanScheduleExport
 
     /**
      * GetDataForLoanScheduleExport constructor.
+     *
      * @param Request $request
-     * @param Loan $loan
+     * @param Loan    $loan
      */
     public function __construct(Request $request, Loan $loan)
     {
@@ -38,26 +39,25 @@ class GetDataForLoanScheduleExport
         $loan = $this->loan->load('schedule');
 
         $schedule = $loan->schedule->map(function (LoanRepayment $repayment, $i) {
-
             return [
-                '#' => $i + 1,
-                'Due Date' => $repayment->due_date ? $repayment->due_date->format(config('microfin.dateFormat')) : 'n/a',
-                'Principal' => $repayment->getPrincipal(),
+                '#'              => $i + 1,
+                'Due Date'       => $repayment->due_date ? $repayment->due_date->format(config('microfin.dateFormat')) : 'n/a',
+                'Principal'      => $repayment->getPrincipal(),
                 'Paid principal' => $repayment->getPaidPrincipal(),
-                'Interest' => $repayment->getInterest(),
-                'Paid interest' => $repayment->getPaidInterest(),
-                'Fees' => $repayment->getFees(),
-                'Paid fees' => $repayment->getPaidFees(),
-                'Outstanding' => $repayment->getOutstandingRepaymentAmount(),
+                'Interest'       => $repayment->getInterest(),
+                'Paid interest'  => $repayment->getPaidInterest(),
+                'Fees'           => $repayment->getFees(),
+                'Paid fees'      => $repayment->getPaidFees(),
+                'Outstanding'    => $repayment->getOutstandingRepaymentAmount(),
             ];
         });
 
         $schedule->meta = collect([
-            'Customer Name' => $loan->client->getFullName(),
-            'Customer Number' => '\''. $loan->client->account_number, // make a number appear as string so it doesn't get truncated
-            'Loan Number' => '\''. $loan->number,
-            'Maturity Date' => $loan->maturity_date ? '"'. $loan->maturity_date->format(config('microfin.dateFormat')) .'"' : 'n/a',
-            'Balance' => '"'. number_format($loan->getBalance(false) * -1, 2) .'"',
+            'Customer Name'   => $loan->client->getFullName(),
+            'Customer Number' => '\''.$loan->client->account_number, // make a number appear as string so it doesn't get truncated
+            'Loan Number'     => '\''.$loan->number,
+            'Maturity Date'   => $loan->maturity_date ? '"'.$loan->maturity_date->format(config('microfin.dateFormat')).'"' : 'n/a',
+            'Balance'         => '"'.number_format($loan->getBalance(false) * -1, 2).'"',
         ]);
 
         return $schedule;

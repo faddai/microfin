@@ -24,14 +24,14 @@ class AddZoneFormRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required'
+            'name' => 'required',
         ];
     }
 
     public function messages()
     {
         return [
-            'name.required' => 'Please specify a name for the Zone'
+            'name.required' => 'Please specify a name for the Zone',
         ];
     }
 }

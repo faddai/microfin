@@ -2,14 +2,12 @@
 /**
  * Author: Francis Addai <me@faddai.com>
  * Date: 20/11/2016
- * Time: 1:01 AM
+ * Time: 1:01 AM.
  */
-
 use App\Entities\RepaymentPlan;
 
-/** @var \Illuminate\Database\Eloquent\Factory $factory **/
+/* @var \Illuminate\Database\Eloquent\Factory $factory **/
 $factory->define(RepaymentPlan::class, function () {
-
     $plans = [
         ['number_of_days' => 5, 'label' => RepaymentPlan::WEEKLY, 'number_of_repayments_per_month' => 4],
         ['number_of_days' => 10, 'label' => RepaymentPlan::FORTNIGHTLY, 'number_of_repayments_per_month' => 2],

@@ -6,7 +6,6 @@ use App\Jobs\Accounting\AddLedgerCategoryJob;
 use App\Jobs\Accounting\AddLedgerJob;
 use Tests\TestCase;
 
-
 class AddLedgerJobTest extends TestCase
 {
     public function test_can_add_an_account()

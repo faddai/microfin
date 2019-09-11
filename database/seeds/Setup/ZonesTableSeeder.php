@@ -2,7 +2,6 @@
 
 namespace Setup;
 
-
 use App\Entities\Zone;
 use Illuminate\Database\Seeder;
 

@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Storage;
 
-
 class Client extends Model
 {
     use Notifiable;
@@ -14,11 +13,11 @@ class Client extends Model
     protected $fillable = [
         'phone1', 'phone2', 'status', 'relationship_manager', 'email', 'address', 'clientable_id', 'clientable_type',
         'nationality', 'account_number', 'branch_id', 'created_by', 'identification_type', 'identification_number',
-        'name', 'photo', 'signature', 'account_balance'
+        'name', 'photo', 'signature', 'account_balance',
     ];
 
     /**
-     * The user who created/opened the account for this client
+     * The user who created/opened the account for this client.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
@@ -91,10 +90,12 @@ class Client extends Model
     /**
      * @return mixed|string
      */
-    public function getLastFourDigitsOfAccountNumber() {
+    public function getLastFourDigitsOfAccountNumber()
+    {
         if (strlen($this->account_number) > 4) {
-            return str_repeat('*', strlen($this->account_number) - 4) . substr($this->account_number, -4);
+            return str_repeat('*', strlen($this->account_number) - 4).substr($this->account_number, -4);
         }
+
         return $this->account_number;
     }
 
@@ -127,10 +128,10 @@ class Client extends Model
     public function getNameAttribute()
     {
         if ($this->clientable instanceof IndividualClient) {
-            $name = $this->clientable->firstname .' ';
+            $name = $this->clientable->firstname.' ';
 
             if ($middlename = $this->clientable->middlename) {
-                $name .= $middlename. ' ';
+                $name .= $middlename.' ';
             }
 
             $name .= $this->clientable->lastname;
@@ -148,9 +149,10 @@ class Client extends Model
 
     /**
      * Checks if Client has any more funds that can be deducted to repay
-     * the scheduled repayment amount
+     * the scheduled repayment amount.
      *
      * @param int $amount
+     *
      * @return bool
      */
     public function isDeductable($amount = 0)
@@ -164,6 +166,7 @@ class Client extends Model
 
     /**
      * @param bool $format
+     *
      * @return mixed|string
      */
     public function getAccountBalance($format = true)
@@ -174,7 +177,8 @@ class Client extends Model
     }
 
     /**
-     * Determines whether a Client can receive an email notifications
+     * Determines whether a Client can receive an email notifications.
+     *
      * @return bool
      */
     public function canReceiveEmailNotification()
@@ -183,11 +187,12 @@ class Client extends Model
     }
 
     /**
-     * Determines whether a Client can receive SMS notifications
+     * Determines whether a Client can receive SMS notifications.
+     *
      * @return bool
      */
     public function canReceiveSmsNotification()
     {
-        return ! $this->phone1 !== null || ! $this->phone2 !== null;
+        return !$this->phone1 !== null || !$this->phone2 !== null;
     }
 }

@@ -9,7 +9,6 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 
 class PostAccruedReceivablesToLoanAccountStatementCommand extends Command
 {
-
     use DispatchesJobs;
 
     /**
@@ -28,7 +27,7 @@ class PostAccruedReceivablesToLoanAccountStatementCommand extends Command
 
     /**
      * When a loan's repayment is due, record fees (breakdown) and interest accrued/receivable as Debit
-     * to the loan account
+     * to the loan account.
      *
      * @return void
      */
@@ -37,7 +36,7 @@ class PostAccruedReceivablesToLoanAccountStatementCommand extends Command
         $includesMaturedLoans = $this->option('include-matured-loans');
         $loans = Loan::running();
 
-        if (! $includesMaturedLoans) {
+        if (!$includesMaturedLoans) {
             $loans = $loans->reject(function (Loan $loan) {
                 return $loan->isMatured();
             });

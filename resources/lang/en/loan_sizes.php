@@ -2,7 +2,7 @@
 /**
  * Author: Francis Addai <me@faddai.com>
  * Date: 03/11/2016
- * Time: 00:13
+ * Time: 00:13.
  */
 
 return [

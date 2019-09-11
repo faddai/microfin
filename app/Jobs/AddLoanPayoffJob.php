@@ -24,8 +24,8 @@ class AddLoanPayoffJob
     /**
      * Create a new job instance.
      *
-     * @param Request $request
-     * @param Loan $loan
+     * @param Request    $request
+     * @param Loan       $loan
      * @param LoanPayoff $payoff
      */
     public function __construct(Request $request, Loan $loan, LoanPayoff $payoff = null)
@@ -42,13 +42,12 @@ class AddLoanPayoffJob
      */
     public function handle()
     {
-        if (! $this->payoff->exists) {
+        if (!$this->payoff->exists) {
             $this->payoff->status = Loan::PENDING;
         }
 
         foreach ($this->payoff->getFillable() as $fillable) {
             if ($this->request->filled($fillable)) {
-
                 $data = $this->request->get($fillable);
 
                 if (in_array($fillable, ['principal', 'interest', 'fees', 'penalty'], true)) {
@@ -69,7 +68,9 @@ class AddLoanPayoffJob
     private function getTotalAmountForPayOff()
     {
         return collect($this->request->only(['principal', 'interest', 'fees']))
-            ->map(function ($amount) { return str_replace(',', '', $amount); })
+            ->map(function ($amount) {
+                return str_replace(',', '', $amount);
+            })
             ->sum();
     }
 }

@@ -34,7 +34,7 @@ class GenerateCustomerDataReportJob implements ReportsInterface
     }
 
     /**
-     * Returns the title of this report
+     * Returns the title of this report.
      *
      * @return string
      */
@@ -44,7 +44,7 @@ class GenerateCustomerDataReportJob implements ReportsInterface
     }
 
     /**
-     * Returns the description of this report
+     * Returns the description of this report.
      *
      * @return string
      */
@@ -58,7 +58,7 @@ class GenerateCustomerDataReportJob implements ReportsInterface
 
     /**
      * Returns the heading used to display report data in HTML table
-     * or exported file formats (CSV, Excel, PDF)
+     * or exported file formats (CSV, Excel, PDF).
      *
      * @return array
      */
@@ -77,7 +77,7 @@ class GenerateCustomerDataReportJob implements ReportsInterface
     }
 
     /**
-     * Add logic to retrieve data for this report
+     * Add logic to retrieve data for this report.
      *
      * @return Collection
      */
@@ -90,15 +90,15 @@ class GenerateCustomerDataReportJob implements ReportsInterface
             ->get()
             ->each(function (Client $client) {
                 $this->report->push(collect([
-                    'id' => $client->id,
-                    'name' => $client->getFullName(),
-                    'address' => $client->address,
-                    'phone' => $client->phone1,
-                    'identification_type' => $client->identification_type,
+                    'id'                    => $client->id,
+                    'name'                  => $client->getFullName(),
+                    'address'               => $client->address,
+                    'phone'                 => $client->phone1,
+                    'identification_type'   => $client->identification_type,
                     'identification_number' => $client->identification_number,
-                    'email' => $client->email,
-                    'dob' => $client->clientable->dob,
-                    'gender' => $client->clientable->gender,
+                    'email'                 => $client->email,
+                    'dob'                   => $client->clientable->dob,
+                    'gender'                => $client->clientable->gender,
                 ]));
             });
 
@@ -119,25 +119,23 @@ class GenerateCustomerDataReportJob implements ReportsInterface
         $report->shift();
 
         $_report = $report->map(function (Collection $collection) {
-
             return [
-                'Name' => $collection->get('name'),
-                'Address' => $collection->get('address'),
-                'Tel Number' => $collection->get('phone'),
-                'ID Type' => trans('identification_types')[$collection->get('identification_type')],
-                'ID Number' => $collection->get('identification_number'),
+                'Name'          => $collection->get('name'),
+                'Address'       => $collection->get('address'),
+                'Tel Number'    => $collection->get('phone'),
+                'ID Type'       => trans('identification_types')[$collection->get('identification_type')],
+                'ID Number'     => $collection->get('identification_number'),
                 'Email Address' => $collection->get('email'),
                 'Date of Birth' => $collection->get('dob') ? $collection->get('dob')->format('d/m/Y') : '',
-                'Gender' => ucfirst($collection->get('gender')),
+                'Gender'        => ucfirst($collection->get('gender')),
             ];
         });
 
         $_report->meta = collect([
-            $this->getTitle() => '',
+            $this->getTitle()       => '',
             $this->getDescription() => '',
         ]);
 
         return $_report;
     }
-
 }

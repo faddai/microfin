@@ -16,9 +16,9 @@ class GenerateCollateralReportJobTest extends TestCase
         $this->request->merge(
             factory(Loan::class, 'staff')
                 ->make([
-                    'amount' => 10000,
+                    'amount'      => 10000,
                     'collaterals' => [
-                        factory(Collateral::class)->make(['label' => 'Car', 'market_value' => 42000])->toArray()
+                        factory(Collateral::class)->make(['label' => 'Car', 'market_value' => 42000])->toArray(),
                     ],
                 ])
                 ->toArray()
@@ -32,21 +32,21 @@ class GenerateCollateralReportJobTest extends TestCase
 
         $expected->push(collect([
             'loan' => collect([
-                'id' => 1,
-                'number' => $loan->number,
+                'id'             => 1,
+                'number'         => $loan->number,
                 'disbursed_date' => 'n/a', // loan hasn't been disbursed
-                'amount' => '10,000.00',
-                'product' => 'Staff Loan',
-                'type' => $loan->type->label,
+                'amount'         => '10,000.00',
+                'product'        => 'Staff Loan',
+                'type'           => $loan->type->label,
             ]),
 
             'client' => collect([
                 'name' => $loan->client->getFullName(),
-                'id' => $loan->client->id
+                'id'   => $loan->client->id,
             ]),
 
-            'collateral_type' => 'Car',
-            'collateral_value' => '42,000.00',
+            'collateral_type'     => 'Car',
+            'collateral_value'    => '42,000.00',
             'percentage_coverage' => (42000 / 10000) * 100,
         ]));
 
@@ -77,9 +77,9 @@ class GenerateCollateralReportJobTest extends TestCase
         $this->request->merge(
             factory(Loan::class, 'staff')
                 ->make([
-                    'amount' => 10000,
+                    'amount'       => 10000,
                     'disbursed_at' => $disbursedAt,
-                    'collaterals' => [
+                    'collaterals'  => [
                         factory(Collateral::class)->make(['label' => 'Car', 'market_value' => 42000])->toArray(),
                     ],
                 ])
@@ -94,21 +94,21 @@ class GenerateCollateralReportJobTest extends TestCase
 
         $expected->push(collect([
             'loan' => collect([
-                'id' => 1,
-                'number' => $loan->number,
+                'id'             => 1,
+                'number'         => $loan->number,
                 'disbursed_date' => $disbursedAt->format(config('microfin.dateFormat')),
-                'amount' => '10,000.00',
-                'product' => 'Staff Loan',
-                'type' => $loan->type->label,
+                'amount'         => '10,000.00',
+                'product'        => 'Staff Loan',
+                'type'           => $loan->type->label,
             ]),
 
             'client' => collect([
                 'name' => $loan->client->getFullName(),
-                'id' => $loan->client->id
+                'id'   => $loan->client->id,
             ]),
 
-            'collateral_type' => 'Car',
-            'collateral_value' => '42,000.00',
+            'collateral_type'     => 'Car',
+            'collateral_value'    => '42,000.00',
             'percentage_coverage' => (42000 / 10000) * 100,
         ]));
 
@@ -129,5 +129,4 @@ class GenerateCollateralReportJobTest extends TestCase
         self::assertEquals($expectedReportHeader, $report->shift());
         self::assertEquals($expected, $report);
     }
-
 }

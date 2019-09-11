@@ -7,12 +7,11 @@ use App\Entities\Accounting\LedgerCategory;
 use App\Jobs\Accounting\AddLedgerJob;
 use Illuminate\Http\Request;
 
-
 class LedgersController extends Controller
 {
     protected $rules = [
         'category_id' => 'bail|required|numeric|exists:ledger_categories,id',
-        'name' => 'required'
+        'name'        => 'required',
     ];
 
     public function index()

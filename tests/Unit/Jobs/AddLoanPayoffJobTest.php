@@ -1,8 +1,8 @@
 <?php
 
 use App\Entities\Loan;
-use App\Jobs\AddLoanPayoffJob;
 use App\Entities\LoanPayoff;
+use App\Jobs\AddLoanPayoffJob;
 use Tests\TestCase;
 
 class AddLoanPayoffJobTest extends TestCase
@@ -15,9 +15,9 @@ class AddLoanPayoffJobTest extends TestCase
 
         $this->request->merge([
             'principal' => 1200,
-            'interest' => 100,
-            'fees' => 50,
-            'remarks' => 'Lorem ipsum'
+            'interest'  => 100,
+            'fees'      => 50,
+            'remarks'   => 'Lorem ipsum',
         ]);
 
         $payoff = $this->dispatch(new AddLoanPayoffJob($this->request, $loan));
@@ -40,9 +40,9 @@ class AddLoanPayoffJobTest extends TestCase
 
         $this->request->merge([
             'principal' => 1200,
-            'interest' => 100,
-            'fees' => 50,
-            'remarks' => 'Lorem ipsum'
+            'interest'  => 100,
+            'fees'      => 50,
+            'remarks'   => 'Lorem ipsum',
         ]);
 
         $payoff = $this->dispatch(new AddLoanPayoffJob($this->request, $loan));
@@ -65,8 +65,8 @@ class AddLoanPayoffJobTest extends TestCase
 
         $this->request->merge([
             'principal' => '1,200',
-            'interest' => '100',
-            'fees' => '50.23'
+            'interest'  => '100',
+            'fees'      => '50.23',
         ]);
 
         $payoff = $this->dispatch(new AddLoanPayoffJob($this->request, $loan));
@@ -75,5 +75,4 @@ class AddLoanPayoffJobTest extends TestCase
         self::assertEquals(1350.23, $payoff->amount);
         self::assertEquals($loan->id, $payoff->loan_id);
     }
-
 }

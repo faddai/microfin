@@ -4,7 +4,6 @@ namespace App\Entities;
 
 use Illuminate\Database\Eloquent\Model;
 
-
 class Deposit extends Model
 {
     protected $fillable = ['amount', 'client_id', 'user_id', 'narration', 'account_id', 'receipt'];

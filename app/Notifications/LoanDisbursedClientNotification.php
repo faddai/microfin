@@ -2,7 +2,7 @@
 /**
  * Author: Francis Addai <me@faddai.com>
  * Date: 25/02/2017
- * Time: 09:38
+ * Time: 09:38.
  */
 
 namespace App\Notifications;
@@ -12,7 +12,6 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-
 
 class LoanDisbursedClientNotification extends Notification implements ShouldQueue
 {
@@ -36,7 +35,8 @@ class LoanDisbursedClientNotification extends Notification implements ShouldQueu
     /**
      * Get the notification's delivery channels.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
+     *
      * @return array
      */
     public function via($notifiable)
@@ -47,14 +47,15 @@ class LoanDisbursedClientNotification extends Notification implements ShouldQueu
     /**
      * Get the mail representation of the notification.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
+     *
      * @return \Illuminate\Notifications\Messages\MailMessage
      */
     public function toMail($notifiable)
     {
         $currency = config('app.currency');
 
-        $loanAmount = $currency. ' '. $this->loan->getPrincipalAmount();
+        $loanAmount = $currency.' '.$this->loan->getPrincipalAmount();
 
         $loanSummary = <<<TABLE
 <table border="0" cellpadding="12" width="100%" style="border-collapse:collapse;margin:0;padding:0;font-family:Arial;">
@@ -82,7 +83,7 @@ class LoanDisbursedClientNotification extends Notification implements ShouldQueu
 </table>
 TABLE;
 
-        return (new MailMessage)
+        return (new MailMessage())
                     ->greeting(sprintf('Dear %s,', $notifiable->getFullName()))
                     ->subject('Your loan has been disbursed')
                     ->line(sprintf('Your loan amount of %s has been disbursed.', $loanAmount))
@@ -95,7 +96,8 @@ TABLE;
     /**
      * Get the array representation of the notification.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
+     *
      * @return array
      */
     public function toArray($notifiable)

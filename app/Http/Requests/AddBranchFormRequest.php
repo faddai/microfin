@@ -24,9 +24,9 @@ class AddBranchFormRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|unique:branches',
+            'name'     => 'required|unique:branches',
             'location' => '',
-            'code' => ''
+            'code'     => '',
         ];
     }
 
@@ -34,7 +34,7 @@ class AddBranchFormRequest extends FormRequest
     {
         return [
             'name.required' => 'The name of the branch is required',
-            'name.unique' => 'There is already a branch with that name'
+            'name.unique'   => 'There is already a branch with that name',
         ];
     }
 }

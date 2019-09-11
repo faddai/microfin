@@ -2,18 +2,16 @@
 /**
  * Author: Francis Addai <me@faddai.com>
  * Date: 02/11/2016
- * Time: 00:50
+ * Time: 00:50.
  */
 
 namespace Setup;
-
 
 use App\Entities\RepaymentPlan;
 use Illuminate\Database\Seeder;
 
 class RepaymentPlansTableSeeder extends Seeder
 {
-
     /**
      * Run the database seeds.
      *

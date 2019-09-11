@@ -2,12 +2,11 @@
 /**
  * Author: Francis Addai <me@faddai.com>
  * Date: 27/02/2017
- * Time: 15:20
+ * Time: 15:20.
  */
-
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class AddPrincipalAndInterestLedgersToLoanProductsTable extends Migration
 {

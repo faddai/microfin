@@ -7,7 +7,6 @@ use App\Entities\Accounting\LedgerCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-
 class AddLedgerJob
 {
     /**
@@ -24,19 +23,20 @@ class AddLedgerJob
      * Create a new job instance.
      *
      * @param Request $request
-     * @param Ledger $ledger
+     * @param Ledger  $ledger
      */
     public function __construct(Request $request, Ledger $ledger = null)
     {
         $this->request = $request;
-        $this->ledger = $ledger ?? new Ledger;
+        $this->ledger = $ledger ?? new Ledger();
     }
 
     /**
      * Execute the job.
      *
-     * @return Ledger
      * @throws \Exception
+     *
+     * @return Ledger
      */
     public function handle()
     {
@@ -46,12 +46,13 @@ class AddLedgerJob
     }
 
     /**
-     * @return Ledger
      * @throws \Exception
+     *
+     * @return Ledger
      */
     private function addOrUpdateAccount()
     {
-        if (! $this->ledger->exists && ! $this->request->filled('category_id')) {
+        if (!$this->ledger->exists && !$this->request->filled('category_id')) {
             throw new \Exception('You must specify a ledger category');
         }
 
@@ -61,7 +62,7 @@ class AddLedgerJob
             }
         }
 
-        if (! $this->ledger->exists) {
+        if (!$this->ledger->exists) {
             $this->ledger->code = $this->getLedgerCode();
         }
 

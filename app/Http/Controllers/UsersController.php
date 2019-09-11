@@ -14,6 +14,7 @@ class UsersController extends Controller
      * Store a newly created resource in storage.
      *
      * @param AddUserFormRequest|Request $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function store(AddUserFormRequest $request)
@@ -35,6 +36,7 @@ class UsersController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param User $user
+     *
      * @return \Illuminate\Http\Response
      */
     public function edit(User $user)
@@ -48,7 +50,8 @@ class UsersController extends Controller
      * Update the specified resource in storage.
      *
      * @param AddUserFormRequest|Request $request
-     * @param User $user
+     * @param User                       $user
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(AddUserFormRequest $request, User $user)
@@ -66,15 +69,16 @@ class UsersController extends Controller
         flash()->success('User details updated');
 
         return redirect(route_with_hash('settings.index', '#users'));
-
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param User $user
-     * @return \Illuminate\Http\Response
+     *
      * @throws \Exception
+     *
+     * @return \Illuminate\Http\Response
      */
     public function destroy(User $user)
     {

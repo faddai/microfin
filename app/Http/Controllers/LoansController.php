@@ -2,7 +2,7 @@
 /**
  * Author: Francis Addai <me@faddai.com>
  * Date: 06/11/2016
- * Time: 1:49 PM
+ * Time: 1:49 PM.
  */
 
 namespace App\Http\Controllers;
@@ -21,11 +21,9 @@ use App\Jobs\AddLoanJob;
 use App\Jobs\Exports\GetDataForLoanScheduleExport;
 use App\Jobs\Exports\GetDataForLoanStatementExport;
 use App\Jobs\GenerateLoanRepaymentScheduleJob;
-use App\Jobs\GetPendingLoansJob;
 use App\Jobs\LoanSearchJob;
 use App\Jobs\RestructureLoanJob;
 use Illuminate\Http\Request;
-
 
 class LoansController extends Controller
 {
@@ -42,7 +40,7 @@ class LoansController extends Controller
     {
         $loan = Loan::firstOrNew(['id' => $loan]);
         $loan->amount = $loan->getBalance(false);
-        $title = $loan->exists ? 'Restructure Loan #'. $loan->number : 'New Loan Application';
+        $title = $loan->exists ? 'Restructure Loan #'.$loan->number : 'New Loan Application';
         $clients = Client::with(['clientable'])->get();
         $tenures = Tenure::all(['id', 'label']);
         $repaymentPlans = RepaymentPlan::orderBy('number_of_days', 'DESC')->get();
@@ -52,7 +50,7 @@ class LoansController extends Controller
         $sectors = BusinessSector::all(['id', 'name']);
         $interestCalculationStrategies = collect([
             Loan::STRAIGHT_LINE_STRATEGY,
-            Loan::REDUCING_BALANCE_STRATEGY
+            Loan::REDUCING_BALANCE_STRATEGY,
         ])->flatMap(function ($strategy) {
             return [$strategy => ucwords(str_replace('_', ' ', $strategy))];
         });
@@ -96,13 +94,11 @@ class LoansController extends Controller
 
         return view('dashboard.loans.create', compact('loan', 'clients', 'tenures', 'repaymentPlans', 'creditOfficers',
             'loanTypes', 'zones', 'sectors'));
-
     }
 
     public function update(Requests\AddLoanFormRequest $request, Loan $loan)
     {
         try {
-
             if ($request->has('restructure')) {
                 $message = 'Restructure successful. A new Loan has been created pending approval.';
                 $this->dispatch(new RestructureLoanJob($request, $loan));
@@ -114,11 +110,10 @@ class LoansController extends Controller
             flash()->success($message);
 
             return redirect()->route('loans.index');
-
         } catch (\Exception $exception) {
             logger()->error('Loan could not be updated', compact('exception'));
 
-            flash()->error('Loan could not be updated: '. $exception->getMessage());
+            flash()->error('Loan could not be updated: '.$exception->getMessage());
 
             return redirect()->back()->withInput();
         }
@@ -127,7 +122,7 @@ class LoansController extends Controller
     public function show(Loan $loan)
     {
         $loan->load('statement.entries', 'schedule.loan');
-        
+
         return view('dashboard.loans.show', compact('loan'));
     }
 
@@ -146,7 +141,9 @@ class LoansController extends Controller
 
     /**
      * @todo Validate submitted filters most especially, status
+     *
      * @param Request $request
+     *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function search(Request $request)
@@ -160,16 +157,17 @@ class LoansController extends Controller
 
     /**
      * @param Request $request
-     * @param Loan $loan
+     * @param Loan    $loan
+     *
      * @return mixed
      */
     public function downloadSchedule(Request $request, Loan $loan)
     {
         $options = [
-            'filename' => 'loan-schedule-'. $loan->number,
-            'view' => 'pdf.loan_schedule',
-            'dataKey' => 'schedule',
-            'orientation' => 'landscape'
+            'filename'    => 'loan-schedule-'.$loan->number,
+            'view'        => 'pdf.loan_schedule',
+            'dataKey'     => 'schedule',
+            'orientation' => 'landscape',
         ];
 
         $schedule = $this->dispatch(new GetDataForLoanScheduleExport($request, $loan));
@@ -179,16 +177,17 @@ class LoansController extends Controller
 
     /**
      * @param Request $request
-     * @param Loan $loan
+     * @param Loan    $loan
+     *
      * @return mixed
      */
     public function downloadStatement(Request $request, Loan $loan)
     {
         $options = [
-            'filename' => 'loan-statement-'. $loan->number,
-            'view' => 'pdf.loan_statement',
-            'dataKey' => 'statement',
-            'orientation' => 'landscape'
+            'filename'    => 'loan-statement-'.$loan->number,
+            'view'        => 'pdf.loan_statement',
+            'dataKey'     => 'statement',
+            'orientation' => 'landscape',
         ];
 
         $statement = $this->dispatch(new GetDataForLoanStatementExport($request, $loan));

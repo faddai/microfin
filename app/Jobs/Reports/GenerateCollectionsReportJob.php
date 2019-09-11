@@ -2,11 +2,10 @@
 /**
  * Author: Francis Addai <me@faddai.com>
  * Date: 27/04/2017
- * Time: 08:52
+ * Time: 08:52.
  */
 
 namespace App\Jobs\Reports;
-
 
 use App\Contracts\ReportsInterface;
 use App\Entities\Loan;
@@ -43,7 +42,7 @@ class GenerateCollectionsReportJob implements ReportsInterface
     }
 
     /**
-     * Add logic to retrieve data for this report
+     * Add logic to retrieve data for this report.
      *
      * @return Collection
      */
@@ -51,7 +50,6 @@ class GenerateCollectionsReportJob implements ReportsInterface
     {
         Loan::collection($this->request)
             ->each(function (Loan $loan) {
-
                 $repaymentAmountDue = $loan->schedule->sum(function (LoanRepayment $repayment) {
                     return $repayment->isDue() ? $repayment->getOutstandingRepaymentAmount(false) : 0;
                 });
@@ -61,18 +59,18 @@ class GenerateCollectionsReportJob implements ReportsInterface
                 $percentageCollected = $repaymentAmountDue > 0 ? ($repaymentCollected / $repaymentAmountDue) * 100 : 0;
 
                 $this->report->push(collect([
-                    'repayment_amount_due' => number_format($repaymentAmountDue, 2),
+                    'repayment_amount_due'  => number_format($repaymentAmountDue, 2),
                     'loan_amount_collected' => number_format($repaymentCollected, 2),
-                    'percentage_collected' => number_format($percentageCollected, 2),
-                    'credit_officer' => $loan->creditOfficer->getFullName(),
+                    'percentage_collected'  => number_format($percentageCollected, 2),
+                    'credit_officer'        => $loan->creditOfficer->getFullName(),
 
                     'loan' => collect([
-                        'id' => $loan->id,
+                        'id'     => $loan->id,
                         'number' => $loan->number,
                     ]),
 
                     'client' => collect([
-                        'id' => $loan->client->id,
+                        'id'   => $loan->client->id,
                         'name' => $loan->client->getFullName(),
                     ]),
                 ]));
@@ -91,7 +89,6 @@ class GenerateCollectionsReportJob implements ReportsInterface
                     'percentage_collected',
                     $this->report->totals->get('percentage_collected') + $percentageCollected
                 );
-
             });
 
         $this->setReportTitleAndDescription();
@@ -102,7 +99,7 @@ class GenerateCollectionsReportJob implements ReportsInterface
     }
 
     /**
-     * Returns the title of this report
+     * Returns the title of this report.
      *
      * @return string
      */
@@ -112,10 +109,11 @@ class GenerateCollectionsReportJob implements ReportsInterface
     }
 
     /**
-     * Returns the description of this report
+     * Returns the description of this report.
+     *
+     * @throws \InvalidArgumentException
      *
      * @return string
-     * @throws \InvalidArgumentException
      */
     public function getDescription(): string
     {
@@ -129,7 +127,7 @@ class GenerateCollectionsReportJob implements ReportsInterface
 
     /**
      * Returns the heading used to display report data in HTML table
-     * or exported file formats (CSV, Excel, PDF)
+     * or exported file formats (CSV, Excel, PDF).
      *
      * @return array
      */
@@ -146,8 +144,9 @@ class GenerateCollectionsReportJob implements ReportsInterface
     }
 
     /**
-     * @return Collection
      * @throws \App\Exceptions\NoDataAvailableForExportException
+     *
+     * @return Collection
      */
     public function downloadAsCsv()
     {
@@ -156,18 +155,16 @@ class GenerateCollectionsReportJob implements ReportsInterface
         $report->shift();
 
         if ($report->count()) {
-
             $_report = $report->map(function (Collection $collection) {
-
                 $loan = $collection->get('loan');
 
                 return [
-                    'Customer Name' => data_get($collection, 'client.name'),
-                    'Loan Number' => sprintf('\'%s', $loan->get('number')),
-                    'Repayments Due' => $collection->get('repayment_amount_due'),
+                    'Customer Name'         => data_get($collection, 'client.name'),
+                    'Loan Number'           => sprintf('\'%s', $loan->get('number')),
+                    'Repayments Due'        => $collection->get('repayment_amount_due'),
                     'Loan amount collected' => $collection->get('loan_amount_collected'),
-                    '% Collected' => $collection->get('percentage_collected'),
-                    'Credit Officer' => $collection->get('credit_officer'),
+                    '% Collected'           => $collection->get('percentage_collected'),
+                    'Credit Officer'        => $collection->get('credit_officer'),
                 ];
             });
 
@@ -175,21 +172,20 @@ class GenerateCollectionsReportJob implements ReportsInterface
 
             collect(['repayment_amount_due', 'loan_amount_collected', 'percentage_collected'])
                 ->each(function ($key) use ($report, &$totals) {
-                    $totals[] = '"'. number_format($report->totals->get($key), 2) .'"';
+                    $totals[] = '"'.number_format($report->totals->get($key), 2).'"';
                 });
 
             $_report->push(vsprintf(',,%s,%s,%s,', $totals));
 
             $_report->meta = collect([
                 $this->getTitle() => '',
-                'From Date' => sprintf('"%s"', $this->request->get('startDate')->format(config('microfin.dateFormat'))),
-                'To Date' => sprintf('"%s"', $this->request->get('endDate')->format(config('microfin.dateFormat'))),
+                'From Date'       => sprintf('"%s"', $this->request->get('startDate')->format(config('microfin.dateFormat'))),
+                'To Date'         => sprintf('"%s"', $this->request->get('endDate')->format(config('microfin.dateFormat'))),
             ]);
 
             return $_report;
         }
 
-        throw new NoDataAvailableForExportException;
+        throw new NoDataAvailableForExportException();
     }
-
 }

@@ -15,12 +15,12 @@ class AddUserJob
     use InteractsWithQueue, Queueable, SerializesModels;
 
     /**
-     * @var Request $request
+     * @var Request
      */
     private $request;
 
     /**
-     * @var User $user
+     * @var User
      */
     private $user;
 
@@ -38,16 +38,17 @@ class AddUserJob
      * Create a new job instance.
      *
      * @param Request $request
-     * @param User $user
-     * @param bool $sendEmailNotification
+     * @param User    $user
+     * @param bool    $sendEmailNotification
      */
     public function __construct(Request $request, User $user = null, $sendEmailNotification = true)
     {
         $this->request = $request;
         $this->isANewUser = $user === null;
-        $this->user = $user ?? new User;
+        $this->user = $user ?? new User();
         $this->sendEmailNotification = $sendEmailNotification;
     }
+
     /**
      * Execute the job.
      *
@@ -65,7 +66,6 @@ class AddUserJob
     private function addOrUpdateUser()
     {
         return DB::transaction(function () {
-
             foreach ($this->user->getFillable() as $fillable) {
                 if ($this->request->filled($fillable)) {
                     $this->user->{$fillable} = $this->request->get($fillable);
@@ -86,8 +86,6 @@ class AddUserJob
             }
 
             return $this->user;
-
         });
     }
-
 }

@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 
     'cache'      => [
 
@@ -32,7 +32,7 @@ return array(
         'settings' => [
 
             'memoryCacheSize' => '32MB',
-            'cacheTime'       => 600
+            'cacheTime'       => 600,
 
         ],
 
@@ -54,7 +54,7 @@ return array(
         |--------------------------------------------------------------------------
         */
 
-        'dir'      => storage_path('cache')
+        'dir'      => storage_path('cache'),
     ],
 
     'properties' => [
@@ -142,7 +142,7 @@ return array(
         |--------------------------------------------------------------------------
         */
 
-        'use_bom' => false
+        'use_bom' => false,
     ],
 
     'export'     => [
@@ -253,7 +253,7 @@ return array(
             | Apply strict comparison when testing for null values in the array
             |--------------------------------------------------------------------------
             */
-            'strictNullComparison' => false
+            'strictNullComparison' => false,
         ],
 
         /*
@@ -282,7 +282,7 @@ return array(
             | Whether we want to return information about the stored file or not
             |
             */
-            'returnInfo' => false
+            'returnInfo' => false,
 
         ],
 
@@ -314,7 +314,7 @@ return array(
                 |--------------------------------------------------------------------------
                 */
                 'DomPDF' => [
-                    'path' => base_path('vendor/dompdf/dompdf/')
+                    'path' => base_path('vendor/dompdf/dompdf/'),
                 ],
 
                 /*
@@ -323,7 +323,7 @@ return array(
                 |--------------------------------------------------------------------------
                 */
                 'tcPDF'  => [
-                    'path' => base_path('vendor/tecnick.com/tcpdf/')
+                    'path' => base_path('vendor/tecnick.com/tcpdf/'),
                 ],
 
                 /*
@@ -332,10 +332,10 @@ return array(
                 |--------------------------------------------------------------------------
                 */
                 'mPDF'   => [
-                    'path' => base_path('vendor/mpdf/mpdf/')
+                    'path' => base_path('vendor/mpdf/mpdf/'),
                 ],
-            ]
-        ]
+            ],
+        ],
     ],
 
     'filters'    => [
@@ -346,7 +346,7 @@ return array(
         */
 
         'registered' => [
-            'chunk' => 'Maatwebsite\Excel\Filters\ChunkReadFilter'
+            'chunk' => 'Maatwebsite\Excel\Filters\ChunkReadFilter',
         ],
 
         /*
@@ -355,7 +355,7 @@ return array(
         |--------------------------------------------------------------------------
         */
 
-        'enabled'    => []
+        'enabled'    => [],
     ],
 
     'import'     => [
@@ -426,7 +426,7 @@ return array(
         'encoding'                => [
 
             'input'  => 'UTF-8',
-            'output' => 'UTF-8'
+            'output' => 'UTF-8',
 
         ],
 
@@ -498,7 +498,7 @@ return array(
             | Date columns
             |--------------------------------------------------------------------------
             */
-            'columns' => []
+            'columns' => [],
         ],
 
         /*
@@ -519,11 +519,11 @@ return array(
 
             'test' => [
 
-                'firstname' => 'A2'
+                'firstname' => 'A2',
 
-            ]
+            ],
 
-        ]
+        ],
     ],
 
     'views'      => [
@@ -548,7 +548,7 @@ return array(
                 'font' => [
                     'bold' => true,
                     'size' => 12,
-                ]
+                ],
             ],
 
             /*
@@ -560,7 +560,7 @@ return array(
                 'font' => [
                     'bold' => true,
                     'size' => 12,
-                ]
+                ],
             ],
 
             /*
@@ -572,7 +572,7 @@ return array(
                 'font' => [
                     'bold' => true,
                     'size' => 12,
-                ]
+                ],
             ],
 
             /*
@@ -584,7 +584,7 @@ return array(
                 'font' => [
                     'italic' => true,
                     'size'   => 12,
-                ]
+                ],
             ],
 
             /*
@@ -596,7 +596,7 @@ return array(
                 'font' => [
                     'bold' => true,
                     'size' => 24,
-                ]
+                ],
             ],
 
             /*
@@ -608,7 +608,7 @@ return array(
                 'font' => [
                     'bold' => true,
                     'size' => 18,
-                ]
+                ],
             ],
 
             /*
@@ -620,7 +620,7 @@ return array(
                 'font' => [
                     'bold' => true,
                     'size' => 13.5,
-                ]
+                ],
             ],
 
             /*
@@ -632,7 +632,7 @@ return array(
                 'font' => [
                     'bold' => true,
                     'size' => 12,
-                ]
+                ],
             ],
 
             /*
@@ -644,7 +644,7 @@ return array(
                 'font' => [
                     'bold' => true,
                     'size' => 10,
-                ]
+                ],
             ],
 
             /*
@@ -656,7 +656,7 @@ return array(
                 'font' => [
                     'bold' => true,
                     'size' => 7.5,
-                ]
+                ],
             ],
 
             /*
@@ -668,7 +668,7 @@ return array(
                 'font' => [
                     'underline' => true,
                     'color'     => ['argb' => 'FF0000FF'],
-                ]
+                ],
             ],
 
             /*
@@ -680,12 +680,12 @@ return array(
                 'borders' => [
                     'bottom' => [
                         'style' => 'thin',
-                        'color' => ['FF000000']
+                        'color' => ['FF000000'],
                     ],
-                ]
-            ]
-        ]
+                ],
+            ],
+        ],
 
-    ]
+    ],
 
-);
+];

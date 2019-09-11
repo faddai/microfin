@@ -5,9 +5,9 @@ namespace App\Jobs\Reports;
 use App\Contracts\ReportsInterface;
 use App\Entities\Loan;
 use App\Traits\DecoratesReport;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
-use Carbon\Carbon;
 
 class GenerateAgeGroupReportJob implements ReportsInterface
 {
@@ -35,7 +35,7 @@ class GenerateAgeGroupReportJob implements ReportsInterface
     }
 
     /**
-     * Add logic to retrieve data for this report
+     * Add logic to retrieve data for this report.
      *
      * @return Collection
      */
@@ -50,7 +50,6 @@ class GenerateAgeGroupReportJob implements ReportsInterface
             })
             ->groupBy('age_group')
             ->flatMap(function (Collection $loans, $ageGroup) {
-
                 return collect([$ageGroup => $loans->sum('amount')]);
             })
             ->sortBy(function ($amount, $ageGroup) {
@@ -67,7 +66,7 @@ class GenerateAgeGroupReportJob implements ReportsInterface
     }
 
     /**
-     * Returns the title of this report
+     * Returns the title of this report.
      *
      * @return string
      */
@@ -77,18 +76,18 @@ class GenerateAgeGroupReportJob implements ReportsInterface
     }
 
     /**
-     * Returns the description of this report
+     * Returns the description of this report.
      *
      * @return string
      */
     public function getDescription(): string
     {
-        return $this->getTitle(). ' as at '. Carbon::today()->format(config('microfin.dateFormat'));
+        return $this->getTitle().' as at '.Carbon::today()->format(config('microfin.dateFormat'));
     }
 
     /**
      * Returns the heading used to display report data in HTML table
-     * or exported file formats (CSV, Excel, PDF)
+     * or exported file formats (CSV, Excel, PDF).
      *
      * @return array
      */
@@ -96,7 +95,7 @@ class GenerateAgeGroupReportJob implements ReportsInterface
     {
         return [
             'Age Group',
-            'Loan Amount'
+            'Loan Amount',
         ];
     }
 
@@ -111,8 +110,8 @@ class GenerateAgeGroupReportJob implements ReportsInterface
 
         $_report = $report->map(function ($amount, $k) {
             return [
-                'Age Group' => $k,
-                'Loan Amount' => number_format($amount, 2)
+                'Age Group'   => $k,
+                'Loan Amount' => number_format($amount, 2),
             ];
         });
 
@@ -125,5 +124,4 @@ class GenerateAgeGroupReportJob implements ReportsInterface
 
         return $_report;
     }
-
 }

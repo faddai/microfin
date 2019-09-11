@@ -5,7 +5,6 @@ use App\Jobs\AddLedgerEntryJob;
 use Ramsey\Uuid\Uuid;
 use Tests\TestCase;
 
-
 class AddLedgerEntryJobTest extends TestCase
 {
     /**

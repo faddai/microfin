@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Entities\Loan;
 use App\Jobs\LoanSearchJob;
-use App\LoanRestructure;
 use Illuminate\Http\Request;
 
 class LoanRestructureController extends Controller

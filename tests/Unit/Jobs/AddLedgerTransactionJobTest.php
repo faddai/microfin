@@ -8,10 +8,8 @@ use Carbon\Carbon;
 use Ramsey\Uuid\Uuid;
 use Tests\TestCase;
 
-
 class AddLedgerTransactionJobTest extends TestCase
 {
-
     public function test_able_to_create_a_transaction_with_a_valid_transaction_id()
     {
         $valueDate = Carbon::parse('2 months ago')->format('Y-m-d');
@@ -19,12 +17,12 @@ class AddLedgerTransactionJobTest extends TestCase
         $this->request->merge(
             factory(LedgerTransaction::class)
                 ->make([
-                    'uuid' => '',
+                    'uuid'       => '',
                     'value_date' => $valueDate,
-                    'entries' => [
+                    'entries'    => [
                         factory(LedgerEntry::class)->make(['dr' => 200])->toArray(),
                         factory(LedgerEntry::class)->make(['cr' => 200])->toArray(),
-                    ]
+                    ],
                 ])
                 ->toArray()
         );
@@ -44,7 +42,7 @@ class AddLedgerTransactionJobTest extends TestCase
             'entries' => [
                 factory(LedgerEntry::class)->make(['dr' => 200])->toArray(),
                 factory(LedgerEntry::class)->make(['cr' => 200])->toArray(),
-            ]
+            ],
         ])->toArray());
 
         $transaction = $this->dispatchNow(new AddLedgerTransactionJob($this->request));
@@ -58,7 +56,7 @@ class AddLedgerTransactionJobTest extends TestCase
             'entries' => [
                 factory(LedgerEntry::class)->make(['dr' => 200])->toArray(),
                 factory(LedgerEntry::class)->make(['cr' => 200])->toArray(),
-            ]
+            ],
         ])->toArray());
 
         $transaction = $this->dispatchNow(new AddLedgerTransactionJob($this->request));
@@ -67,20 +65,20 @@ class AddLedgerTransactionJobTest extends TestCase
     }
 
     /**
-     * create a transaction involving 2 ledgers
+     * create a transaction involving 2 ledgers.
      */
-    public function test_able_to_post_ledger_entries_as_part_of_a_transaction() {
-
+    public function test_able_to_post_ledger_entries_as_part_of_a_transaction()
+    {
         $txn = factory(LedgerTransaction::class)->make();
 
         $this->request->merge(array_merge($txn->toArray(), [
                 'entries' => [
                     factory(LedgerEntry::class)->make(['dr' => 2000])->toArray(),
                     factory(LedgerEntry::class)->make([
-                        'cr' => 2000,
+                        'cr'        => 2000,
                         'ledger_id' => Ledger::firstOrCreate(['code' => 4002])->id,
-                    ])->toArray()
-                ]
+                    ])->toArray(),
+                ],
             ]
         ));
 
@@ -103,10 +101,10 @@ class AddLedgerTransactionJobTest extends TestCase
                 factory(LedgerEntry::class)->make(['dr' => 2000])->toArray(),
                 factory(LedgerEntry::class)->make(['dr' => 100])->toArray(),
                 factory(LedgerEntry::class)->make([
-                    'cr' => 2000,
+                    'cr'        => 2000,
                     'ledger_id' => Ledger::whereCode(4002)->first()->id,
-                ])->toArray()
-            ]
+                ])->toArray(),
+            ],
         ]);
 
         $transaction = $this->dispatchNow(new AddLedgerTransactionJob($this->request));

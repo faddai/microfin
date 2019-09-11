@@ -5,7 +5,6 @@ use App\Entities\Loan;
 use App\Jobs\AddCollateralJob;
 use Tests\TestCase;
 
-
 class AddCollateralTest extends TestCase
 {
     public function test_add_a_single_collateral_to_a_loan()
@@ -27,15 +26,15 @@ class AddCollateralTest extends TestCase
         $loan = factory(Loan::class)->create();
 
         $this->request->merge([
-            'market_value' => 300, 'label' => 'Mobile Phone'
+            'market_value' => 300, 'label' => 'Mobile Phone',
         ]);
 
         $collateral = $this->dispatch(new AddCollateralJob($this->request, $loan));
 
         $this->request->merge([
             'collateral_id' => $collateral->id,
-            'label' => 'Digital Camera',
-            'market_value' => 600
+            'label'         => 'Digital Camera',
+            'market_value'  => 600,
         ]);
 
         $updatedCollateral = $this->dispatch(new AddCollateralJob($this->request, $loan));

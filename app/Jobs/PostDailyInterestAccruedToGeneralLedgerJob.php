@@ -2,7 +2,7 @@
 /**
  * Author: Francis Addai <me@faddai.com>
  * Date: 27/02/2017
- * Time: 16:31
+ * Time: 16:31.
  */
 
 namespace App\Jobs;
@@ -13,7 +13,6 @@ use Carbon\Carbon;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-
 
 class PostDailyInterestAccruedToGeneralLedgerJob
 {
@@ -32,13 +31,13 @@ class PostDailyInterestAccruedToGeneralLedgerJob
     /**
      * Execute the job.
      *
-     * @return int
      * @throws \App\Exceptions\LedgerEntryException
+     *
+     * @return int
      */
     public function handle()
     {
         return DB::transaction(function () {
-
             $processed = 0;
 
             // retrieve actively running loans
@@ -62,30 +61,36 @@ class PostDailyInterestAccruedToGeneralLedgerJob
 
     /**
      * Filtering is done at this level because not all loans have maturity date set in the database
-     * This is because the maturity date is retrieved via an accessor
+     * This is because the maturity date is retrieved via an accessor.
      *
      * @todo save maturity date to the database so that query can be scoped to return immatured loans
+     *
      * @see Loan::getMaturityDateAttribute()
+     *
      * @param Loan $loan
+     *
      * @return bool
      */
-    private function getLoansThatHaventMatured(Loan $loan) {
+    private function getLoansThatHaventMatured(Loan $loan)
+    {
         return $loan->maturity_date > $this->accrualDate->format('Y-m-%');
     }
 
     /**
      * @param $dailyInterest
      * @param Loan $loan
-     * @return mixed
+     *
      * @throws LedgerEntryException
+     *
+     * @return mixed
      */
     private function postTransactionToLedger($dailyInterest, Loan $loan)
     {
-        if (! $loan->product || $loan->product->interestReceivableLedger === null) {
+        if (!$loan->product || $loan->product->interestReceivableLedger === null) {
             throw new LedgerEntryException('You cannot post an entry for a Loan Product without configured Interest Ledgers');
         }
 
-        $narration = 'Daily Interest Accrued - ' . $loan->number;
+        $narration = 'Daily Interest Accrued - '.$loan->number;
 
         $valueDate = $this->accrualDate;
 
@@ -93,8 +98,8 @@ class PostDailyInterestAccruedToGeneralLedgerJob
 
         return $this->dispatch(new AddLedgerTransactionJob(new Request([
             'branch_id' => $loan->createdBy->branch->id,
-            'loan_id' => $loan->id,
-            'entries' => [
+            'loan_id'   => $loan->id,
+            'entries'   => [
                 [
                     'dr' => $dailyInterest,
                     // Ledger to collect proceeds depending on loan product
@@ -102,12 +107,12 @@ class PostDailyInterestAccruedToGeneralLedgerJob
                     'narration' => $narration,
                 ],
                 [
-                    'cr' => $dailyInterest,
+                    'cr'        => $dailyInterest,
                     'ledger_id' => $loan->product->interestIncomeLedger->id,
                     'narration' => $narration,
-                ]
+                ],
             ],
-            'value_date' => $this->accrualDate
+            'value_date' => $this->accrualDate,
         ])));
     }
 }

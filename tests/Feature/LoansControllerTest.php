@@ -2,9 +2,8 @@
 /**
  * Author: Francis Addai <me@faddai.com>
  * Date: 29/03/2017
- * Time: 4:05 PM
+ * Time: 4:05 PM.
  */
-
 use App\Entities\User;
 use Tests\TestCase;
 

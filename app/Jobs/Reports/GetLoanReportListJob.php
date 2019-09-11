@@ -19,6 +19,7 @@ class GetLoanReportListJob
             })
             ->map(function (array $report) {
                 $report['url'] = route('reports.loans.show', ['report' => str_slug($report['title'])]);
+
                 return collect($report);
             });
     }

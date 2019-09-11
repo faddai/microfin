@@ -26,7 +26,7 @@ class AddGuarantorJob
      * Create a new job instance.
      *
      * @param Request $request
-     * @param Loan $loan
+     * @param Loan    $loan
      */
     public function __construct(Request $request, Loan $loan)
     {
@@ -41,7 +41,7 @@ class AddGuarantorJob
      */
     public function handle()
     {
-        if (! $this->request->filled('name')) {
+        if (!$this->request->filled('name')) {
             throw new BadRequestHttpException('You must provide at least a name for the guarantor');
         }
 

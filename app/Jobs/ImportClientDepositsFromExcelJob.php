@@ -15,7 +15,6 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class ImportClientDepositsFromExcelJob
 {
-
     use DispatchesJobs;
 
     /**
@@ -36,10 +35,11 @@ class ImportClientDepositsFromExcelJob
     /**
      * Execute the job.
      *
-     * @return mixed
      * @throws \InvalidArgumentException
      * @throws \App\Exceptions\ClientTransactionException
      * @throws \Exception
+     *
+     * @return mixed
      */
     public function handle()
     {
@@ -50,20 +50,19 @@ class ImportClientDepositsFromExcelJob
                 $reader->formatDates(false);
 
                 $workbook->each(function (RowCollection $sheet) {
-
                     $sheet->map(function (CellCollection $transaction) {
                         $client = Client::whereAccountNumber(trim(str_replace('\'', '', $transaction->customer_number)))
                             ->firstOrFail();
 
-                        $ledger =  Ledger::whereCode(''. $transaction->ledger_code)->firstOrFail();
+                        $ledger = Ledger::whereCode(''.$transaction->ledger_code)->firstOrFail();
 
                         $txn = collect([
-                            'branch_id' => $this->getBranchId($transaction),
+                            'branch_id'  => $this->getBranchId($transaction),
                             'value_date' => $transaction->value_date,
                             'created_at' => $transaction->transaction_date,
-                            'ledger_id' => $ledger->id,
-                            'cr' => $transaction->amount,
-                            'narration' => $transaction->narration,
+                            'ledger_id'  => $ledger->id,
+                            'cr'         => $transaction->amount,
+                            'narration'  => $transaction->narration,
                         ]);
 
                         $txn->client = $client;
@@ -71,7 +70,6 @@ class ImportClientDepositsFromExcelJob
                         return $txn;
                     })
                     ->each(function (Collection $transaction) {
-
                         $request = new Request($transaction->toArray());
 
                         $request->setUserResolver(function () {
@@ -89,14 +87,16 @@ class ImportClientDepositsFromExcelJob
 
     /**
      * @param $transaction
-     * @return mixed
+     *
      * @throws \Exception
+     *
+     * @return mixed
      */
     private function getBranchId($transaction)
     {
         $branch = Branch::whereCode($transaction->business_unit_code)->first() ?? $this->request->user()->branch;
 
-        if (! $branch) {
+        if (!$branch) {
             throw new \Exception('A transaction branch is missing for one or more transactions');
         }
 

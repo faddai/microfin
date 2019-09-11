@@ -12,6 +12,7 @@ class ClientsController extends Controller
 {
     /**
      * @param Request $request
+     *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
      */
     public function index(Request $request)
@@ -33,16 +34,15 @@ class ClientsController extends Controller
 
     /**
      * @param Request $request
+     *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function create(Request $request)
     {
-
         if ($request->has('type')) {
-
             $typeOfClient = $request->get('type', null);
 
-            $client = new Client;
+            $client = new Client();
             $relationshipManagers = User::relationshipManagers();
             $pageTitle = sprintf('Add new Client / %s Account', ucfirst($typeOfClient));
 
@@ -51,11 +51,11 @@ class ClientsController extends Controller
         }
 
         return view('dashboard.clients.choose_type_of_client');
-
     }
 
     /**
      * @param Requests\AddClientFormRequest $request
+     *
      * @return $this|\Illuminate\Http\RedirectResponse
      */
     public function store(Requests\AddClientFormRequest $request)
@@ -66,7 +66,6 @@ class ClientsController extends Controller
             flash()->success('The Client has successfully been created');
 
             return redirect()->route('clients.show', ['client' => $client]);
-
         } catch (\Exception $e) {
             logger()->error('Could not add client:', ['error' => $e->getMessage()]);
 
@@ -74,7 +73,6 @@ class ClientsController extends Controller
 
             return redirect()->back()->withInput();
         }
-
     }
 
     public function show(Client $client)
@@ -86,6 +84,7 @@ class ClientsController extends Controller
 
     /**
      * @param Client $client
+     *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function edit(Client $client)
@@ -99,7 +98,8 @@ class ClientsController extends Controller
 
     /**
      * @param Requests\AddClientFormRequest $request
-     * @param Client $client
+     * @param Client                        $client
+     *
      * @return $this|\Illuminate\Http\RedirectResponse
      */
     public function update(Requests\AddClientFormRequest $request, Client $client)

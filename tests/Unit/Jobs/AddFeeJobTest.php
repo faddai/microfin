@@ -2,23 +2,21 @@
 /**
  * Author: Francis Addai <me@faddai.com>
  * Date: 03/03/2017
- * Time: 02:02
+ * Time: 02:02.
  */
-
 use App\Entities\Fee;
 use App\Jobs\AddFeeJob;
 use Setup\FeesTableSeeder;
 use Tests\TestCase;
-
 
 class AddFeeJobTest extends TestCase
 {
     public function test_can_save_a_fee()
     {
         $this->request->merge([
-            'rate' => 3,
-            'name' => faker()->name,
-            'is_paid_upfront' => 1
+            'rate'            => 3,
+            'name'            => faker()->name,
+            'is_paid_upfront' => 1,
         ]);
 
         $fee = $this->dispatch(new AddFeeJob($this->request));
@@ -34,9 +32,9 @@ class AddFeeJobTest extends TestCase
         $fee = factory(Fee::class)->create(['rate' => 1.4, 'is_paid_upfront' => 0]);
 
         $this->request->merge([
-            'rate' => 4,
+            'rate'            => 4,
             'is_paid_upfront' => 1,
-            'type' => Fee::PERCENTAGE
+            'type'            => Fee::PERCENTAGE,
         ]);
 
         $fee = $this->dispatch(new AddFeeJob($this->request, $fee));

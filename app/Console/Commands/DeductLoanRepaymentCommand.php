@@ -9,7 +9,6 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 
 class DeductLoanRepaymentCommand extends Command
 {
-
     use DispatchesJobs;
 
     /**

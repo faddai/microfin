@@ -9,7 +9,7 @@ class LoanProduct extends Model
 {
     protected $fillable = ['name', 'description', 'min_loan_amount', 'max_loan_amount', 'code',
         // ledgers for receiving principal and interest
-        'principal_ledger_id', 'interest_ledger_id', 'interest_income_ledger_id'
+        'principal_ledger_id', 'interest_ledger_id', 'interest_income_ledger_id',
     ];
 
     const CUSTOMER = 1120;
@@ -22,7 +22,7 @@ class LoanProduct extends Model
     }
 
     /**
-     * The ledger for keeping track of principal repayments of loans belonging to this product
+     * The ledger for keeping track of principal repayments of loans belonging to this product.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
@@ -32,7 +32,7 @@ class LoanProduct extends Model
     }
 
     /**
-     * The ledger for keeping track of interest repayments of loans belonging to this product
+     * The ledger for keeping track of interest repayments of loans belonging to this product.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
@@ -42,7 +42,7 @@ class LoanProduct extends Model
     }
 
     /**
-     * The ledger for keeping track of actual interest repayments of loans belonging to this product
+     * The ledger for keeping track of actual interest repayments of loans belonging to this product.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */

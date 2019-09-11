@@ -7,7 +7,6 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
 use Laratrust\Traits\LaratrustUserTrait;
 
-
 class User extends Authenticatable
 {
     use LaratrustUserTrait;
@@ -19,7 +18,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'branch_id', 'last_login', 'is_active'
+        'name', 'email', 'password', 'branch_id', 'last_login', 'is_active',
     ];
 
     protected $dates = ['last_login'];

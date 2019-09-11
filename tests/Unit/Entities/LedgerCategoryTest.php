@@ -2,9 +2,8 @@
 /**
  * Author: Francis Addai <me@faddai.com>
  * Date: 29/02/2017
- * Time: 4:50 PM
+ * Time: 4:50 PM.
  */
-
 use App\Entities\Accounting\LedgerCategory;
 use Tests\TestCase;
 

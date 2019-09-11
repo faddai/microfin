@@ -13,7 +13,6 @@ use App\Jobs\AutomatedLoanRepaymentJob;
 use Carbon\Carbon;
 use Tests\TestCase;
 
-
 class AutomatedLoanRepaymentJobTest extends TestCase
 {
     public function test_that_deductions_happen_for_running_loans()
@@ -22,11 +21,11 @@ class AutomatedLoanRepaymentJobTest extends TestCase
 
         $this->request->merge(
             factory(Loan::class)->make([
-                'amount' => 10000,
-                'rate' => 6,
+                'amount'     => 10000,
+                'rate'       => 6,
                 'created_at' => Carbon::parse('Dec 16, 2016'),
-                'tenure_id' => Tenure::firstOrCreate(['number_of_months' => 4])->id,
-                'client_id' => factory(Client::class, 'corporate')->create(['account_balance' => 20000])->id,
+                'tenure_id'  => Tenure::firstOrCreate(['number_of_months' => 4])->id,
+                'client_id'  => factory(Client::class, 'corporate')->create(['account_balance' => 20000])->id,
             ])->toArray()
         );
 
@@ -57,12 +56,12 @@ class AutomatedLoanRepaymentJobTest extends TestCase
         $this->request->merge(
             factory(Loan::class)
                 ->make([
-                    'disbursed_at' => $disbursalDate,
+                    'disbursed_at'      => $disbursalDate,
                     'repayment_plan_id' => $repaymentPlan->id,
-                    'tenure_id' => Tenure::firstOrCreate(['number_of_months' => 5])->id,
-                    'amount' => 6000,
-                    'rate' => 4.5,
-                    'client_id' => $client->id
+                    'tenure_id'         => Tenure::firstOrCreate(['number_of_months' => 5])->id,
+                    'amount'            => 6000,
+                    'rate'              => 4.5,
+                    'client_id'         => $client->id,
                 ])
                 ->toArray()
         );
@@ -80,7 +79,7 @@ class AutomatedLoanRepaymentJobTest extends TestCase
 
         $loan = $loan->fresh();
 
-        self::assertEquals(LoanRepayment::DEFAULTED,  $loan->schedule->first()->status);
+        self::assertEquals(LoanRepayment::DEFAULTED, $loan->schedule->first()->status);
         self::assertFalse($loan->schedule->first()->has_been_paid);
         self::assertNull($loan->schedule->first()->repayment_timestamp);
     }
@@ -102,12 +101,12 @@ class AutomatedLoanRepaymentJobTest extends TestCase
         $this->request->merge(
             factory(Loan::class)
                 ->make([
-                    'disbursed_at' => $disbursalDate,
+                    'disbursed_at'      => $disbursalDate,
                     'repayment_plan_id' => $repaymentPlan->id,
-                    'tenure_id' => Tenure::firstOrCreate(['number_of_months' => 3])->id,
-                    'amount' => 1000,
-                    'rate' => 5,
-                    'client_id' => $client->id
+                    'tenure_id'         => Tenure::firstOrCreate(['number_of_months' => 3])->id,
+                    'amount'            => 1000,
+                    'rate'              => 5,
+                    'client_id'         => $client->id,
                 ])
                 ->toArray()
         );
@@ -147,12 +146,12 @@ class AutomatedLoanRepaymentJobTest extends TestCase
         $this->request->merge(
             factory(Loan::class)
                 ->make([
-                    'disbursed_at' => $disbursalDate,
+                    'disbursed_at'      => $disbursalDate,
                     'repayment_plan_id' => $repaymentPlan->id,
-                    'tenure_id' => Tenure::firstOrCreate(['number_of_months' => 2])->id,
-                    'amount' => 20000,
-                    'rate' => 3,
-                    'client_id' => $client->id
+                    'tenure_id'         => Tenure::firstOrCreate(['number_of_months' => 2])->id,
+                    'amount'            => 20000,
+                    'rate'              => 3,
+                    'client_id'         => $client->id,
                 ])
             ->toArray()
         );
@@ -209,12 +208,12 @@ class AutomatedLoanRepaymentJobTest extends TestCase
         $this->request->merge(
             factory(Loan::class)
                 ->make([
-                    'disbursed_at' => $disbursalDate,
+                    'disbursed_at'      => $disbursalDate,
                     'repayment_plan_id' => $repaymentPlan->id,
-                    'tenure_id' => Tenure::firstOrCreate(['number_of_months' => 2])->id,
-                    'amount' => 2000,
-                    'rate' => 3,
-                    'client_id' => $client->id
+                    'tenure_id'         => Tenure::firstOrCreate(['number_of_months' => 2])->id,
+                    'amount'            => 2000,
+                    'rate'              => 3,
+                    'client_id'         => $client->id,
                 ])
                 ->toArray()
         );
@@ -255,10 +254,10 @@ class AutomatedLoanRepaymentJobTest extends TestCase
         $this->request->merge(
             factory(Loan::class)->make([
                 'repayment_plan_id' => RepaymentPlan::firstOrCreate(['label' => RepaymentPlan::MONTHLY])->id,
-                'tenure_id' => Tenure::firstOrCreate(['number_of_months' => 2])->id,
-                'amount' => 2000,
-                'rate' => 3,
-                'client_id' => $client->id
+                'tenure_id'         => Tenure::firstOrCreate(['number_of_months' => 2])->id,
+                'amount'            => 2000,
+                'rate'              => 3,
+                'client_id'         => $client->id,
             ])
             ->toArray()
         );
@@ -286,13 +285,13 @@ class AutomatedLoanRepaymentJobTest extends TestCase
 
         $this->request->merge(
             factory(Loan::class)->make([
-                'disbursed_at' => $disbursalDate,
+                'disbursed_at'      => $disbursalDate,
                 'repayment_plan_id' => $repaymentPlan->id,
-                'tenure_id' => Tenure::firstOrCreate(['number_of_months' => 5])->id,
-                'amount' => 6000,
-                'rate' => 4.5,
-                'client_id' => factory(Client::class, 'individual')->create(['account_balance' => 0])->id,
-                'fees' => [['rate' => 17, 'id' => 3]]
+                'tenure_id'         => Tenure::firstOrCreate(['number_of_months' => 5])->id,
+                'amount'            => 6000,
+                'rate'              => 4.5,
+                'client_id'         => factory(Client::class, 'individual')->create(['account_balance' => 0])->id,
+                'fees'              => [['rate' => 17, 'id' => 3]],
             ])
             ->toArray()
         );
@@ -358,11 +357,11 @@ class AutomatedLoanRepaymentJobTest extends TestCase
                 ->states('approved', 'disbursed')
                 ->make([
                     'disbursed_at' => Carbon::parse('Jan 11, 2017'),
-                    'tenure_id' => Tenure::firstOrCreate(['number_of_months' => 5])->id,
-                    'amount' => 6000,
-                    'rate' => 4.5,
-                    'client_id' => factory(Client::class, 'individual')->create(['account_balance' => 0])->id,
-                    'fees' => [
+                    'tenure_id'    => Tenure::firstOrCreate(['number_of_months' => 5])->id,
+                    'amount'       => 6000,
+                    'rate'         => 4.5,
+                    'client_id'    => factory(Client::class, 'individual')->create(['account_balance' => 0])->id,
+                    'fees'         => [
                         Fee::whereName(Fee::ADMINISTRATION)->first()->toArray(),
                         Fee::whereName(Fee::ARRANGEMENT)->first()->fill(['is_paid_upfront' => 1])->toArray(),
                     ],
@@ -388,14 +387,14 @@ class AutomatedLoanRepaymentJobTest extends TestCase
                 ->states('approved', 'disbursed')
                 ->make([
                     'disbursed_at' => $disbursed,
-                    'tenure_id' => Tenure::firstOrCreate(['number_of_months' => 5])->id,
-                    'amount' => 6000,
-                    'rate' => 4.5,
-                    'client_id' => factory(Client::class, 'individual')->create(['account_balance' => 1700])->id,
-                    'fees' => collect([
+                    'tenure_id'    => Tenure::firstOrCreate(['number_of_months' => 5])->id,
+                    'amount'       => 6000,
+                    'rate'         => 4.5,
+                    'client_id'    => factory(Client::class, 'individual')->create(['account_balance' => 1700])->id,
+                    'fees'         => collect([
                         Fee::whereName(Fee::ADMINISTRATION)->first(), // upfront = 5%
                         Fee::whereName(Fee::DISBURSEMENT)->first(), // amortized fee = 5%
-                        Fee::whereName(Fee::ARRANGEMENT)->first()->fill(['is_paid_upfront' => 1, 'rate' => 5]) // upfront = 5%
+                        Fee::whereName(Fee::ARRANGEMENT)->first()->fill(['is_paid_upfront' => 1, 'rate' => 5]), // upfront = 5%
                     ])->toArray(),
                 ])
                 ->toArray()
@@ -440,14 +439,14 @@ class AutomatedLoanRepaymentJobTest extends TestCase
                 ->states('approved', 'disbursed')
                 ->make([
                     'disbursed_at' => $disbursed,
-                    'tenure_id' => Tenure::firstOrCreate(['number_of_months' => 5])->id,
-                    'amount' => 6000,
-                    'rate' => 4.5,
-                    'client_id' => factory(Client::class, 'individual')->create(['account_balance' => 1600])->id,
-                    'fees' => collect([
+                    'tenure_id'    => Tenure::firstOrCreate(['number_of_months' => 5])->id,
+                    'amount'       => 6000,
+                    'rate'         => 4.5,
+                    'client_id'    => factory(Client::class, 'individual')->create(['account_balance' => 1600])->id,
+                    'fees'         => collect([
                         Fee::whereName(Fee::ADMINISTRATION)->first(), // upfront = 5%
                         Fee::whereName(Fee::DISBURSEMENT)->first(), // amortized fee = 5%
-                        Fee::whereName(Fee::ARRANGEMENT)->first() // amortized fee = 7%
+                        Fee::whereName(Fee::ARRANGEMENT)->first(), // amortized fee = 7%
                     ])->toArray(),
                 ])
                 ->toArray()
@@ -506,14 +505,14 @@ class AutomatedLoanRepaymentJobTest extends TestCase
                 ->states('approved', 'disbursed')
                 ->make([
                     'disbursed_at' => $disbursed,
-                    'tenure_id' => Tenure::firstOrCreate(['number_of_months' => 5])->id,
-                    'amount' => 6000,
-                    'rate' => 4.5,
-                    'client_id' => factory(Client::class, 'individual')->create(['account_balance' => 50])->id,
-                    'fees' => collect([
+                    'tenure_id'    => Tenure::firstOrCreate(['number_of_months' => 5])->id,
+                    'amount'       => 6000,
+                    'rate'         => 4.5,
+                    'client_id'    => factory(Client::class, 'individual')->create(['account_balance' => 50])->id,
+                    'fees'         => collect([
                         Fee::whereName(Fee::ADMINISTRATION)->first(), // upfront = 5%
                         Fee::whereName(Fee::DISBURSEMENT)->first(), // amortized fee = 5%
-                        Fee::whereName(Fee::ARRANGEMENT)->first() // amortized fee = 7%
+                        Fee::whereName(Fee::ARRANGEMENT)->first(), // amortized fee = 7%
                     ])->toArray(),
                 ])
                 ->toArray()
@@ -566,14 +565,14 @@ class AutomatedLoanRepaymentJobTest extends TestCase
                 ->states('approved', 'disbursed')
                 ->make([
                     'disbursed_at' => $disbursed,
-                    'tenure_id' => Tenure::firstOrCreate(['number_of_months' => 5])->id,
-                    'amount' => 6000,
-                    'rate' => 4.5,
-                    'client_id' => factory(Client::class, 'individual')->create(['account_balance' => 1200])->id,
-                    'fees' => collect([
+                    'tenure_id'    => Tenure::firstOrCreate(['number_of_months' => 5])->id,
+                    'amount'       => 6000,
+                    'rate'         => 4.5,
+                    'client_id'    => factory(Client::class, 'individual')->create(['account_balance' => 1200])->id,
+                    'fees'         => collect([
                         Fee::whereName(Fee::ADMINISTRATION)->first(), // upfront = 5%
                         Fee::whereName(Fee::DISBURSEMENT)->first(), // amortized fee = 5%
-                        Fee::whereName(Fee::ARRANGEMENT)->first() // amortized fee = 7%
+                        Fee::whereName(Fee::ARRANGEMENT)->first(), // amortized fee = 7%
                     ])->toArray(),
                 ])
                 ->toArray()
@@ -623,8 +622,8 @@ class AutomatedLoanRepaymentJobTest extends TestCase
             factory(Loan::class, 'staff')
                 ->make([
                     'amount' => 10000,
-                    'rate' => 9,
-                    'fees' => collect([
+                    'rate'   => 9,
+                    'fees'   => collect([
                         Fee::whereName(Fee::ADMINISTRATION)->first(), // upfront = 5%
                         Fee::whereName(Fee::DISBURSEMENT)->first(), // amortized fee = 5%
                     ])->toArray(),
@@ -654,6 +653,4 @@ class AutomatedLoanRepaymentJobTest extends TestCase
 
         self::assertEquals(LoanRepayment::PART_PAYMENT, $loan->schedule->first()->status);
     }
-
-
 }

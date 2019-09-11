@@ -20,7 +20,8 @@ class LoanPayoffController extends Controller
 
     /**
      * @param Request $request
-     * @param Loan $loan
+     * @param Loan    $loan
+     *
      * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request, Loan $loan)
@@ -32,7 +33,7 @@ class LoanPayoffController extends Controller
         } catch (\Exception $exception) {
             logger()->debug('Error occurred: ', compact('exception'));
 
-            flash()->error('An error occurred whiles paying off loan. Error: '. $exception->getMessage());
+            flash()->error('An error occurred whiles paying off loan. Error: '.$exception->getMessage());
         }
 
         return back();
@@ -45,7 +46,7 @@ class LoanPayoffController extends Controller
         } catch (\Exception $exception) {
             logger()->debug('Error occurred: ', compact('exception'));
 
-            flash()->error('An error occurred whiles paying off loan. Error: '. $exception->getMessage());
+            flash()->error('An error occurred whiles paying off loan. Error: '.$exception->getMessage());
 
             return back();
         }

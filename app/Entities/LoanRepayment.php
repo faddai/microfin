@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 
-
 class LoanRepayment extends Model
 {
     const DEFAULTED = 'Defaulted';
@@ -23,14 +22,14 @@ class LoanRepayment extends Model
     protected $dates = ['repayment_timestamp', 'due_date'];
 
     protected $casts = [
-        'has_been_paid' => 'boolean',
-        'principal' => 'float',
+        'has_been_paid'  => 'boolean',
+        'principal'      => 'float',
         'paid_principal' => 'float',
-        'interest' => 'float',
-        'paid_interest' => 'float',
-        'amount' => 'float',
-        'fees' => 'float',
-        'paid_fees' => 'float',
+        'interest'       => 'float',
+        'paid_interest'  => 'float',
+        'amount'         => 'float',
+        'fees'           => 'float',
+        'paid_fees'      => 'float',
     ];
 
     protected static function boot()
@@ -71,8 +70,9 @@ class LoanRepayment extends Model
     }
 
     /**
-     * @param Loan $loan
+     * @param Loan  $loan
      * @param array $dueDateRange
+     *
      * @return \Illuminate\Database\Eloquent\Collection
      */
     public static function schedule($loan = null, $dueDateRange = [])
@@ -88,9 +88,10 @@ class LoanRepayment extends Model
     }
 
     /**
-     * Interest on repayment
+     * Interest on repayment.
      *
      * @param bool|true $format
+     *
      * @return mixed|string
      */
     public function getInterest($format = true)
@@ -99,9 +100,10 @@ class LoanRepayment extends Model
     }
 
     /**
-     * Principal amount on repayment
+     * Principal amount on repayment.
      *
      * @param bool|true $format
+     *
      * @return mixed|string
      */
     public function getPrincipal($format = true)
@@ -110,9 +112,10 @@ class LoanRepayment extends Model
     }
 
     /**
-     * Fees component on repayment
+     * Fees component on repayment.
      *
      * @param bool|true $format
+     *
      * @return mixed|string
      */
     public function getFees($format = true)
@@ -121,8 +124,10 @@ class LoanRepayment extends Model
     }
 
     /**
-     * Repayment amount
+     * Repayment amount.
+     *
      * @param bool|true $format
+     *
      * @return mixed|string
      */
     public function getAmount($format = true)
@@ -131,15 +136,17 @@ class LoanRepayment extends Model
     }
 
     /**
-     * Get all repayments that are due and unpaid on a specific date (default is today)
+     * Get all repayments that are due and unpaid on a specific date (default is today).
+     *
      * @param $query
      * @param null $date
+     *
      * @return mixed
      */
     public function scopeGetLoanRepaymentsDue($query, $date = null)
     {
         return $query->withoutGlobalScope('paid')
-            ->with(['loan','loan.client'])
+            ->with(['loan', 'loan.client'])
             ->whereDueDate($date ?? Carbon::today())
             ->where('has_been_paid', false);
     }
@@ -147,6 +154,7 @@ class LoanRepayment extends Model
     /**
      * @param $query
      * @param Client $client
+     *
      * @return mixed
      */
     public function scopeGetDueRepaymentsForAClient($query, Client $client)
@@ -165,7 +173,8 @@ class LoanRepayment extends Model
 
     /**
      * @param Builder $query
-     * @param Carbon $dueDate
+     * @param Carbon  $dueDate
+     *
      * @return mixed
      */
     public function scopeDue(Builder $query, Carbon $dueDate = null)
@@ -175,6 +184,7 @@ class LoanRepayment extends Model
 
     /**
      * @param $query
+     *
      * @return mixed
      */
     public function scopeUnpaid(Builder $query)
@@ -185,6 +195,7 @@ class LoanRepayment extends Model
     /**
      * @param $query
      * @param Request $request
+     *
      * @return mixed
      */
     public function scopePar(Builder $query, Request $request)
@@ -221,6 +232,7 @@ class LoanRepayment extends Model
     /**
      * @param $query
      * @param Request $request
+     *
      * @return mixed
      */
     public function scopeAgeing(Builder $query, Request $request)
@@ -252,6 +264,7 @@ class LoanRepayment extends Model
     /**
      * @param Builder $query
      * @param Request $request
+     *
      * @return mixed
      */
     public function scopeMonthlyCollectionProjections(Builder $query, Request $request)
@@ -284,17 +297,18 @@ class LoanRepayment extends Model
     }
 
     /**
-     * Deduct scheduled repayment amount
+     * Deduct scheduled repayment amount.
+     *
+     * @throws \App\Exceptions\InsufficientAccountBalanceException
      *
      * @return bool
-     * @throws \App\Exceptions\InsufficientAccountBalanceException
      */
     public function deductFromClientAccountBalance()
     {
         $client = $this->loan->client;
 
         // Client has no balance, there is no need to continue
-        if (! $client->isDeductable()) {
+        if (!$client->isDeductable()) {
             return $this->markAsDefaulted();
         }
 
@@ -303,7 +317,7 @@ class LoanRepayment extends Model
             return $this->deductAmountFromClientAccountBalance();
         }
 
-        /**
+        /*
          * Client has some funds but it wasn't enough to pay the full repayment  amount, so, first we'll try and pay
          * the interest component then proceed to pay the principal component
          */
@@ -314,10 +328,11 @@ class LoanRepayment extends Model
     }
 
     /**
-     * Deduct full repayment amount from Client account balance
+     * Deduct full repayment amount from Client account balance.
+     *
+     * @throws \App\Exceptions\InsufficientAccountBalanceException
      *
      * @return bool
-     * @throws \App\Exceptions\InsufficientAccountBalanceException
      */
     private function deductAmountFromClientAccountBalance()
     {
@@ -325,20 +340,20 @@ class LoanRepayment extends Model
     }
 
     /**
-     * Update a repayment to indicate it is fully paid
+     * Update a repayment to indicate it is fully paid.
      *
      * @return bool
      */
     public function markAsPaid()
     {
         return $this->update([
-            'has_been_paid' => true,
+            'has_been_paid'       => true,
             'repayment_timestamp' => Carbon::now(),
-            'paid_principal' => $this->principal,
-            'paid_interest' => $this->interest,
-            'paid_fees' => $this->fees,
-            'user_id' => auth()->id(),
-            'status' => self::FULL_PAYMENT,
+            'paid_principal'      => $this->principal,
+            'paid_interest'       => $this->interest,
+            'paid_fees'           => $this->fees,
+            'user_id'             => auth()->id(),
+            'status'              => self::FULL_PAYMENT,
         ]);
     }
 
@@ -357,11 +372,11 @@ class LoanRepayment extends Model
         if ($this->decrementClientAccountBalance($amount)) {
             $this->update([
                 'paid_interest' => $paid_interest,
-                'status' => self::PART_PAYMENT
+                'status'        => self::PART_PAYMENT,
             ]);
         }
 
-        /**
+        /*
          * After the interest is successfully deducted, use whatever client account
          * balance remaining to repay the principal.
          *
@@ -387,7 +402,7 @@ class LoanRepayment extends Model
         if ($this->decrementClientAccountBalance($amount)) {
             $this->update([
                 'paid_principal' => $paidPrincipal,
-                'status' => self::PART_PAYMENT
+                'status'         => self::PART_PAYMENT,
             ]);
         }
 
@@ -397,7 +412,7 @@ class LoanRepayment extends Model
     }
 
     /**
-     * Attempt to deduct full fees. If that is unsuccessful, deduct whatever the Client has  available
+     * Attempt to deduct full fees. If that is unsuccessful, deduct whatever the Client has  available.
      *
      * @throws \App\Exceptions\InsufficientAccountBalanceException
      */
@@ -413,7 +428,7 @@ class LoanRepayment extends Model
         if ($this->decrementClientAccountBalance($amount)) {
             $this->update([
                 'paid_fees' => $paidFees,
-                'status' => self::PART_PAYMENT
+                'status'    => self::PART_PAYMENT,
             ]);
         }
 
@@ -423,7 +438,7 @@ class LoanRepayment extends Model
 
     /**
      * Don't update the status to DEFAULTED if some payment has already been made.
-     * In that case the status should be PART_PAYMENT
+     * In that case the status should be PART_PAYMENT.
      *
      * @return bool
      */
@@ -438,13 +453,14 @@ class LoanRepayment extends Model
 
     /**
      * @param bool $format
+     *
      * @return int|mixed|string
      */
     public function getOutstandingRepaymentAmount($format = true)
     {
         $outstanding = 0;
 
-        if (! $this->isFullyPaid()) {
+        if (!$this->isFullyPaid()) {
             $outstanding = $this->amount - $this->getTotalAmountPaid(false);
         }
 
@@ -453,6 +469,7 @@ class LoanRepayment extends Model
 
     /**
      * @param bool $format
+     *
      * @return mixed|string
      */
     public function getPaidPrincipal($format = true)
@@ -462,6 +479,7 @@ class LoanRepayment extends Model
 
     /**
      * @param bool $format
+     *
      * @return mixed|string
      */
     public function getPaidInterest($format = true)
@@ -471,6 +489,7 @@ class LoanRepayment extends Model
 
     /**
      * @param bool|true $format
+     *
      * @return mixed|string
      */
     public function getPaidFees($format = true)
@@ -480,6 +499,7 @@ class LoanRepayment extends Model
 
     /**
      * @param bool $format
+     *
      * @return mixed|string
      */
     public function getTotalAmountPaid($format = true)
@@ -566,11 +586,13 @@ class LoanRepayment extends Model
     }
 
     /**
-     * A control to avoid decrementing an account to a negative balance
+     * A control to avoid decrementing an account to a negative balance.
      *
      * @param $amount
-     * @return bool
+     *
      * @throws InsufficientAccountBalanceException
+     *
+     * @return bool
      */
     private function decrementClientAccountBalance($amount)
     {
@@ -601,7 +623,8 @@ class LoanRepayment extends Model
     }
 
     /**
-     * Check if there is an amortized fee on this repayment (and on the loan as a whole)
+     * Check if there is an amortized fee on this repayment (and on the loan as a whole).
+     *
      * @return bool
      */
     public function hasFees()

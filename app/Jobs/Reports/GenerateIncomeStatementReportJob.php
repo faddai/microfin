@@ -2,11 +2,10 @@
 /**
  * Author: Francis Addai <me@faddai.com>
  * Date: 17/04/2017
- * Time: 17:00
+ * Time: 17:00.
  */
 
 namespace App\Jobs\Reports;
-
 
 use App\Entities\Accounting\LedgerEntry;
 use Carbon\Carbon;
@@ -23,6 +22,7 @@ class GenerateIncomeStatementReportJob
 
     /**
      * GetIncomeStatementReport constructor.
+     *
      * @param Request $request
      */
     public function __construct(Request $request)
@@ -32,37 +32,35 @@ class GenerateIncomeStatementReportJob
 
     public function handle()
     {
-
         $startDate = Carbon::parse($this->request->get('startDate'));
         $endDate = Carbon::parse($this->request->get('endDate'));
 
         /**
-        get all ledgers and group them under their respective categories
-        get the ledger closing balance at the date range
-
-        Sample output:
-
-            collect([
-                'income' => [
-                    'total' => 2000,
-                    'ledgers' => [
-                        'Bank interest' => 1290,
-                        'Yello card' => 10,
-                        'Mabella Enterprise' => 500,
-                        'Fransoft Inc.' => 200
-                    ]
-                ],
-                'expense' => [
-                    'total' => 500,
-                    'ledgers' => [
-                        'Bank charges' => 20,
-                        'Transportation' => 180,
-                        'Yin Yang Lui' => 300
-                    ]
-                ]
-            ]);
-        */
-
+         * get all ledgers and group them under their respective categories
+         * get the ledger closing balance at the date range.
+         *
+         * Sample output:
+         *
+         * collect([
+         * 'income' => [
+         * 'total' => 2000,
+         * 'ledgers' => [
+         * 'Bank interest' => 1290,
+         * 'Yello card' => 10,
+         * 'Mabella Enterprise' => 500,
+         * 'Fransoft Inc.' => 200
+         * ]
+         * ],
+         * 'expense' => [
+         * 'total' => 500,
+         * 'ledgers' => [
+         * 'Bank charges' => 20,
+         * 'Transportation' => 180,
+         * 'Yin Yang Lui' => 300
+         * ]
+         * ]
+         * ]);
+         */
         $collection = LedgerEntry::with('ledger.category')
             ->whereHas('ledger.category', function ($query) {
                 return $query->whereIn('id', [7, 8]);
@@ -75,7 +73,6 @@ class GenerateIncomeStatementReportJob
                 return $entry->ledger->category->name;
             })
             ->map(function (Collection $ledgerEntriesGroup) {
-
                 return collect([
                     'total' => $ledgerEntriesGroup->sum(function (LedgerEntry $entry) {
                         return $entry->dr + $entry->cr;
@@ -91,8 +88,8 @@ class GenerateIncomeStatementReportJob
                                 'balance' => $entries->sum(function (LedgerEntry $entry) {
                                     return $entry->dr + $entry->cr;
                                 }),
-                                'budgeted' => 0
-                            ])
+                                'budgeted' => 0,
+                            ]),
                         ];
                     }),
                 ]);
@@ -102,8 +99,8 @@ class GenerateIncomeStatementReportJob
         $totalExpense = $collection->has('Expenses') ? $collection->get('Expenses')->get('total') : 0;
 
         $collection->net_profit = collect([
-            'balance' => $totalIncome - $totalExpense,
-            'budgeted' => 0
+            'balance'  => $totalIncome - $totalExpense,
+            'budgeted' => 0,
         ]);
 
         $collection->startDate = $startDate->format(config('microfin.dateFormat'));

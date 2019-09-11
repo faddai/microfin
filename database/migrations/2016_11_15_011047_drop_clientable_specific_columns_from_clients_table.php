@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class DropClientableSpecificColumnsFromClientsTable extends Migration
 {
@@ -26,13 +26,13 @@ class DropClientableSpecificColumnsFromClientsTable extends Migration
     public function down()
     {
         Schema::table('clients', function (Blueprint $table) {
-            $table->string("firstname", 60)->index()->nullable();
-            $table->string("lastname", 60)->index()->nullable();
-            $table->string("middlename", 60)->nullable();
-            $table->date("dob")->nullable();
-            $table->string("gender")->nullable();
-            $table->string("photo")->nullable();
-            $table->string("signature")->nullable();
+            $table->string('firstname', 60)->index()->nullable();
+            $table->string('lastname', 60)->index()->nullable();
+            $table->string('middlename', 60)->nullable();
+            $table->date('dob')->nullable();
+            $table->string('gender')->nullable();
+            $table->string('photo')->nullable();
+            $table->string('signature')->nullable();
         });
     }
 }

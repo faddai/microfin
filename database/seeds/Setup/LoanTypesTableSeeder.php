@@ -2,17 +2,16 @@
 /**
  * Author: Francis Addai <me@faddai.com>
  * Date: 02/11/2016
- * Time: 00:38
+ * Time: 00:38.
  */
 
 namespace Setup;
 
-use Illuminate\Database\Seeder;
 use App\Entities\LoanType;
+use Illuminate\Database\Seeder;
 
 class LoanTypesTableSeeder extends Seeder
 {
-
     /**
      * Run the database seeds.
      *

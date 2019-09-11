@@ -8,7 +8,6 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-
 class ApproveLoanJob
 {
     /**
@@ -25,7 +24,7 @@ class ApproveLoanJob
      * Create a new job instance.
      *
      * @param Request $request
-     * @param Loan $loan
+     * @param Loan    $loan
      */
     public function __construct(Request $request, Loan $loan)
     {
@@ -41,7 +40,6 @@ class ApproveLoanJob
     public function handle()
     {
         return DB::transaction(function () {
-
             $this->updateLoan();
 
             event(new LoanApprovedEvent($this->loan));
@@ -56,7 +54,7 @@ class ApproveLoanJob
         $this->loan->forceFill([
             'approver_id' => $this->request->user()->id,
             'approved_at' => $this->request->get('approved_at', Carbon::now()),
-            'status' => Loan::APPROVED,
+            'status'      => Loan::APPROVED,
         ])->save();
 
         return $this->loan;

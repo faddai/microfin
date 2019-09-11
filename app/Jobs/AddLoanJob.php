@@ -2,7 +2,7 @@
 /**
  * Author: Francis Addai <me@faddai.com>
  * Date: 06/11/2016
- * Time: 1:49 PM
+ * Time: 1:49 PM.
  */
 
 namespace App\Jobs;
@@ -16,7 +16,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-
 
 class AddLoanJob
 {
@@ -48,8 +47,8 @@ class AddLoanJob
      * Create a new job instance.
      *
      * @param Request $request
-     * @param Loan $loan
-     * @param bool $sendEmailNotification Purposely put here to help with loan migration
+     * @param Loan    $loan
+     * @param bool    $sendEmailNotification Purposely put here to help with loan migration
      */
     public function __construct(Request $request, Loan $loan = null, $sendEmailNotification = true)
     {
@@ -59,9 +58,9 @@ class AddLoanJob
         $this->sendEmailNotification = $sendEmailNotification;
 
         $this->loan = $loan ?? new Loan([
-                'status' => Loan::PENDING,
+                'status'  => Loan::PENDING,
                 'user_id' => $this->authUser->id,
-                'number' => $request->get('number', $this->generateLoanNumber())
+                'number'  => $request->get('number', $this->generateLoanNumber()),
             ]);
     }
 
@@ -88,7 +87,7 @@ class AddLoanJob
     private function addOrUpdateLoan()
     {
         // a client is required for creating loans
-        if (! $this->loan->exists && ! $this->request->filled('client_id')) {
+        if (!$this->loan->exists && !$this->request->filled('client_id')) {
             throw new BadRequestHttpException('A client is required to create a loan');
         }
 
@@ -124,7 +123,6 @@ class AddLoanJob
     private function saveOrUpdateGuarantors()
     {
         return collect($this->request->get('guarantors', []))->each(function ($guarantor) {
-
             $guarantorRequestData = new Request($guarantor);
 
             return dispatch_now(new AddGuarantorJob($guarantorRequestData, $this->loan));
@@ -137,11 +135,9 @@ class AddLoanJob
     private function saveOrUpdateCollaterals()
     {
         return collect($this->request->get('collaterals', []))->each(function ($collateral) {
-
             $collateralRequestData = new Request($collateral);
 
             return dispatch_now(new AddCollateralJob($collateralRequestData, $this->loan));
-
         });
     }
 
@@ -155,7 +151,6 @@ class AddLoanJob
                 return $fee['rate'] <= 0; // we're not interested in 0 rate fees
             })
             ->each(function ($loanFee) {
-
                 $loanFee = collect($loanFee);
 
                 $rate = $loanFee->get('rate');
@@ -206,6 +201,7 @@ class AddLoanJob
 
     /**
      * @param Collection $loanFee
+     *
      * @return bool
      */
     private function feeInRequestIsPaidUpfront(Collection $loanFee): bool
@@ -217,7 +213,7 @@ class AddLoanJob
     {
         // branch code + 7-digit incremented number
         $branchCode = $this->authUser->branch->code ?? null;
-        $lastLoan =  Loan::where('number', 'like', $branchCode.'%')->orderBy('id', 'DESC')->take(1)->first();
+        $lastLoan = Loan::where('number', 'like', $branchCode.'%')->orderBy('id', 'DESC')->take(1)->first();
 
         return null === $lastLoan ? sprintf('%s0000001', $branchCode) : sprintf('00%d', $lastLoan->number + 1);
     }

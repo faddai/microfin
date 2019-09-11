@@ -24,7 +24,6 @@ use App\Listeners\ReverseRestructureWhenLoanIsDeclined;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
-
 class EventServiceProvider extends ServiceProvider
 {
     /**
@@ -38,7 +37,7 @@ class EventServiceProvider extends ServiceProvider
             RecordUserLastSuccessfulLogin::class,
         ],
 
-        /**
+        /*
          * @see PostClientTransactionsToGeneralLedgersSubscriber for other listeners for this event
          */
         DepositAddedEvent::class => [

@@ -11,10 +11,8 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-
 class DisburseLoanJob
 {
-
     use DispatchesJobs;
 
     /**
@@ -28,7 +26,7 @@ class DisburseLoanJob
     private $loan;
 
     /**
-     * @var boolean
+     * @var bool
      */
     private $loanIsBackdated;
 
@@ -36,7 +34,7 @@ class DisburseLoanJob
      * Create a new job instance.
      *
      * @param Request $request
-     * @param Loan $loan
+     * @param Loan    $loan
      */
     public function __construct(Request $request, Loan $loan)
     {
@@ -47,8 +45,10 @@ class DisburseLoanJob
 
     /**
      * Execute the job.
-     * @return Loan
+     *
      * @throws LoanDisbursalException
+     *
+     * @return Loan
      */
     public function handle()
     {
@@ -68,21 +68,22 @@ class DisburseLoanJob
     }
 
     /**
-     * @return Loan
      * @throws LoanDisbursalException
+     *
+     * @return Loan
      */
     private function disburse(): Loan
     {
-        if (! $this->loan->isApproved()) {
+        if (!$this->loan->isApproved()) {
             throw new LoanDisbursalException('You cannot disburse a loan that hasn\'t been approved');
         }
 
         // disbursing a loan isn't allowed to be mass assigned
         $this->loan->forceFill([
-            'disburser_id' => $this->request->user()->id,
-            'disbursed_at' => $this->getDateLoanIsDisbursed(),
-            'status' => Loan::DISBURSED,
-            'disbursal_remarks' => $this->request->get('disbursal_remarks')
+            'disburser_id'      => $this->request->user()->id,
+            'disbursed_at'      => $this->getDateLoanIsDisbursed(),
+            'status'            => Loan::DISBURSED,
+            'disbursal_remarks' => $this->request->get('disbursal_remarks'),
         ])->save();
 
         return $this->loan;
@@ -90,6 +91,7 @@ class DisburseLoanJob
 
     /**
      * @param Loan $loan
+     *
      * @return mixed
      */
     private function regenerateRepaymentScheduleForLoan(Loan $loan)

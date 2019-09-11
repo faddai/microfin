@@ -6,13 +6,13 @@ use App\Entities\User;
 use App\Events\LoanApprovedEvent;
 use App\Notifications\LoanApprovedNotification;
 
-
 class NotifyUsersWhoCanDisburseLoan
 {
     /**
      * Handle the event.
      *
-     * @param  LoanApprovedEvent  $event
+     * @param LoanApprovedEvent $event
+     *
      * @return void
      */
     public function handle(LoanApprovedEvent $event)

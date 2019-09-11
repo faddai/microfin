@@ -12,7 +12,7 @@ class LedgerCategoriesController extends Controller
     {
         $this->validate($request, [
             'name' => 'required',
-            'type' => 'required|in:'. collect(LedgerCategory::TYPES)->implode(',')
+            'type' => 'required|in:'.collect(LedgerCategory::TYPES)->implode(','),
         ]);
 
         try {

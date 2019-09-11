@@ -9,7 +9,6 @@ use App\Jobs\AddLoanJob;
 use App\Jobs\ApproveLoanJob;
 use Tests\TestCase;
 
-
 class ApproveLoanJobTest extends TestCase
 {
     public function test_that_authenticated_user_loan_approval_permission()

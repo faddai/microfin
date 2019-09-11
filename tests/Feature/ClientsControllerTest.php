@@ -3,9 +3,8 @@
 /**
  * Author: Francis Addai <me@faddai.com>
  * Date: 15/10/2016
- * Time: 23:14
+ * Time: 23:14.
  */
-
 use App\Entities\User;
 use App\Jobs\AddClientJob;
 use Tests\TestCase;
@@ -14,7 +13,7 @@ class ClientsControllerTest extends TestCase
 {
     /**
      * Create 7 clients
-     * 2 of which are individual and 5 corporate clients
+     * 2 of which are individual and 5 corporate clients.
      *
      * @return \Illuminate\Support\Collection
      */
@@ -24,43 +23,44 @@ class ClientsControllerTest extends TestCase
 
         return collect([
             [
-                'type' => 'individual',
-                'account_number' => 3333
+                'type'           => 'individual',
+                'account_number' => 3333,
             ],
             [
-                'type' => 'individual',
+                'type'           => 'individual',
                 'account_number' => 2222,
-                'firstname' => 'Copos',
-                'lastname' => 'Due'
+                'firstname'      => 'Copos',
+                'lastname'       => 'Due',
             ],
             [
-                'type' => 'individual',
+                'type'           => 'individual',
                 'account_number' => 4444,
-                'firstname' => 'Funda',
-                'lastname' => 'Mental'
+                'firstname'      => 'Funda',
+                'lastname'       => 'Mental',
             ],
             [
-                'type' => 'corporate',
+                'type'           => 'corporate',
                 'account_number' => 5555,
-                'company_name' => 'Escobar Inc',
+                'company_name'   => 'Escobar Inc',
             ],
             [
-                'type' => 'corporate',
+                'type'           => 'corporate',
                 'account_number' => 6666,
-                'company_name' => 'Guits Inc',
+                'company_name'   => 'Guits Inc',
             ],
             [
-                'type' => 'corporate',
+                'type'           => 'corporate',
                 'account_number' => 7777,
-                'company_name' => 'Yen Duedio',
+                'company_name'   => 'Yen Duedio',
             ],
             [
-                'type' => 'corporate',
+                'type'           => 'corporate',
                 'account_number' => 8888,
-                'company_name' => 'Copular Yen',
-            ]
+                'company_name'   => 'Copular Yen',
+            ],
         ])->map(function (array $client) {
             $this->request->replace($client);
+
             return $this->dispatch(new AddClientJob($this->request));
         });
     }
@@ -78,7 +78,7 @@ class ClientsControllerTest extends TestCase
         $this->actingAs(factory(User::class)->create())
             ->get('clients?q=33')
             ->assertStatus(302)
-            ->assertRedirect('clients/'. $client->id);
+            ->assertRedirect('clients/'.$client->id);
     }
 
     public function test_view_client_details_page()
@@ -90,7 +90,7 @@ class ClientsControllerTest extends TestCase
         $client = $this->dispatch(new AddClientJob($this->request));
 
         $this->actingAs(factory(User::class)->create())
-            ->get('clients/'. $client['id'])
+            ->get('clients/'.$client['id'])
             ->assertSee('3333');
     }
 
@@ -102,15 +102,15 @@ class ClientsControllerTest extends TestCase
         $this->actingAs($user)
             ->get('clients?q=funda')
             ->assertStatus(302)
-            ->assertRedirect('clients/'. $clients->get(2)->id);
+            ->assertRedirect('clients/'.$clients->get(2)->id);
 
         // do a search that matches more than one Corporate Client
         $this->actingAs($user)
             ->get('clients?q=Yen')->assertStatus(200)
             ->assertSee($clients->last()->getFullName())
-            ->assertSee((string)$clients->last()->account_number)
+            ->assertSee((string) $clients->last()->account_number)
             ->assertSee($clients->get(5)->getFullName())
-            ->assertSee((string)$clients->get(5)->account_number);
+            ->assertSee((string) $clients->get(5)->account_number);
     }
 
     public function test_client_search_matching_individual_and_corporate_clients()
@@ -122,7 +122,7 @@ class ClientsControllerTest extends TestCase
             ->get('clients?q=Due')
             ->assertStatus(200)
             ->assertSee($clients->get(1)->getFullName())
-            ->assertSee((string)$clients->get(1)->account_number)
+            ->assertSee((string) $clients->get(1)->account_number)
             ->assertSee($clients->get(5)->getFullName());
     }
 

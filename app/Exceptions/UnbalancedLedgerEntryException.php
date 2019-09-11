@@ -2,11 +2,10 @@
 /**
  * Author: Francis Addai <me@faddai.com>
  * Date: 22/02/2017
- * Time: 22:02
+ * Time: 22:02.
  */
 
 namespace App\Exceptions;
-
 
 use Exception;
 

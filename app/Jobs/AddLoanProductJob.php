@@ -2,7 +2,7 @@
 /**
  * Author: Francis Addai <me@faddai.com>
  * Date: 26/02/2017
- * Time: 16:33
+ * Time: 16:33.
  */
 
 namespace App\Jobs;
@@ -26,13 +26,13 @@ class AddLoanProductJob
     /**
      * Create a new job instance.
      *
-     * @param Request $request
+     * @param Request     $request
      * @param LoanProduct $product
      */
     public function __construct(Request $request, LoanProduct $product = null)
     {
         $this->request = $request;
-        $this->product = $product ?? new LoanProduct;
+        $this->product = $product ?? new LoanProduct();
     }
 
     /**

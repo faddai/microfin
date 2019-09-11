@@ -2,7 +2,7 @@
 /**
  * Author: Francis Addai <me@faddai.com>
  * Date: 22/02/2017
- * Time: 09:52
+ * Time: 09:52.
  */
 
 namespace App\Jobs;
@@ -12,7 +12,6 @@ use App\Exceptions\LedgerEntryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Ramsey\Uuid\Uuid;
-
 
 class AddLedgerEntryJob
 {
@@ -28,18 +27,20 @@ class AddLedgerEntryJob
 
     /**
      * AddLedgerEntryJob constructor.
-     * @param Request $request
+     *
+     * @param Request     $request
      * @param LedgerEntry $entry
      */
-    public function __construct(Request $request, LedgerEntry $entry= null)
+    public function __construct(Request $request, LedgerEntry $entry = null)
     {
         $this->request = $request;
         $this->entry = $entry ?? new LedgerEntry(['ledger_transaction_id' => $this->request->get('transaction_id')]);
     }
 
     /**
-     * @return mixed
      * @throws \App\Exceptions\LedgerEntryException
+     *
+     * @return mixed
      */
     public function handle()
     {
@@ -51,12 +52,13 @@ class AddLedgerEntryJob
     }
 
     /**
-     * @return LedgerEntry
      * @throws \App\Exceptions\LedgerEntryException
+     *
+     * @return LedgerEntry
      */
     private function saveLedgerEntry()
     {
-        if (! $this->isValidTransaction()) {
+        if (!$this->isValidTransaction()) {
             throw new LedgerEntryException('You cannot post an entry without a valid transaction');
         }
 

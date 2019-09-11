@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class AddLoanIdAndMarketValueColumnsToCollateralsTable extends Migration
 {
@@ -19,7 +19,6 @@ class AddLoanIdAndMarketValueColumnsToCollateralsTable extends Migration
 
             $table->foreign('loan_id', 'fk_collaterals_loan_id')->references('id')->on('loans')
                 ->onUpdate('cascade')->onDelete('set null');
-
         });
     }
 

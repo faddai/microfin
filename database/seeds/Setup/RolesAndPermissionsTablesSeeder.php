@@ -2,7 +2,7 @@
 /**
  * Author: Francis Addai <me@faddai.com>
  * Date: 12/11/2016
- * Time: 10:34 AM
+ * Time: 10:34 AM.
  */
 
 namespace Setup;
@@ -10,7 +10,6 @@ namespace Setup;
 use App\Entities\Permission;
 use App\Entities\Role;
 use Illuminate\Database\Seeder;
-
 
 class RolesAndPermissionsTablesSeeder extends Seeder
 {
@@ -23,74 +22,72 @@ class RolesAndPermissionsTablesSeeder extends Seeder
     {
         $rolesAndPermissions = [
             [
-                'role' => Role::ADMINISTRATOR,
+                'role'        => Role::ADMINISTRATOR,
                 'permissions' => [
                     Permission::VIEW_USER,
                     Permission::CREATE_USER,
                     Permission::DELETE_USER,
                     Permission::UPDATE_USER,
-                ]
+                ],
             ],
             [
-                'role' => Role::RELATIONSHIP_MANAGER,
+                'role'        => Role::RELATIONSHIP_MANAGER,
                 'permissions' => [
                     Permission::VIEW_CLIENT,
                     Permission::UPDATE_CLIENT,
                     Permission::CREATE_CLIENT,
-                ]
+                ],
             ],
             [
-                'role' => Role::BRANCH_MANAGER,
+                'role'        => Role::BRANCH_MANAGER,
                 'permissions' => [
                     Permission::APPROVE_LOAN,
                     Permission::APPROVE_LOAN_PAYOFF,
                     Permission::APPROVE_TRANSACTION_REVERSAL,
                     Permission::RESTRUCTURE_LOAN,
-                    Permission::DISBURSE_LOAN
-                ]
+                    Permission::DISBURSE_LOAN,
+                ],
             ],
             [
-                'role' => Role::CREDIT_OFFICER,
+                'role'        => Role::CREDIT_OFFICER,
                 'permissions' => [
                     Permission::CREATE_LOAN,
                     Permission::VIEW_LOAN,
-                ]
+                ],
             ],
             [
-                'role' => Role::SUPERVISOR,
+                'role'        => Role::SUPERVISOR,
                 'permissions' => [
                     Permission::APPROVE_LOAN,
                     Permission::VIEW_LOAN,
-                ]
+                ],
             ],
             [
-                'role' => Role::CASHIER,
+                'role'        => Role::CASHIER,
                 'permissions' => [
                     Permission::CREATE_DEPOSIT,
                     Permission::VIEW_DEPOSIT,
                     Permission::VIEW_CLIENT,
-                    Permission::VIEW_LOAN
-                ]
+                    Permission::VIEW_LOAN,
+                ],
             ],
             [
-                'role' => Role::ACCOUNT_MANAGER,
+                'role'        => Role::ACCOUNT_MANAGER,
                 'permissions' => [
                     Permission::CREATE_CLIENT,
-                ]
-            ]
+                ],
+            ],
         ];
 
         foreach ($rolesAndPermissions as $rolePermissions) {
-
             $role = Role::firstOrCreate([
-                'name' => str_slug($rolePermissions['role']),
-                'display_name' => $rolePermissions['role']
+                'name'         => str_slug($rolePermissions['role']),
+                'display_name' => $rolePermissions['role'],
             ]);
 
             if ($this->roleHasPermissions($rolePermissions)) {
                 $this->createPermissionsAndAssignToRole($role, $rolePermissions);
             }
-
         }
 
         cache()->forget('roles'); // bust roles from cache
@@ -102,7 +99,7 @@ class RolesAndPermissionsTablesSeeder extends Seeder
     }
 
     /**
-     * Add permissions to the just created role
+     * Add permissions to the just created role.
      *
      * @param $role
      * @param $rolePermissions

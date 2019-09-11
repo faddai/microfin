@@ -15,7 +15,6 @@ use App\Jobs\GenerateLoanRepaymentScheduleJob;
 use Carbon\Carbon;
 use Tests\TestCase;
 
-
 class DeductRepaymentForLoansWithMissedDeductionWindowJobTest extends TestCase
 {
     public function test_able_to_recalibrate_and_deduct_repayments()
@@ -35,12 +34,12 @@ class DeductRepaymentForLoansWithMissedDeductionWindowJobTest extends TestCase
         $loan = factory(Loan::class)
             ->states('approved', 'disbursed')
             ->create([
-                'disbursed_at' => $disbursalDate,
+                'disbursed_at'      => $disbursalDate,
                 'repayment_plan_id' => $repaymentPlan->id,
-                'tenure_id' => Tenure::firstOrCreate(['number_of_months' => 5])->id,
-                'amount' => 2000,
-                'rate' => 4.5,
-                'client_id' => $client->id
+                'tenure_id'         => Tenure::firstOrCreate(['number_of_months' => 5])->id,
+                'amount'            => 2000,
+                'rate'              => 4.5,
+                'client_id'         => $client->id,
             ]);
 
         $schedule = $this->dispatch(new GenerateLoanRepaymentScheduleJob($loan));
@@ -53,7 +52,7 @@ class DeductRepaymentForLoansWithMissedDeductionWindowJobTest extends TestCase
             self::assertNull($repayment->status);
         });
 
-        $this->dispatch(new DeductRepaymentForLoansWithMissedDeductionWindowJob);
+        $this->dispatch(new DeductRepaymentForLoansWithMissedDeductionWindowJob());
 
         $loan = $loan->fresh('payments');
 
@@ -62,7 +61,7 @@ class DeductRepaymentForLoansWithMissedDeductionWindowJobTest extends TestCase
     }
 
     /**
-     * Create a loan and add a deposit for the client. That should cause deductions immediately
+     * Create a loan and add a deposit for the client. That should cause deductions immediately.
      */
     public function test_able_to_deduct_repayments_that_have_missed_their_repayment_date()
     {
@@ -79,12 +78,12 @@ class DeductRepaymentForLoansWithMissedDeductionWindowJobTest extends TestCase
         $loan = factory(Loan::class, 'customer')
             ->states('approved', 'disbursed')
             ->create([
-                'disbursed_at' => $disbursalDate,
+                'disbursed_at'      => $disbursalDate,
                 'repayment_plan_id' => $repaymentPlan->id,
-                'tenure_id' => Tenure::firstOrCreate(['number_of_months' => 5])->id,
-                'amount' => 6000,
-                'rate' => 4.5,
-                'client_id' => $client->id
+                'tenure_id'         => Tenure::firstOrCreate(['number_of_months' => 5])->id,
+                'amount'            => 6000,
+                'rate'              => 4.5,
+                'client_id'         => $client->id,
             ]);
 
         $schedule = $this->dispatch(new GenerateLoanRepaymentScheduleJob($loan));
@@ -105,7 +104,7 @@ class DeductRepaymentForLoansWithMissedDeductionWindowJobTest extends TestCase
 
         $this->dispatch(new AddClientDepositJob($this->request, $client));
 
-        $this->dispatch(new DeductRepaymentForLoansWithMissedDeductionWindowJob);
+        $this->dispatch(new DeductRepaymentForLoansWithMissedDeductionWindowJob());
 
         // Client now has an account balance of 4530 which can fully repay the first 3 repayments
         $loan = $loan->fresh('payments');
@@ -132,7 +131,7 @@ class DeductRepaymentForLoansWithMissedDeductionWindowJobTest extends TestCase
         self::assertEquals(0, $lastRepayment->paid_interest);
         self::assertFalse($lastRepayment->has_been_paid);
 
-        /**
+        /*
          * Deposit enough funds to be able to pay fully interest on 4th repayment
          */
         $this->request->merge(['cr' => 150]);
@@ -155,7 +154,7 @@ class DeductRepaymentForLoansWithMissedDeductionWindowJobTest extends TestCase
         self::assertEquals(LoanRepayment::DEFAULTED, $lastRepayment->status);
         self::assertEquals(0, $lastRepayment->paid_interest);
 
-        /**
+        /*
          * Deposit funds to cover outstanding and defaulting repayments
          */
         $this->request->merge(['cr' => 3000]);
@@ -176,9 +175,9 @@ class DeductRepaymentForLoansWithMissedDeductionWindowJobTest extends TestCase
             factory(Loan::class, 'customer')
                 ->make([
                     'client_id' => factory(Client::class, 'individual')->create(['account_balance' => 0])->id,
-                    'amount' => 38000,
+                    'amount'    => 38000,
                     'tenure_id' => Tenure::whereNumberOfMonths(60)->first()->id,
-                    'rate' => 3.84
+                    'rate'      => 3.84,
                 ])
                 ->toArray()
         );
@@ -188,7 +187,7 @@ class DeductRepaymentForLoansWithMissedDeductionWindowJobTest extends TestCase
         self::assertEquals(2092.53, $loan->schedule->first()->amount, '', 0.1);
 
         $this->request->replace([
-            'approved_at' => Carbon::parse('September 9, 2015'),
+            'approved_at'  => Carbon::parse('September 9, 2015'),
             'disbursed_at' => Carbon::parse('September 9, 2015'),
         ]);
 
@@ -208,11 +207,9 @@ class DeductRepaymentForLoansWithMissedDeductionWindowJobTest extends TestCase
         $loan = $loan->fresh();
 
         $loan->schedule->each(function (LoanRepayment $repayment, $i) {
-
             if ($i < 11) { // the first 11 repayments have been defaulted
                 self::assertEquals(LoanRepayment::DEFAULTED, $repayment->status);
             }
-
         });
 
         // make a deposit for Client
@@ -222,7 +219,6 @@ class DeductRepaymentForLoansWithMissedDeductionWindowJobTest extends TestCase
         $loan = $loan->fresh();
 
         $loan->schedule->each(function (LoanRepayment $repayment, $i) {
-
             if ($i < 11) { // the first 11 repayments should be paid now
                 self::assertEquals(LoanRepayment::FULL_PAYMENT, $repayment->status);
             } elseif ($i === 11) {
@@ -230,11 +226,9 @@ class DeductRepaymentForLoansWithMissedDeductionWindowJobTest extends TestCase
             } elseif ($i > 11 && $i < 18) {
                 self::assertEquals(LoanRepayment::DEFAULTED, $repayment->status);
             }
-
         });
 
         self::assertEquals(23870, $loan->getAmountPaid(false), '', 0.1);
         self::assertEquals(0, $loan->client->getAccountBalance());
     }
-
 }

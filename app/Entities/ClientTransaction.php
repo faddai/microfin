@@ -6,11 +6,10 @@ use App\Entities\Accounting\Ledger;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
-
 class ClientTransaction extends Model
 {
     protected $fillable = ['uuid', 'dr', 'cr', 'narration', 'client_id', 'branch_id', 'user_id', 'receipt', 'ledger_id',
-        'value_date', 'created_at'
+        'value_date', 'created_at',
     ];
 
     protected $dates = ['value_date'];
@@ -65,6 +64,7 @@ class ClientTransaction extends Model
 
     /**
      * @param bool $format
+     *
      * @return mixed
      */
     public function getAmount($format = true)
@@ -88,6 +88,5 @@ class ClientTransaction extends Model
     public function setValueDateAttribute($date)
     {
         $this->attributes['value_date'] = Carbon::parse(trim($date));
-
     }
 }

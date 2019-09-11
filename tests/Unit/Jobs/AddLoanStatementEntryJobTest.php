@@ -29,7 +29,7 @@ class AddLoanStatementEntryJobTest extends TestCase
         self::assertInstanceOf(Loan::class, $loan);
 
         $this->request->replace([
-            'dr' => 2000,
+            'dr'        => 2000,
             'narration' => 'Loan repayment',
         ]);
 
@@ -59,8 +59,8 @@ class AddLoanStatementEntryJobTest extends TestCase
         $this->request->merge(
             factory(Loan::class, 'staff')
                 ->make([
-                    'amount' => 10000,
-                    'rate' => 5,
+                    'amount'    => 10000,
+                    'rate'      => 5,
                     'tenure_id' => Tenure::whereNumberOfMonths(5)->first()->id,
                     'client_id' => factory(Client::class, 'individual')->create(['account_balance' => 0])->id,
                 ])
@@ -118,11 +118,11 @@ class AddLoanStatementEntryJobTest extends TestCase
         $this->request->merge(
             factory(Loan::class, 'customer')
                 ->make([
-                    'amount' => 18000,
-                    'rate' => 8.5,
+                    'amount'    => 18000,
+                    'rate'      => 8.5,
                     'tenure_id' => Tenure::whereNumberOfMonths(6)->first()->id,
                     'client_id' => factory(Client::class, 'individual')->create(['account_balance' => 0])->id,
-                    'fees' => collect([
+                    'fees'      => collect([
                         Fee::whereName(Fee::ADMINISTRATION)->first()->fill(['rate' => 5]),
                         Fee::whereName(Fee::ARRANGEMENT)->first()->fill(['rate' => 7]),
                         Fee::whereName(Fee::DISBURSEMENT)->first()->fill(['rate' => 5]),
@@ -182,7 +182,7 @@ class AddLoanStatementEntryJobTest extends TestCase
         self::assertEquals(-21724.05, $loan->statement->entries->get(7)->balance, '', 0.1);
         self::assertEquals(150, $loan->statement->entries->get(8)->dr); // arrangement fee due
         self::assertEquals(-21874.05, $loan->statement->entries->get(8)->balance, '', 0.1);
-   }
+    }
 
     public function test_that_loan_statement_entries_are_not_posted_multiple_times_on_a_due_date()
     {
@@ -208,5 +208,4 @@ class AddLoanStatementEntryJobTest extends TestCase
 
         self::assertCount(1, LoanStatementEntry::all());
     }
-
 }

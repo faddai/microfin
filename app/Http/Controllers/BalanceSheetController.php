@@ -36,7 +36,6 @@ class BalanceSheetController extends Controller
         $csv->insertOne(',Balance,Budgeted');
 
         $balanceSheet->each(function (Collection $group, $ledgerCategoryType) use ($csv) {
-
             $group->each(function (Collection $collection, $category) use ($csv) {
                 $csv->insertOne(sprintf('%s,,', $category));
 
@@ -50,7 +49,7 @@ class BalanceSheetController extends Controller
 
                 $csv->insertOne(vsprintf('Subtotal,"%s","%s"', [
                     number_format($collection->get('subtotal'), 2),
-                    number_format($collection->get('subtotal_budgeted'), 2)
+                    number_format($collection->get('subtotal_budgeted'), 2),
                 ]));
             });
 
@@ -59,15 +58,14 @@ class BalanceSheetController extends Controller
                 number_format($group->total, 2),
                 number_format($group->budgeted_total, 2),
             ]));
-
         });
 
         // leave a blank line
         $csv->insertOne(',');
 
-        $csv->insertOne(vsprintf('Total Liabilities & Capital,"%s",%s',[
+        $csv->insertOne(vsprintf('Total Liabilities & Capital,"%s",%s', [
             number_format($balanceSheet->totalLiabilitiesAndCapital, 2),
-            0.00
+            0.00,
         ]));
 
         $csv->output($filename);

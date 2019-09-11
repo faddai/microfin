@@ -2,8 +2,8 @@
 
 namespace Setup;
 
-use Illuminate\Database\Seeder;
 use App\Entities\BusinessSector;
+use Illuminate\Database\Seeder;
 
 class BusinessSectorsTableSeeder extends Seeder
 {

@@ -6,7 +6,6 @@ use App\Entities\Loan;
 use App\Jobs\DeclineLoanJob;
 use Illuminate\Http\Request;
 
-
 class DeclineLoanController extends Controller
 {
     public function decline(Request $request, Loan $loan)

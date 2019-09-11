@@ -7,7 +7,6 @@ use App\Jobs\AddLoanJob;
 use Carbon\Carbon;
 use Tests\TestCase;
 
-
 /**
  * @todo Refactor tests to be more readable and independent
  *
@@ -23,7 +22,7 @@ class GenerateLoanRepaymentScheduleJobTest extends TestCase
     }
 
     /**
-     * Add a loan and verify whether a repayment schedule is generated
+     * Add a loan and verify whether a repayment schedule is generated.
      */
     public function test_generate_schedule_for_loan()
     {
@@ -53,8 +52,8 @@ class GenerateLoanRepaymentScheduleJobTest extends TestCase
                 ->states('approved', 'disbursed')
                 ->make([
                     'disbursed_at' => $disburseAt,
-                    'tenure_id' => Tenure::firstOrCreate(['number_of_months' => 3])->id,
-                    'grace_period' => 3
+                    'tenure_id'    => Tenure::firstOrCreate(['number_of_months' => 3])->id,
+                    'grace_period' => 3,
                 ])
                 ->toArray()
             );
@@ -89,6 +88,7 @@ class GenerateLoanRepaymentScheduleJobTest extends TestCase
     /**
      * @param int $repaymentPlanId
      * @param int $tenure
+     *
      * @return array
      */
     private function getLoan($repaymentPlanId = null, $tenure = null)
@@ -99,9 +99,9 @@ class GenerateLoanRepaymentScheduleJobTest extends TestCase
         $repaymentPlanId = $repaymentPlanId ?: RepaymentPlan::firstOrCreate(['label' => RepaymentPlan::MONTHLY])->id;
 
         $this->request->merge(factory(Loan::class)->make([
-            'amount' => $loanAmount,
-            'rate' => $monthlyRate,
-            'tenure_id' => $tenure,
+            'amount'            => $loanAmount,
+            'rate'              => $monthlyRate,
+            'tenure_id'         => $tenure,
             'repayment_plan_id' => $repaymentPlanId,
         ])->toArray());
 
@@ -110,6 +110,6 @@ class GenerateLoanRepaymentScheduleJobTest extends TestCase
 
         $totalLoanAmount = $totalInterest + $loanAmount; // 150 + 1000 = 1150
 
-        return array($monthlyInterest, $totalInterest, $totalLoanAmount);
+        return [$monthlyInterest, $totalInterest, $totalLoanAmount];
     }
 }

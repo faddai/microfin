@@ -35,9 +35,9 @@ class LoanSearchJobTest extends TestCase
 
         $this->request->merge([
             'credit_officer' => 1,
-            'status' => Loan::PENDING,
-            'startDate' => Loan::first()->created_at,
-            'endDate' => Loan::first()->created_at,
+            'status'         => Loan::PENDING,
+            'startDate'      => Loan::first()->created_at,
+            'endDate'        => Loan::first()->created_at,
         ]);
 
         $loans = $this->dispatch(new LoanSearchJob($this->request));
@@ -63,9 +63,9 @@ class LoanSearchJobTest extends TestCase
 
         $this->request->merge([
             'credit_officer' => 1,
-            'status' => Loan::APPROVED,
-            'startDate' => Loan::first()->created_at,
-            'endDate' => Loan::first()->created_at,
+            'status'         => Loan::APPROVED,
+            'startDate'      => Loan::first()->created_at,
+            'endDate'        => Loan::first()->created_at,
         ]);
 
         $loans = $this->dispatch(new LoanSearchJob($this->request));
@@ -79,7 +79,6 @@ class LoanSearchJobTest extends TestCase
 
         collect($clientAccountNumbers)
             ->each(function (int $accountNumber) {
-
                 $client = factory(Client::class, 'individual')->create(['account_number' => $accountNumber]);
 
 //                // assign the last loan to the last but one Client so he ends up with 2 loans
@@ -109,7 +108,6 @@ class LoanSearchJobTest extends TestCase
 
         collect($clients)
             ->each(function (string $clientName) {
-
                 $client = factory(Client::class, 'individual')->create();
 
                 list($firstname, $lastname) = explode(' ', $clientName);

@@ -14,7 +14,6 @@ use App\Jobs\AddLoanJob;
 use Carbon\Carbon;
 use Tests\TestCase;
 
-
 class AddLoanJobTest extends TestCase
 {
     public function setUp()
@@ -36,14 +35,14 @@ class AddLoanJobTest extends TestCase
     private function getRequest()
     {
         $loan = factory(Loan::class)->make([
-            'rate' => 2.45,
-            'start_date' => Carbon::parse('7 Dec 2016'),
+            'rate'         => 2.45,
+            'start_date'   => Carbon::parse('7 Dec 2016'),
             'grace_period' => 0,
-            'user_id' => null
+            'user_id'      => null,
         ])->toArray();
 
         return array_merge($loan, [
-            'guarantors' => factory(Guarantor::class, 2)->make(['job_title' => 'Software Engineer'])->toArray(),
+            'guarantors'  => factory(Guarantor::class, 2)->make(['job_title' => 'Software Engineer'])->toArray(),
             'collaterals' => factory(Collateral::class, 2)->make(['market_value' => 4500])->toArray(),
         ]);
     }
@@ -55,6 +54,7 @@ class AddLoanJobTest extends TestCase
         self::assertTrue($loan->isApproved());
         self::assertTrue($loan->isDisbursed());
     }
+
     /**
      * @group loans
      */
@@ -116,8 +116,8 @@ class AddLoanJobTest extends TestCase
 
         // set a new logged in user at same branch & update start date
         $user = factory(User::class)->create([
-            'name' => 'Richard Agyapong',
-            'branch_id' => $loan->createdBy->branch->id
+            'name'      => 'Richard Agyapong',
+            'branch_id' => $loan->createdBy->branch->id,
         ]);
 
         $this->request->setUserResolver(function () use ($user) {
@@ -153,10 +153,10 @@ class AddLoanJobTest extends TestCase
             'guarantors' => [
                 [
                     'guarantor_id' => $loan->guarantors()->first()->id,
-                    'name' => 'Francis Asante',
-                    'employer' => 'Rancard Solutions Limited'
-                ]
-            ]
+                    'name'         => 'Francis Asante',
+                    'employer'     => 'Rancard Solutions Limited',
+                ],
+            ],
         ]);
 
         $updatedLoan = $this->dispatch(new AddLoanJob($this->request, $loan));
@@ -181,10 +181,10 @@ class AddLoanJobTest extends TestCase
         $this->request->replace([
             'guarantors' => [
                 [
-                    'name' => '',
-                    'employer' => ''
-                ]
-            ]
+                    'name'     => '',
+                    'employer' => '',
+                ],
+            ],
         ]);
 
         $updatedLoan = $this->dispatch(new AddLoanJob($this->request, $loan));
@@ -219,7 +219,7 @@ class AddLoanJobTest extends TestCase
 
     /**
      * Create a loan with a tenure of 6 months and check whether it returns a
-     * valid maturity date
+     * valid maturity date.
      */
     public function test_loan_returns_valid_maturity_date()
     {
@@ -238,7 +238,7 @@ class AddLoanJobTest extends TestCase
     }
 
     /**
-     * When a grace period is set, add it to the start date
+     * When a grace period is set, add it to the start date.
      */
     public function test_that_grace_period_is_applied_to_loan_start_date()
     {
@@ -256,8 +256,8 @@ class AddLoanJobTest extends TestCase
         $this->request->merge(array_merge(
             factory(Loan::class)
                 ->make([
-                    'amount' => 10000,
-                    'rate' => 9,
+                    'amount'    => 10000,
+                    'rate'      => 9,
                     'tenure_id' => Tenure::firstOrCreate(['number_of_months' => 24])->id,
                 ])
                 ->toArray(),
@@ -277,9 +277,9 @@ class AddLoanJobTest extends TestCase
     {
         $this->request->merge(
             factory(Loan::class)->make([
-                'amount' => 10000,
-                'rate' => 9,
-                'tenure_id' => Tenure::firstOrCreate(['number_of_months' => 24])->id,
+                'amount'            => 10000,
+                'rate'              => 9,
+                'tenure_id'         => Tenure::firstOrCreate(['number_of_months' => 24])->id,
                 'repayment_plan_id' => RepaymentPlan::firstOrCreate(['label' => RepaymentPlan::MONTHLY])->id,
             ])->toArray()
         );
@@ -297,7 +297,7 @@ class AddLoanJobTest extends TestCase
             factory(Fee::class)
                 ->make([
                     'amount' => 10000,
-                    'fees' => Fee::select('rate', 'id', 'is_paid_upfront')->get()->toArray()
+                    'fees'   => Fee::select('rate', 'id', 'is_paid_upfront')->get()->toArray(),
                 ])
                 ->toArray()
         );
@@ -319,7 +319,7 @@ class AddLoanJobTest extends TestCase
         $this->request->setUserResolver(function () {
             return factory(User::class)->create([
                 'branch_id' => Branch::findOrFail(2)->id,
-                'name' => 'Francis Addai'
+                'name'      => 'Francis Addai',
             ]);
         });
 
@@ -331,7 +331,7 @@ class AddLoanJobTest extends TestCase
 
         self::assertInstanceOf(Loan::class, $loan);
         self::assertNotNull($loan->number);
-        self::assertEquals($loan->createdBy->branch->code . '0000001', $loan->number);
+        self::assertEquals($loan->createdBy->branch->code.'0000001', $loan->number);
         self::assertEquals(10, strlen($loan->number));
 
         // add a second loan and verify that an appropriate loan number gets assigned
@@ -343,7 +343,7 @@ class AddLoanJobTest extends TestCase
 
         self::assertInstanceOf(Loan::class, $loan2);
         self::assertNotNull($loan2->number);
-        self::assertEquals($loan2->createdBy->branch->code . '0000002', $loan2->number);
+        self::assertEquals($loan2->createdBy->branch->code.'0000002', $loan2->number);
         self::assertEquals(10, strlen($loan2->number));
 
         // add 5 more loans
@@ -364,9 +364,8 @@ class AddLoanJobTest extends TestCase
 
         self::assertInstanceOf(Loan::class, $loan24);
         self::assertNotNull($loan24->number);
-        self::assertEquals($loan24->createdBy->branch->code . '0000024', $loan24->number);
+        self::assertEquals($loan24->createdBy->branch->code.'0000024', $loan24->number);
         self::assertEquals(10, strlen($loan24->number));
-
     }
 
     public function test_that_loan_creation_does_not_send_an_email_to_approvers()
@@ -401,7 +400,7 @@ class AddLoanJobTest extends TestCase
         $this->request->merge(
             factory(Loan::class, 'staff')
                 ->make([
-                    'fees' => [1 => ['rate' => 10, 'id' => 1]]
+                    'fees' => [1 => ['rate' => 10, 'id' => 1]],
                 ])
                 ->toArray()
         );
@@ -422,7 +421,7 @@ class AddLoanJobTest extends TestCase
                     'fees' => [
                         1 => ['rate' => 5.3, 'id' => 1],
                         2 => ['rate' => '0', 'id' => 2],
-                    ]
+                    ],
                 ])
                 ->toArray()
         );

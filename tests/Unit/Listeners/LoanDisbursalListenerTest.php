@@ -2,9 +2,8 @@
 /**
  * Author: Francis Addai <me@faddai.com>
  * Date: 14/12/2017
- * Time: 3:59 PM
+ * Time: 3:59 PM.
  */
-
 use App\Entities\Accounting\Ledger;
 use App\Entities\Accounting\LedgerEntry;
 use App\Entities\Accounting\LedgerTransaction;
@@ -27,12 +26,12 @@ class LoanDisbursalListenerTest extends TestCase
         $this->request->merge(
             factory(Loan::class, 'customer')
                 ->make([
-                    'disbursed_at' => Carbon::parse('Feb 20, 2017'),
-                    'amount' => 10000,
-                    'rate' => 9,
-                    'tenure_id' => Tenure::firstOrCreate(['number_of_months' => 24])->id,
-                    'repayment_plan_id' => RepaymentPlan::firstOrCreate(['label' => RepaymentPlan::MONTHLY])->id,
-                    'client_id' => factory(Client::class, 'individual')->create(['account_balance' => 0])->id,
+                    'disbursed_at'                  => Carbon::parse('Feb 20, 2017'),
+                    'amount'                        => 10000,
+                    'rate'                          => 9,
+                    'tenure_id'                     => Tenure::firstOrCreate(['number_of_months' => 24])->id,
+                    'repayment_plan_id'             => RepaymentPlan::firstOrCreate(['label' => RepaymentPlan::MONTHLY])->id,
+                    'client_id'                     => factory(Client::class, 'individual')->create(['account_balance' => 0])->id,
                     'interest_calculation_strategy' => Loan::REDUCING_BALANCE_STRATEGY,
                 ])
                 ->toArray()
@@ -49,7 +48,7 @@ class LoanDisbursalListenerTest extends TestCase
     }
 
     /**
-     * When a loan (with an upfront fee) is disbursed
+     * When a loan (with an upfront fee) is disbursed.
      *
      * 1. Fee is deducted and recorded in its income ledger
      * 2. Current Account ledger is credited with loan principal minus fee charged
@@ -64,15 +63,15 @@ class LoanDisbursalListenerTest extends TestCase
             Fee::whereName(Fee::ADMINISTRATION)->first()->fill(['rate' => 2.5]),
             Fee::whereName(Fee::PROCESSING)->first()->fill(['rate' => 1.5]),
             // override amortized fee to be paid upfront
-            Fee::whereName(Fee::ARRANGEMENT)->first()->fill(['rate' => 1, 'is_paid_upfront' => 1])
+            Fee::whereName(Fee::ARRANGEMENT)->first()->fill(['rate' => 1, 'is_paid_upfront' => 1]),
         ])->toArray();
 
         // create a customer loan
         $this->request->merge(
             factory(Loan::class, 'customer')
                 ->make([
-                    'amount' => 10000,
-                    'fees' => $fees,
+                    'amount'    => 10000,
+                    'fees'      => $fees,
                     'client_id' => factory(Client::class)->create(['account_balance' => 0])->id,
                 ]) // deductable fees = 0.015 * 10000 = 150
                 ->toArray()
@@ -103,7 +102,7 @@ class LoanDisbursalListenerTest extends TestCase
     }
 
     /**
-     * When a loan (without an upfront fee) is disbursed
+     * When a loan (without an upfront fee) is disbursed.
      *
      * 1. Current Account ledger is credited with loan principal minus fee charged
      * 2. Principal ledger for the loan product is debited with loan amount
@@ -115,15 +114,15 @@ class LoanDisbursalListenerTest extends TestCase
 
         $fees = collect([
             Fee::whereName(Fee::ARRANGEMENT)->first()->fill(['rate' => 2.5]),
-            Fee::whereName(Fee::PROCESSING)->first()->fill(['rate' => 1.5])
+            Fee::whereName(Fee::PROCESSING)->first()->fill(['rate' => 1.5]),
         ])->toArray();
 
         // create a customer loan
         $this->request->merge(
             factory(Loan::class, 'customer')
                 ->make([
-                    'amount' => 10000,
-                    'fees' => $fees,
+                    'amount'    => 10000,
+                    'fees'      => $fees,
                     'client_id' => factory(Client::class)->create(['account_balance' => 0])->id,
                 ])
                 ->toArray()

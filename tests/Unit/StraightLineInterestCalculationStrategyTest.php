@@ -2,8 +2,9 @@
 /**
  * Author: Francis Addai <me@faddai.com>
  * Date: 06/11/2016
- * Time: 1:49 PM
+ * Time: 1:49 PM.
  */
+
 namespace Tests\Unit;
 
 use App\Entities\Loan;
@@ -15,7 +16,6 @@ use App\Jobs\AddLoanJob;
 use Carbon\Carbon;
 use Tests\TestCase;
 
-
 class StraightLineInterestCalculationStrategyTest extends TestCase
 {
     public function test_able_to_generate_correct_loan_repayments_schedule_for_a_newly_created_loan()
@@ -23,12 +23,12 @@ class StraightLineInterestCalculationStrategyTest extends TestCase
         $this->setAuthenticatedUserForRequest();
 
         $loan = factory(Loan::class)->make([
-            'amount' => 10000,
-            'tenure_id' => Tenure::firstOrCreate(['number_of_months' => 24])->id,
-            'repayment_plan_id' => RepaymentPlan::firstOrCreate(['label' => RepaymentPlan::MONTHLY])->id,
-            'rate' => 9,
+            'amount'                        => 10000,
+            'tenure_id'                     => Tenure::firstOrCreate(['number_of_months' => 24])->id,
+            'repayment_plan_id'             => RepaymentPlan::firstOrCreate(['label' => RepaymentPlan::MONTHLY])->id,
+            'rate'                          => 9,
             'interest_calculation_strategy' => Loan::STRAIGHT_LINE_STRATEGY,
-            'fees' => [['rate' => 17, 'id' => 2]],
+            'fees'                          => [['rate' => 17, 'id' => 2]],
         ]);
 
         $this->request->merge($loan->toArray());
@@ -71,13 +71,13 @@ class StraightLineInterestCalculationStrategyTest extends TestCase
         $this->request->merge(
             factory(Loan::class)
                 ->make([
-                    'created_at' => Carbon::now()->isWeekend() ? Carbon::now()->addWeekday() : Carbon::now(),
-                    'amount' => 10000,
-                    'tenure_id' => Tenure::firstOrCreate(['number_of_months' => 24])->id,
-                    'repayment_plan_id' => $repaymentPlan->id,
-                    'rate' => 9,
+                    'created_at'                    => Carbon::now()->isWeekend() ? Carbon::now()->addWeekday() : Carbon::now(),
+                    'amount'                        => 10000,
+                    'tenure_id'                     => Tenure::firstOrCreate(['number_of_months' => 24])->id,
+                    'repayment_plan_id'             => $repaymentPlan->id,
+                    'rate'                          => 9,
                     'interest_calculation_strategy' => Loan::STRAIGHT_LINE_STRATEGY,
-                    'fees' => [['rate' => 17, 'id' => 2]],
+                    'fees'                          => [['rate' => 17, 'id' => 2]],
                 ])
                 ->toArray()
         );
@@ -144,10 +144,10 @@ class StraightLineInterestCalculationStrategyTest extends TestCase
         $this->request->merge(
             factory(Loan::class, 'staff')
                 ->make([
-                    'rate' => 9,
-                    'amount' => 10000,
-                    'tenure_id' => Tenure::whereNumberOfMonths(5)->first()->id,
-                    'approved_at' => $approvedAndDisbursedAt,
+                    'rate'         => 9,
+                    'amount'       => 10000,
+                    'tenure_id'    => Tenure::whereNumberOfMonths(5)->first()->id,
+                    'approved_at'  => $approvedAndDisbursedAt,
                     'disbursed_at' => $approvedAndDisbursedAt,
                 ])
                 ->toArray()
@@ -175,8 +175,8 @@ class StraightLineInterestCalculationStrategyTest extends TestCase
         $this->request->merge(
             factory(Loan::class, $product)
                 ->make([
-                    'amount' => $amount,
-                    'rate' => $rate,
+                    'amount'    => $amount,
+                    'rate'      => $rate,
                     'tenure_id' => Tenure::whereNumberOfMonths($tenure)->first()->id,
                 ])
                 ->toArray()

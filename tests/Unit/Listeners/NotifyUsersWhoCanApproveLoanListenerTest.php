@@ -2,9 +2,8 @@
 /**
  * Author: Francis Addai <me@faddai.com>
  * Date: 29/03/2017
- * Time: 4:01 PM
+ * Time: 4:01 PM.
  */
-
 use App\Entities\Loan;
 use App\Entities\Role;
 use App\Jobs\AddLoanJob;
@@ -40,7 +39,7 @@ class NotifyUsersWhoCanApproveLoanListenerTest extends TestCase
         $loan = factory(Loan::class)->create();
 
         $this->request->merge(factory(Loan::class)->make([
-            'status' => Loan::APPROVED,
+            'status'    => Loan::APPROVED,
             'client_id' => $loan->client->id,
         ])->toArray());
 
