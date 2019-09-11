@@ -5,7 +5,6 @@ namespace App\Events;
 use App\Entities\ClientTransaction;
 use Illuminate\Queue\SerializesModels;
 
-
 class DepositAddedEvent
 {
     use SerializesModels;

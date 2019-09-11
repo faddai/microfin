@@ -26,10 +26,13 @@ class LedgerEntry extends Model
     }
 
     /**
-     * Get the balance on the ledger as at the date selected
+     * Get the balance on the ledger as at the date selected.
+     *
      * @todo WIP; finish implementation and test
-     * @param Carbon $fromDate
+     *
+     * @param Carbon      $fromDate
      * @param Carbon|null $toDate
+     *
      * @return int|mixed
      */
     public function setBalanceAttribute(Carbon $fromDate = null, Carbon $toDate = null)
@@ -39,7 +42,7 @@ class LedgerEntry extends Model
 
         $entries = self::whereBetween('created_at', [$fromDate, $toDate])->get();
 
-        $balance =  $entries->sum('cr') - $entries->sum('dr'); // credit balance
+        $balance = $entries->sum('cr') - $entries->sum('dr'); // credit balance
 
         if ($this->ledger->isDebitAccount()) {
             $balance = $entries->sum('dr') - $entries->sum('cr');

@@ -9,7 +9,6 @@ use Illuminate\Http\Request;
 
 class RestructureLoanJob
 {
-
     use DispatchesJobs;
 
     /**
@@ -18,7 +17,7 @@ class RestructureLoanJob
     private $request;
 
     /**
-     * The loan being restructured
+     * The loan being restructured.
      *
      * @var Loan
      */
@@ -28,7 +27,7 @@ class RestructureLoanJob
      * Create a new job instance.
      *
      * @param Request $request
-     * @param Loan $loan
+     * @param Loan    $loan
      */
     public function __construct(Request $request, Loan $loan)
     {
@@ -50,7 +49,7 @@ class RestructureLoanJob
         $this->originalLoan->forceFill([
             'restructured_by' => $this->request->user()->id,
             'restructured_at' => Carbon::now(),
-            'status' => Loan::RESTRUCTURED,
+            'status'          => Loan::RESTRUCTURED,
         ])->save();
 
         $loanRestructure->parent_loan_id = $this->originalLoan->id;

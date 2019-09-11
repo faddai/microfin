@@ -2,15 +2,13 @@
 /**
  * Author: Francis Addai <me@faddai.com>
  * Date: 03/03/2017
- * Time: 01:52
+ * Time: 01:52.
  */
-
-use App\Entities\Accounting\Ledger;
 use App\Entities\Fee;
 use Faker\Generator;
 use Illuminate\Database\Eloquent\Factory;
 
-/** @var Factory $factory */
+/* @var Factory $factory */
 $factory->define(Fee::class, function (Generator $faker) {
     return [
         'rate' => $faker->randomDigit,
@@ -49,4 +47,3 @@ $factory->defineAs(Fee::class, 'processing', function () use ($factory) {
         Fee::whereName(Fee::PROCESSING)->first()->toArray()
     );
 });
-

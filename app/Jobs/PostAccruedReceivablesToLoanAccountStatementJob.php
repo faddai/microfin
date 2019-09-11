@@ -2,7 +2,7 @@
 /**
  * Author: Francis Addai <me@faddai.com>
  * Date: 16/04/2017
- * Time: 01:36
+ * Time: 01:36.
  */
 
 namespace App\Jobs;
@@ -59,25 +59,23 @@ class PostAccruedReceivablesToLoanAccountStatementJob implements ShouldQueue
                     return $this->entryHasNotBeenPostedAlready($repayment);
                 })
                 ->each(function (LoanRepayment $repayment) use (&$posted) {
-
-                    logger('Post accrued receivables for #'. $repayment->loan->number .' to its Loan Statement', [
-                        'dueDate' => $repayment->getDueDate()
+                    logger('Post accrued receivables for #'.$repayment->loan->number.' to its Loan Statement', [
+                        'dueDate' => $repayment->getDueDate(),
                     ]);
 
                     if ($repayment->getInterest(false) > 0) {
 
                         // add accrued interest
                         $request = new Request([
-                            'narration' => 'Interest accrued',
-                            'dr' => $repayment->getInterest(false),
+                            'narration'  => 'Interest accrued',
+                            'dr'         => $repayment->getInterest(false),
                             'value_date' => $repayment->due_date,
-                            'created_at' => $repayment->due_date
+                            'created_at' => $repayment->due_date,
                         ]);
 
                         $this->dispatch(new AddLoanStatementEntryJob($request, $repayment->loan));
 
                         $posted++;
-
                     }
 
                     // add accrued/due fees to loan statement
@@ -86,26 +84,22 @@ class PostAccruedReceivablesToLoanAccountStatementJob implements ShouldQueue
                             return $fee->pivot->is_paid_upfront;
                         })
                         ->each(function (Fee $fee) use ($repayment, &$posted) {
-
                             if ($fee->pivot->amount > 0) {
-
                                 $this->dispatch(new AddLoanStatementEntryJob(new Request([
-                                    'narration' => $fee->name,
-                                    'dr' => $fee->pivot->amount / $repayment->loan->tenure->number_of_months,
+                                    'narration'  => $fee->name,
+                                    'dr'         => $fee->pivot->amount / $repayment->loan->tenure->number_of_months,
                                     'value_date' => $repayment->due_date,
-                                    'created_at' => $repayment->due_date
+                                    'created_at' => $repayment->due_date,
                                 ]), $repayment->loan));
 
                                 $posted++;
                             }
-
                         });
 
                     logger(sprintf(
                         'Posted %d %s on %s for Loan #%s',
                         $posted, str_plural('entry', $posted), $repayment->getDueDate(), $repayment->loan->number
                     ));
-
                 });
         });
     }
@@ -118,5 +112,4 @@ class PostAccruedReceivablesToLoanAccountStatementJob implements ShouldQueue
             })
             ->first() === null;
     }
-
 }

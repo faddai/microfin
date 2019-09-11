@@ -7,7 +7,6 @@ use App\Entities\Client;
 use App\Http\Requests\DepositFormRequest;
 use App\Jobs\AddClientDepositJob;
 
-
 class ClientDepositsController extends Controller
 {
     public function create()
@@ -25,7 +24,7 @@ class ClientDepositsController extends Controller
         } catch (\Exception $exception) {
             logger('Deposit could not be recorded', compact('exception'));
 
-            flash()->error('There was an error adding the deposit. Please try again. Error: '. $exception->getMessage());
+            flash()->error('There was an error adding the deposit. Please try again. Error: '.$exception->getMessage());
 
             return back()->withInput();
         }

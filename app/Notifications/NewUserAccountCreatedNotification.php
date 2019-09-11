@@ -30,7 +30,8 @@ class NewUserAccountCreatedNotification extends Notification implements ShouldQu
     /**
      * Get the notification's delivery channels.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
+     *
      * @return array
      */
     public function via($notifiable)
@@ -41,7 +42,8 @@ class NewUserAccountCreatedNotification extends Notification implements ShouldQu
     /**
      * Get the mail representation of the notification.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
+     *
      * @return \Illuminate\Notifications\Messages\MailMessage
      */
     public function toMail($notifiable)
@@ -50,21 +52,22 @@ class NewUserAccountCreatedNotification extends Notification implements ShouldQu
         $expire = config('auth.passwords.users.expire') / 60;
         $url = route('password.reset', ['token' => $token, 'email' => $this->user->email]);
 
-        return (new MailMessage)
+        return (new MailMessage())
                     ->subject(trans('users.invitation_mail_subject'))
                     ->greeting(sprintf('Hi %s,', $this->user->getFullName()))
-                    ->line(sprintf("You have been invited to use %s at %s. To complete your account setup,
-                    click the button below to set a new password for yourself.", config('app.name'), config('app.company')))
-                    ->line("You will use your email address and the password you set to access your account.")
+                    ->line(sprintf('You have been invited to use %s at %s. To complete your account setup,
+                    click the button below to set a new password for yourself.', config('app.name'), config('app.company')))
+                    ->line('You will use your email address and the password you set to access your account.')
                     ->action('Reset your password', $url)
-                    ->line(sprintf("NB: This password reset link expires in %d %s.", $expire, str_plural('hour', $expire)))
+                    ->line(sprintf('NB: This password reset link expires in %d %s.', $expire, str_plural('hour', $expire)))
                     ->line('Thank you for using our application!');
     }
 
     /**
      * Get the array representation of the notification.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
+     *
      * @return array
      */
     public function toArray($notifiable)

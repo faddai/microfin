@@ -2,7 +2,7 @@
 /**
  * Author: Francis Addai <me@faddai.com>
  * Date: 27/02/2017
- * Time: 16:31
+ * Time: 16:31.
  */
 
 namespace App\Console\Commands;
@@ -14,7 +14,6 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 
 class PostDailyInterestAccruedToGeneralLedgerCommand extends Command
 {
-
     use DispatchesJobs;
 
     /**
@@ -44,6 +43,6 @@ class PostDailyInterestAccruedToGeneralLedgerCommand extends Command
 
         $processed = $this->dispatch(new PostDailyInterestAccruedToGeneralLedgerJob($date));
 
-        $this->info('Total loans processed: '. $processed);
+        $this->info('Total loans processed: '.$processed);
     }
 }

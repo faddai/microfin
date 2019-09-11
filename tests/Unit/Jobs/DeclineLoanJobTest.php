@@ -5,7 +5,6 @@ use App\Jobs\AddLoanJob;
 use App\Jobs\DeclineLoanJob;
 use Tests\TestCase;
 
-
 class DeclineLoanJobTest extends TestCase
 {
     public function test_loan_can_be_declined()

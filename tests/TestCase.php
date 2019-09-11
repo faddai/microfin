@@ -3,8 +3,9 @@
 /**
  * Author: Francis Addai <me@faddai.com>
  * Date: 15/10/2016
- * Time: 23:14
+ * Time: 23:14.
  */
+
 namespace Tests;
 
 use App\Entities\Loan;
@@ -19,11 +20,8 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use Illuminate\Http\Request;
 
-
-
 abstract class TestCase extends BaseTestCase
 {
-
     use DispatchesJobs, CreatesApplication;
 
     /**
@@ -41,7 +39,7 @@ abstract class TestCase extends BaseTestCase
     }
 
     /**
-     * Run migrations together with seeding
+     * Run migrations together with seeding.
      */
     private function runMigrationsAndSeed()
     {
@@ -54,6 +52,7 @@ abstract class TestCase extends BaseTestCase
      * @param $objectInstance
      * @param $methodName
      * @param array $parameters
+     *
      * @return mixed
      */
     public function callPrivateMethod(&$objectInstance, $methodName, $parameters = [])
@@ -67,6 +66,7 @@ abstract class TestCase extends BaseTestCase
 
     /**
      * @param null $permission
+     *
      * @return Request
      */
     public function setAuthenticatedUserForRequest($permission = null)
@@ -86,8 +86,9 @@ abstract class TestCase extends BaseTestCase
 
     /**
      * @param $role
-     * @param int $count
+     * @param int   $count
      * @param array $data
+     *
      * @return User|Collection
      */
     protected function createUserWithARole($role, $count = 1, array $data = [])
@@ -105,21 +106,22 @@ abstract class TestCase extends BaseTestCase
     }
 
     /**
-     * @param Loan $loan
+     * @param Loan    $loan
      * @param Request $request
+     *
      * @return mixed
      */
     protected function approveAndDisburseLoan(Loan $loan, Request $request = null)
     {
         $request = $request ?? $this->request;
 
-        ! $request->user() && $this->setAuthenticatedUserForRequest();
+        !$request->user() && $this->setAuthenticatedUserForRequest();
 
         return $this->dispatch(new DisburseLoanJob($request, $this->dispatch(new ApproveLoanJob($request, $loan))));
     }
 
     /**
-     * test should not break when run on weekends
+     * test should not break when run on weekends.
      */
     public function addWeekdayToCarbonNowOnWeekend()
     {
@@ -127,5 +129,4 @@ abstract class TestCase extends BaseTestCase
             Carbon::setTestNow(Carbon::now()->addWeekday());
         }
     }
-
 }

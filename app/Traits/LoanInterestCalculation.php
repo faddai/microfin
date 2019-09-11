@@ -2,17 +2,15 @@
 /**
  * Author: Francis Addai <me@faddai.com>
  * Date: 21/02/2017
- * Time: 13:52
+ * Time: 13:52.
  */
 
 namespace App\Traits;
-
 
 use Illuminate\Foundation\Bus\DispatchesJobs;
 
 trait LoanInterestCalculation
 {
-
     use DispatchesJobs;
 
     /**
@@ -33,6 +31,7 @@ trait LoanInterestCalculation
     /**
      * @param $repaymentAmount
      * @param $interest
+     *
      * @return mixed
      */
     public function getPrincipalOnRepayment($repaymentAmount, $interest)

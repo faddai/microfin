@@ -21,10 +21,9 @@ class AddUnapprovedLedgerTransactionJob
     {
         $this->request = $request;
         $this->transaction = new UnapprovedLedgerTransaction([
-            'user_id' => $this->request->user()->id,
+            'user_id'   => $this->request->user()->id,
             'branch_id' => $this->request->user()->branch->id,
         ]);
-
     }
 
     /**

@@ -4,10 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Entities\Loan;
 use App\Jobs\DisburseLoanJob;
-use App\Jobs\GetDisbursedLoansJob;
 use App\Jobs\LoanSearchJob;
 use Illuminate\Http\Request;
-
 
 class DisburseLoanController extends Controller
 {
@@ -18,7 +16,7 @@ class DisburseLoanController extends Controller
         } catch (\Exception $exception) {
             logger('Error occurred while disbursing loan: ', compact('exception'));
 
-            flash()->error('Loan could not be disbursed. Please try again. Error: '. $exception->getMessage());
+            flash()->error('Loan could not be disbursed. Please try again. Error: '.$exception->getMessage());
 
             return back();
         }

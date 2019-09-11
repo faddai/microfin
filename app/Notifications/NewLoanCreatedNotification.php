@@ -8,7 +8,6 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-
 class NewLoanCreatedNotification extends Notification implements ShouldQueue
 {
     use Queueable;
@@ -31,7 +30,8 @@ class NewLoanCreatedNotification extends Notification implements ShouldQueue
     /**
      * Get the notification's delivery channels.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
+     *
      * @return array
      */
     public function via($notifiable)
@@ -42,14 +42,15 @@ class NewLoanCreatedNotification extends Notification implements ShouldQueue
     /**
      * Get the mail representation of the notification.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
+     *
      * @return \Illuminate\Notifications\Messages\MailMessage
      */
     public function toMail($notifiable)
     {
         $currency = config('app.currency');
 
-        $loanAmount = $currency. ' '. $this->loan->getPrincipalAmount();
+        $loanAmount = $currency.' '.$this->loan->getPrincipalAmount();
 
         $loanSummary = <<<TABLE
 <table border="0" cellpadding="12" width="100%" style="border-collapse:collapse;margin:0;padding:0;font-family:Arial;">
@@ -77,7 +78,7 @@ class NewLoanCreatedNotification extends Notification implements ShouldQueue
 </table>
 TABLE;
 
-        return (new MailMessage)
+        return (new MailMessage())
             ->subject("A loan of {$loanAmount} needs your approval")
             ->greeting("Hi {$notifiable->getFullName()},")
             ->line("{$this->loan->createdBy->getFullName()} is requesting for your approval of a loan. See loan summary below;")
@@ -88,7 +89,8 @@ TABLE;
     /**
      * Get the array representation of the notification.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
+     *
      * @return array
      */
     public function toArray($notifiable)

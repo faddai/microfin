@@ -2,7 +2,7 @@
 /**
  * Author: Francis Addai <me@faddai.com>
  * Date: 25/12/2016
- * Time: 15:06
+ * Time: 15:06.
  */
 
 namespace App\Traits;
@@ -12,13 +12,12 @@ use App\Entities\LoanRepayment;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 
-
 trait GetDueRepaymentsTrait
 {
-
     /**
      * @param \Closure|string $filterCallback
-     * @param Loan $loan
+     * @param Loan            $loan
+     *
      * @return Collection
      */
     public function getRepayments($filterCallback, Loan $loan = null): Collection
@@ -33,9 +32,10 @@ trait GetDueRepaymentsTrait
     }
 
     /**
-     * @param string $endDate
-     * @param null $startDate
+     * @param string   $endDate
+     * @param null     $startDate
      * @param \Closure $callback
+     *
      * @return Collection
      */
     public function getRepaymentsForDate($endDate, $startDate = null, \Closure $callback = null): Collection
@@ -48,6 +48,7 @@ trait GetDueRepaymentsTrait
     /**
      * @param $filterCallback
      * @param Loan $loan
+     *
      * @return Collection
      */
     private function getRepaymentsForASpecificLoan($filterCallback, Loan $loan)
@@ -59,7 +60,7 @@ trait GetDueRepaymentsTrait
 
     private function normalizeFilterCallback($filterCallback)
     {
-        if (! $filterCallback instanceof \Closure) {
+        if (!$filterCallback instanceof \Closure) {
             $filterCallback = function (LoanRepayment $repayment) use ($filterCallback) {
                 return $repayment->{$filterCallback}();
             };

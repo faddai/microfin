@@ -33,7 +33,7 @@ class LedgerTransactionsController extends Controller
      */
     public function create()
     {
-        $transaction = new LedgerTransaction;
+        $transaction = new LedgerTransaction();
         $ledgers = Ledger::with('category')->get();
 
         return view('dashboard.accounting.transactions.create', compact('transaction', 'ledgers'));
@@ -43,6 +43,7 @@ class LedgerTransactionsController extends Controller
      * Store a newly created resource in storage.
      *
      * @param Request $request
+     *
      * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request)
@@ -75,6 +76,7 @@ class LedgerTransactionsController extends Controller
      * Display the specified resource.
      *
      * @param LedgerTransaction $transaction
+     *
      * @return \Illuminate\Http\Response
      */
     public function show(LedgerTransaction $transaction)
@@ -87,7 +89,8 @@ class LedgerTransactionsController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -98,8 +101,9 @@ class LedgerTransactionsController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int                      $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -110,7 +114,8 @@ class LedgerTransactionsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)

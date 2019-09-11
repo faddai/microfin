@@ -2,8 +2,8 @@
 
 namespace App\Jobs;
 
-use Illuminate\Http\Request;
 use App\Entities\ClientTransaction;
+use Illuminate\Http\Request;
 
 class GetClientTransactionsJob
 {
@@ -24,8 +24,6 @@ class GetClientTransactionsJob
 
     /**
      * Execute the job.
-     *
-     *
      */
     public function handle()
     {

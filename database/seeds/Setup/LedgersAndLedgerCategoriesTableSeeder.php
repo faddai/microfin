@@ -7,28 +7,28 @@ use App\Entities\Accounting\LedgerCategory;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-
 class LedgersAndLedgerCategoriesTableSeeder extends Seeder
 {
     /**
-     * Create 10 dummy shareholders
+     * Create 10 dummy shareholders.
      *
      * @return array
      */
-    private static function generateFakeLedgers($minCode, $maxCode) {
-
+    private static function generateFakeLedgers($minCode, $maxCode)
+    {
         return collect(range($minCode, $maxCode))->map(function ($code) {
             return [
                 'code' => $code,
-                'name' => faker()->name
+                'name' => faker()->name,
             ];
         })->toArray();
     }
 
     /**
-     * @return  array
+     * @return array
      */
-    public static function getChartOfAccounts() {
+    public static function getChartOfAccounts()
+    {
         return [
             'Share Capital' => static::generateFakeLedgers(1001, 1010),
 
@@ -167,7 +167,7 @@ class LedgersAndLedgerCategoriesTableSeeder extends Seeder
                 ['code' => 8051, 'name' => 'Property Transfer Tax'],
                 ['code' => 8052, 'name' => 'Taxation Paid'],
                 ['code' => 8053, 'name' => 'Security Charges'],
-            ]
+            ],
         ];
     }
 
@@ -189,14 +189,14 @@ class LedgersAndLedgerCategoriesTableSeeder extends Seeder
         collect($this->getChartOfAccounts())->each(function ($accounts, $category) {
             $accountCategory = LedgerCategory::firstOrCreate([
                 'name' => $category,
-                'type' => LedgerCategory::getCategoryType($category)
+                'type' => LedgerCategory::getCategoryType($category),
             ]);
 
             collect($accounts)->each(function ($account) use ($accountCategory) {
                 return Ledger::firstOrCreate(array_merge($account, [
                     'category_id' => $accountCategory->id,
-                    'is_left' => $accountCategory->hasDebitBalance(),
-                    'is_right' => $accountCategory->hasCreditBalance()
+                    'is_left'     => $accountCategory->hasDebitBalance(),
+                    'is_right'    => $accountCategory->hasCreditBalance(),
                 ]));
             });
         });

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class CorporateClient extends Model
 {
     protected $fillable = ['company_name', 'date_of_incorporation', 'business_registration_number',
-        'company_ownership_type', 'statement_frequency'];
+        'company_ownership_type', 'statement_frequency', ];
 
     protected $dates = ['date_of_incorporation'];
 

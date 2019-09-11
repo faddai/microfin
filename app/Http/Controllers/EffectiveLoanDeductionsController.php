@@ -6,7 +6,6 @@ use App\Jobs\GetEffectiveLoanDeductionsJob;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
-
 class EffectiveLoanDeductionsController extends Controller
 {
     public function index(Request $request)

@@ -2,7 +2,7 @@
 /**
  * Author: Francis Addai <me@faddai.com>
  * Date: 05/02/2017
- * Time: 1:49 PM
+ * Time: 1:49 PM.
  */
 
 namespace App\Entities\InterestCalculations;
@@ -12,7 +12,6 @@ use App\Jobs\AddLoanRepaymentJob;
 use App\Traits\LoanInterestCalculation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
-
 
 class ReducingBalanceInterestCalculationStrategy implements LoanInterestCalculationStrategyInterface
 {
@@ -25,6 +24,7 @@ class ReducingBalanceInterestCalculationStrategy implements LoanInterestCalculat
 
     /**
      * ReducingBalanceInterestCalculationStrategy constructor.
+     *
      * @param Loan $loan
      */
     public function __construct(Loan $loan)
@@ -48,12 +48,12 @@ class ReducingBalanceInterestCalculationStrategy implements LoanInterestCalculat
             $principal = $this->getPrincipalOnRepayment($repaymentAmount, $interest);
 
             $request = new Request([
-                'loan_id' => $this->loan->id,
-                'amount' => $repaymentAmount,
+                'loan_id'   => $this->loan->id,
+                'amount'    => $repaymentAmount,
                 'principal' => $principal,
-                'interest' => $interest,
-                'fees' => $this->loan->getFeesComponentOnRepayment(),
-                'due_date' => $dueDate
+                'interest'  => $interest,
+                'fees'      => $this->loan->getFeesComponentOnRepayment(),
+                'due_date'  => $dueDate,
             ]);
 
             $repayments->push($this->dispatch(new AddLoanRepaymentJob($request)));
@@ -66,6 +66,7 @@ class ReducingBalanceInterestCalculationStrategy implements LoanInterestCalculat
 
     /**
      * @see http://bit.ly/2kHACRx
+     *
      * @return float
      */
     public function getRepaymentAmount()
@@ -80,12 +81,14 @@ class ReducingBalanceInterestCalculationStrategy implements LoanInterestCalculat
             $monthlyRepaymentAmount += $simpleMonthlyInterest / $timeInterestRateFactor;
         }
 
-        return $monthlyRepaymentAmount  / $this->loan->repaymentPlan->number_of_repayments_per_month;
+        return $monthlyRepaymentAmount / $this->loan->repaymentPlan->number_of_repayments_per_month;
     }
 
     /**
      * @param $outstandingPrincipal
+     *
      * @return float
+     *
      * @see https://www.comparehero.my/blog/how-to-calculate-flat-rate-interest-and-reducing-balance-rate
      */
     private function getInterestOnRepayment($outstandingPrincipal)

@@ -32,7 +32,6 @@ class AccrueInterestAndFeesFromBeginningOfYearUpToDate extends Command
         $beginningDate = Carbon::today()->startOfYear();
 
         while ($beginningDate->lte(Carbon::today())) {
-
             if ($beginningDate->isWeekday()) {
                 $this->call('microfin:accrue-daily-interest', ['date' => $beginningDate]);
             }

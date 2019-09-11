@@ -7,7 +7,6 @@ use App\Entities\Loan;
 
 class DashboardController extends Controller
 {
-
     /**
      * Show the application dashboard.
      *

@@ -3,7 +3,7 @@
 /**
  * Author: Francis Addai <me@faddai.com>
  * Date: 28/10/2016
- * Time: 10:52
+ * Time: 10:52.
  */
 
 namespace Setup;
@@ -13,7 +13,6 @@ use Illuminate\Database\Seeder;
 
 class CountriesTableSeeder extends Seeder
 {
-
     /**
      * Run the database seeds.
      *
@@ -270,7 +269,7 @@ class CountriesTableSeeder extends Seeder
             ['name' => 'Western Sahara', 'alpha_2_code' => 'EH', 'alpha_3_code' => 'ESH', 'nationality' => 'Sahrawi, Sahrawian, Sahraouian'],
             ['name' => 'Yemen', 'alpha_2_code' => 'YE', 'alpha_3_code' => 'YEM', 'nationality' => 'Yemeni'],
             ['name' => 'Zambia', 'alpha_2_code' => 'ZM', 'alpha_3_code' => 'ZMB', 'nationality' => 'Zambian'],
-            ['name' => 'Zimbabwe', 'alpha_2_code' => 'ZW', 'alpha_3_code' => 'ZWE', 'nationality' => 'Zimbabwean']
+            ['name' => 'Zimbabwe', 'alpha_2_code' => 'ZW', 'alpha_3_code' => 'ZWE', 'nationality' => 'Zimbabwean'],
         ];
 
         foreach ($countries as $country) {

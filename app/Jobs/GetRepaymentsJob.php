@@ -2,7 +2,7 @@
 /**
  * Author: Francis Addai <me@faddai.com>
  * Date: 07/01/2017
- * Time: 11:13 PM
+ * Time: 11:13 PM.
  */
 
 namespace App\Jobs;
@@ -10,7 +10,6 @@ namespace App\Jobs;
 use App\Entities\LoanRepayment;
 use App\Traits\GetDueRepaymentsTrait;
 use Illuminate\Http\Request;
-
 
 class GetRepaymentsJob
 {
@@ -23,6 +22,7 @@ class GetRepaymentsJob
 
     /**
      * GetRepaymentsJob constructor.
+     *
      * @param Request $request
      */
     public function __construct(Request $request)
@@ -33,7 +33,6 @@ class GetRepaymentsJob
     public function handle()
     {
         if ($this->requestHasDateRange()) {
-
             return $this->getRepaymentsForDate(
                 $this->request->get('startDate'),
                 $this->request->get('endDate'),
@@ -55,19 +54,18 @@ class GetRepaymentsJob
 
     private function isUnpaid(LoanRepayment $repayment)
     {
-        return $repayment->isDue() && ! $repayment->isFullyPaid();
+        return $repayment->isDue() && !$repayment->isFullyPaid();
     }
 
     /**
-     * Get loans belonging to a specified credit officer
+     * Get loans belonging to a specified credit officer.
      *
      * @return \Closure
      */
     private function filterLoansForCreditOfficer()
     {
         return function (LoanRepayment $repayment) {
-
-            if (! $this->request->has('credit_officer')) {
+            if (!$this->request->has('credit_officer')) {
                 return true;
             }
 

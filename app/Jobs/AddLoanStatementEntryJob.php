@@ -2,11 +2,10 @@
 /**
  * Author: Francis Addai <me@faddai.com>
  * Date: 08/04/2017
- * Time: 05:21
+ * Time: 05:21.
  */
 
 namespace App\Jobs;
-
 
 use App\Entities\Loan;
 use App\Entities\LoanStatement;
@@ -32,7 +31,7 @@ class AddLoanStatementEntryJob
      * Create a new job instance.
      *
      * @param Request $request
-     * @param Loan $loan
+     * @param Loan    $loan
      */
     public function __construct(Request $request, Loan $loan)
     {
@@ -68,9 +67,7 @@ class AddLoanStatementEntryJob
 
     private function getBalance()
     {
-
         if ($this->loan->statement->entries->count()) {
-
             $this->loan = $this->loan->fresh('statement');
 
             $entries = $this->loan->statement->entries;

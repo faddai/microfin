@@ -2,11 +2,10 @@
 /**
  * Author: Francis Addai <me@faddai.com>
  * Date: 08/04/2017
- * Time: 04:58
+ * Time: 04:58.
  */
 
 namespace App\Entities;
-
 
 use App\Scopes\OrderByCreatedAtScope;
 use Illuminate\Database\Eloquent\Model;
@@ -21,7 +20,7 @@ class LoanStatementEntry extends Model
     {
         parent::boot();
 
-        self::addGlobalScope(new OrderByCreatedAtScope);
+        self::addGlobalScope(new OrderByCreatedAtScope());
     }
 
     public function statement()
@@ -43,5 +42,4 @@ class LoanStatementEntry extends Model
     {
         return $format ? number_format($this->balance, 2) : $this->balance;
     }
-
 }

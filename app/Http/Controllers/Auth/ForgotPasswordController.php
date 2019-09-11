@@ -38,7 +38,8 @@ class ForgotPasswordController extends Controller
     /**
      * Send a reset link to the given user.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Http\RedirectResponse
      */
     public function sendResetLinkEmail(Request $request)
@@ -72,7 +73,6 @@ class ForgotPasswordController extends Controller
 
     public function isPasswordResetForASuspendedUser(User $user = null)
     {
-        return $user && ! $user->isActive();
+        return $user && !$user->isActive();
     }
-
 }

@@ -2,7 +2,7 @@
 /**
  * Author: Francis Addai <me@faddai.com>
  * Date: 02/02/2017
- * Time: 12:20 AM
+ * Time: 12:20 AM.
  */
 
 namespace App\Entities\Accounting;
@@ -10,7 +10,6 @@ namespace App\Entities\Accounting;
 use App\Entities\Branch;
 use App\Entities\User;
 use Illuminate\Database\Eloquent\Model;
-
 
 class LedgerTransaction extends Model
 {
@@ -49,5 +48,4 @@ class LedgerTransaction extends Model
     {
         return $this->hasMany(LedgerEntry::class, 'ledger_transaction_id', 'uuid');
     }
-
 }

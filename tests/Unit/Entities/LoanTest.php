@@ -2,9 +2,8 @@
 /**
  * Author: Francis Addai <me@faddai.com>
  * Date: 29/10/2016
- * Time: 4:52 PM
+ * Time: 4:52 PM.
  */
-
 use App\Entities\Client;
 use App\Entities\Fee;
 use App\Entities\Loan;
@@ -27,18 +26,17 @@ class LoanTest extends TestCase
             ->states('approved', 'disbursed')
             ->create([
                 'disbursed_at' => Carbon::parse('June 6 2016'),
-                'amount' => 3000,
-                'rate' => 5,
-                'tenure_id' => Tenure::firstOrCreate(['number_of_months' => 3])->id,
-                'client_id' => factory(Client::class, 'individual')->create(['account_balance' => 1160])->id,
+                'amount'       => 3000,
+                'rate'         => 5,
+                'tenure_id'    => Tenure::firstOrCreate(['number_of_months' => 3])->id,
+                'client_id'    => factory(Client::class, 'individual')->create(['account_balance' => 1160])->id,
             ]);
 
         $this->dispatch(new GenerateLoanRepaymentScheduleJob($loan));
 
         self::assertCount(3, $loan->schedule);
 
-        $this->artisan('microfin:repay', ['dueDate' => $loan->disbursed_at->addWeekdays
-        ($loan->repaymentPlan->number_of_days)]);
+        $this->artisan('microfin:repay', ['dueDate' => $loan->disbursed_at->addWeekdays($loan->repaymentPlan->number_of_days)]);
 
         $loan = $loan->fresh();
 
@@ -65,9 +63,9 @@ class LoanTest extends TestCase
             });
 
         $this->request->replace([
-            'status' => Loan::PENDING,
+            'status'    => Loan::PENDING,
             'startDate' => $createdAt,
-            'endDate' => $createdAt,
+            'endDate'   => $createdAt,
         ]);
 
         $loans = $this->dispatch(new LoanSearchJob($this->request));
@@ -96,9 +94,9 @@ class LoanTest extends TestCase
         });
 
         $this->request->replace([
-            'status' => Loan::APPROVED,
+            'status'    => Loan::APPROVED,
             'startDate' => Carbon::today(),
-            'endDate' => Carbon::today(),
+            'endDate'   => Carbon::today(),
         ]);
 
         $approvedLoans = $this->dispatch(new LoanSearchJob($this->request));
@@ -119,7 +117,6 @@ class LoanTest extends TestCase
         $createdAt = Carbon::today();
 
         $loans = factory(Loan::class, 3)->make()->each(function (Loan $loan) use ($createdAt) {
-
             $loan->forceFill(['created_at' => $createdAt]);
 
             $this->request->replace($loan->toArray());
@@ -129,19 +126,19 @@ class LoanTest extends TestCase
 
         $loans->each(function (Loan $loan) use ($createdAt) {
             $this->request->merge(['approved_at' => $createdAt]);
+
             return $this->dispatch(new ApproveLoanJob($this->request, $loan));
         });
 
         $this->request->replace([
-            'status' => Loan::APPROVED,
+            'status'    => Loan::APPROVED,
             'startDate' => $createdAt,
-            'endDate' => $createdAt,
+            'endDate'   => $createdAt,
         ]);
 
         $approvedLoans = $this->dispatch(new LoanSearchJob($this->request));
 
         $disbursedLoans = $approvedLoans->each(function (Loan $loan, $_) {
-
             if ($_ < 2) {
                 return $this->dispatch(new DisburseLoanJob($this->request, $loan));
             }
@@ -167,8 +164,8 @@ class LoanTest extends TestCase
         $this->request->merge(
             factory(Loan::class, 'staff')
                 ->make([
-                    'rate' => 0,
-                    'amount' => 22993.54,
+                    'rate'      => 0,
+                    'amount'    => 22993.54,
                     'tenure_id' => Tenure::whereNumberOfMonths(3)->first()->id,
                 ])
                 ->toArray()
@@ -190,9 +187,9 @@ class LoanTest extends TestCase
         $this->request->merge(
             factory(Loan::class, 'staff')
                 ->make([
-                    'rate' => 0,
-                    'amount' => 22993.54,
-                    'tenure_id' => Tenure::whereNumberOfMonths(3)->first()->id,
+                    'rate'                          => 0,
+                    'amount'                        => 22993.54,
+                    'tenure_id'                     => Tenure::whereNumberOfMonths(3)->first()->id,
                     'interest_calculation_strategy' => Loan::REDUCING_BALANCE_STRATEGY,
                 ])
                 ->toArray()
@@ -216,8 +213,8 @@ class LoanTest extends TestCase
         $this->request->merge(
             factory(Loan::class, 'staff')
                 ->make([
-                    'amount' => 10000,
-                    'rate' => 9,
+                    'amount'    => 10000,
+                    'rate'      => 9,
                     'tenure_id' => Tenure::whereNumberOfMonths(5)->first()->id,
                 ])
                 ->toArray()
@@ -258,13 +255,13 @@ class LoanTest extends TestCase
         $this->request->merge(
             factory(Loan::class, 'staff')
                 ->make([
-                    'amount' => 10000,
-                    'rate' => 9,
+                    'amount'    => 10000,
+                    'rate'      => 9,
                     'tenure_id' => Tenure::whereNumberOfMonths(5)->first()->id,
-                    'fees' => collect([
+                    'fees'      => collect([
                         Fee::whereName(Fee::ADMINISTRATION)->first($columns), // upfront = 5%
                         Fee::whereName(Fee::DISBURSEMENT)->first($columns)->fill(['rate' => 10]), // amortized fee = 10%
-                    ])->toArray()
+                    ])->toArray(),
                 ])
                 ->toArray()
         );
@@ -306,5 +303,4 @@ class LoanTest extends TestCase
         self::assertEquals(16000, $loan->getAmountPaid(false));
         self::assertEquals('Closed', $loan->getStatus());
     }
-
 }

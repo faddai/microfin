@@ -2,18 +2,16 @@
 /**
  * Author: Francis Addai <me@faddai.com>
  * Date: 02/11/2016
- * Time: 00:58
+ * Time: 00:58.
  */
 
 namespace Setup;
-
 
 use App\Entities\Tenure;
 use Illuminate\Database\Seeder;
 
 class TenuresTableSeeder extends Seeder
 {
-
     /**
      * Run the database seeds.
      *
@@ -25,7 +23,7 @@ class TenuresTableSeeder extends Seeder
             ->each(function (int $tenure) {
                 Tenure::firstOrCreate([
                     'number_of_months' => $tenure,
-                    'label' => $tenure. ' ' .str_plural('month', $tenure)
+                    'label'            => $tenure.' '.str_plural('month', $tenure),
                 ]);
             });
     }

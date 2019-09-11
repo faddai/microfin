@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
 
-
 class AutomatedLoanRepaymentJob
 {
     /**
@@ -19,6 +18,7 @@ class AutomatedLoanRepaymentJob
 
     /**
      * AutomatedLoanRepaymentJob constructor.
+     *
      * @param Carbon|null $dueDate
      */
     public function __construct(Carbon $dueDate = null)
@@ -29,20 +29,20 @@ class AutomatedLoanRepaymentJob
     /**
      * Execute the job.
      *
-     * @return mixed
      * @throws \App\Exceptions\InsufficientAccountBalanceException
+     *
+     * @return mixed
      */
     public function handle()
     {
         logger('Execute loan repayment job', [
-            'dueDate' => $this->dueDate->format('d/m/Y'),
-            'repaymentsCount' => $this->getLoanRepaymentsDue()->count()
+            'dueDate'         => $this->dueDate->format('d/m/Y'),
+            'repaymentsCount' => $this->getLoanRepaymentsDue()->count(),
         ]);
 
         return DB::transaction(function () {
             return $this->getLoanRepaymentsDue()->chunk(30, function (Collection $repayments) {
                 return $repayments->each(function (LoanRepayment $repayment) {
-
                     $repaymentBeforeDeduction = $repayment->replicate();
 
                     $repayment->loan->isDisbursed() &&
@@ -53,7 +53,6 @@ class AutomatedLoanRepaymentJob
                 });
             });
         });
-
     }
 
     /**

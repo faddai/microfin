@@ -2,7 +2,7 @@
 /**
  * Author: Francis Addai <me@faddai.com>
  * Date: 24/02/2017
- * Time: 11:36
+ * Time: 11:36.
  */
 
 namespace App\Listeners;
@@ -14,22 +14,18 @@ use App\Jobs\AddLedgerTransactionJob;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Http\Request;
 
-
 /**
- * Class PostClientTransactionsToGeneralLedgersSubscriber
+ * Class PostClientTransactionsToGeneralLedgersSubscriber.
  *
  * This is responsible for posting all Client Transactions (deposit, withdrawal)
  * that are not nominal to the Current Account Ledger and the selected Ledger
- *
- * @package App\Listeners
  */
 class PostClientTransactionsToGeneralLedgersSubscriber
 {
-
     use DispatchesJobs;
 
     /**
-     * Post ledger entry for a withdrawal transaction
+     * Post ledger entry for a withdrawal transaction.
      *
      * @param $event
      */
@@ -38,19 +34,19 @@ class PostClientTransactionsToGeneralLedgersSubscriber
         $request = new Request([
             'entries' => [
                 [
-                    'cr' => $event->transaction->dr,
+                    'cr'        => $event->transaction->dr,
                     'narration' => $event->transaction->narration,
                     'ledger_id' => $event->transaction->ledger_id,
                 ],
                 [
-                    'dr' => $event->transaction->dr,
+                    'dr'        => $event->transaction->dr,
                     'narration' => $event->transaction->narration,
 
                     // @todo add ability to configure this ledger
                     // for now, going to hard code a ledger from the short term liability category
                     'ledger_id' => Ledger::where('code', Ledger::CURRENT_ACCOUNT_CODE)->first()->id,
-                ]
-            ]
+                ],
+            ],
         ]);
 
         $request->merge($this->getTransactionDetails($event));
@@ -60,7 +56,7 @@ class PostClientTransactionsToGeneralLedgersSubscriber
     }
 
     /**
-     * Post ledger entry for a deposit transaction
+     * Post ledger entry for a deposit transaction.
      *
      * @param $event
      */
@@ -69,19 +65,19 @@ class PostClientTransactionsToGeneralLedgersSubscriber
         $request = new Request([
             'entries' => [
                 [
-                    'dr' => $event->transaction->cr,
+                    'dr'        => $event->transaction->cr,
                     'narration' => $event->transaction->narration,
                     'ledger_id' => $event->transaction->ledger_id,
                 ],
                 [
-                    'cr' => $event->transaction->cr,
+                    'cr'        => $event->transaction->cr,
                     'narration' => $event->transaction->narration,
 
                     // @todo add ability to configure this ledger
                     // for now, going to hard code a ledger from the short term liability category
                     'ledger_id' => Ledger::where('code', Ledger::CURRENT_ACCOUNT_CODE)->first()->id,
-                ]
-            ]
+                ],
+            ],
         ]);
 
         $request->merge($this->getTransactionDetails($event));
@@ -91,13 +87,14 @@ class PostClientTransactionsToGeneralLedgersSubscriber
 
     /**
      * @param $event
+     *
      * @return array
      */
     private function getTransactionDetails($event)
     {
         return [
-            'user_id' => $event->transaction->user_id,
-            'branch_id' => $event->transaction->branch_id,
+            'user_id'    => $event->transaction->user_id,
+            'branch_id'  => $event->transaction->branch_id,
             'value_date' => $event->transaction->value_date,
         ];
     }

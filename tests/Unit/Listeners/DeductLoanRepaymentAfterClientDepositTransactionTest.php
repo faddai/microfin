@@ -2,9 +2,8 @@
 /**
  * Author: Francis Addai <me@faddai.com>
  * Date: 14/02/2018
- * Time: 3:56 PM
+ * Time: 3:56 PM.
  */
-
 use App\Entities\Client;
 use App\Entities\ClientTransaction;
 use App\Entities\Loan;
@@ -36,12 +35,12 @@ class DeductLoanRepaymentAfterClientDepositTransactionTest extends TestCase
             factory(Loan::class, 'customer')
                 ->states('approved', 'disbursed')
                 ->make([
-                    'disbursed_at' => $disbursalDate,
+                    'disbursed_at'      => $disbursalDate,
                     'repayment_plan_id' => $repaymentPlan->id,
-                    'tenure_id' => Tenure::whereNumberOfMonths(5)->first()->id,
-                    'amount' => 6000,
-                    'rate' => 4.5,
-                    'client_id' => $client->id
+                    'tenure_id'         => Tenure::whereNumberOfMonths(5)->first()->id,
+                    'amount'            => 6000,
+                    'rate'              => 4.5,
+                    'client_id'         => $client->id,
                 ])
                 ->toArray()
         );
@@ -101,12 +100,12 @@ class DeductLoanRepaymentAfterClientDepositTransactionTest extends TestCase
         $loan = factory(Loan::class, 'staff')
             ->states('approved', 'disbursed')
             ->create([
-                'disbursed_at' => $disbursalDate,
+                'disbursed_at'      => $disbursalDate,
                 'repayment_plan_id' => $repaymentPlan->id,
-                'tenure_id' => Tenure::firstOrCreate(['number_of_months' => 5])->id,
-                'amount' => 6000,
-                'rate' => 4.5,
-                'client_id' => $client->id
+                'tenure_id'         => Tenure::firstOrCreate(['number_of_months' => 5])->id,
+                'amount'            => 6000,
+                'rate'              => 4.5,
+                'client_id'         => $client->id,
             ]);
 
         $scheduledRepayments = $this->dispatch(new GenerateLoanRepaymentScheduleJob($loan));
@@ -170,12 +169,12 @@ class DeductLoanRepaymentAfterClientDepositTransactionTest extends TestCase
         $loan = factory(Loan::class, 'staff')
             ->states('approved', 'disbursed')
             ->create([
-                'disbursed_at' => $disbursalDate,
+                'disbursed_at'      => $disbursalDate,
                 'repayment_plan_id' => $repaymentPlan->id,
-                'tenure_id' => Tenure::firstOrCreate(['number_of_months' => 5])->id,
-                'amount' => 6000,
-                'rate' => 4.5,
-                'client_id' => $client->id
+                'tenure_id'         => Tenure::firstOrCreate(['number_of_months' => 5])->id,
+                'amount'            => 6000,
+                'rate'              => 4.5,
+                'client_id'         => $client->id,
             ]);
 
         $schedule = $this->dispatch(new GenerateLoanRepaymentScheduleJob($loan));
@@ -213,7 +212,7 @@ class DeductLoanRepaymentAfterClientDepositTransactionTest extends TestCase
     }
 
     /**
-     * Pay the Outstanding principal of repayment amount to fulfill the full repayment of a loan
+     * Pay the Outstanding principal of repayment amount to fulfill the full repayment of a loan.
      */
     public function test_deduct_loan_repayment_from_client_with_enough_balance_to_pay_outstanding_principal()
     {
@@ -230,12 +229,12 @@ class DeductLoanRepaymentAfterClientDepositTransactionTest extends TestCase
         $loan = factory(Loan::class, 'staff')
             ->states('approved', 'disbursed')
             ->create([
-                'disbursed_at' => $disbursalDate,
+                'disbursed_at'      => $disbursalDate,
                 'repayment_plan_id' => $repaymentPlan->id,
-                'tenure_id' => Tenure::whereNumberOfMonths(2)->first()->id,
-                'amount' => 2000,
-                'rate' => 3,
-                'client_id' => $client->id
+                'tenure_id'         => Tenure::whereNumberOfMonths(2)->first()->id,
+                'amount'            => 2000,
+                'rate'              => 3,
+                'client_id'         => $client->id,
             ]);
 
         $this->dispatch(new GenerateLoanRepaymentScheduleJob($loan));
@@ -280,7 +279,7 @@ class DeductLoanRepaymentAfterClientDepositTransactionTest extends TestCase
     }
 
     /**
-     * Pay the Outstanding interest of repayment amount to fulfill the full repayment of a loan
+     * Pay the Outstanding interest of repayment amount to fulfill the full repayment of a loan.
      */
     public function test_deduct_loan_repayment_from_client_with_enough_balance_to_pay_outstanding_interest()
     {
@@ -297,12 +296,12 @@ class DeductLoanRepaymentAfterClientDepositTransactionTest extends TestCase
         $loan = factory(Loan::class, 'staff')
             ->states('approved', 'disbursed')
             ->create([
-                'disbursed_at' => $disbursalDate,
+                'disbursed_at'      => $disbursalDate,
                 'repayment_plan_id' => $repaymentPlan->id,
-                'tenure_id' => Tenure::firstOrCreate(['number_of_months' => 2])->id,
-                'amount' => 2000,
-                'rate' => 3,
-                'client_id' => $client->id
+                'tenure_id'         => Tenure::firstOrCreate(['number_of_months' => 2])->id,
+                'amount'            => 2000,
+                'rate'              => 3,
+                'client_id'         => $client->id,
             ]);
 
         $this->dispatch(new GenerateLoanRepaymentScheduleJob($loan));
@@ -342,7 +341,7 @@ class DeductLoanRepaymentAfterClientDepositTransactionTest extends TestCase
         self::assertEquals(950, $schedule->getOutstandingRepaymentAmount(false));
         self::assertNull($loan->payments->first());
 
-        /**
+        /*
          * Add another deposit that would allow client to be able to repay the Outstanding
          * Repayment amount.
          */
@@ -366,10 +365,10 @@ class DeductLoanRepaymentAfterClientDepositTransactionTest extends TestCase
             ->states('approved', 'disbursed')
             ->make([
                 'disbursed_at' => Carbon::parse('June 12, 2016'),
-                'tenure_id' => Tenure::firstOrCreate(['number_of_months' => 3])->id,
-                'amount' => 2000,
-                'rate' => 3,
-                'client_id' => factory(Client::class, 'individual')->create(['account_balance' => 1250])->id
+                'tenure_id'    => Tenure::firstOrCreate(['number_of_months' => 3])->id,
+                'amount'       => 2000,
+                'rate'         => 3,
+                'client_id'    => factory(Client::class, 'individual')->create(['account_balance' => 1250])->id,
             ]);
 
         $this->request->merge($loan->toArray());
@@ -416,7 +415,7 @@ class DeductLoanRepaymentAfterClientDepositTransactionTest extends TestCase
                 // associate a client to the loan
                 $loan->fill([
                     'disbursed_at' => Carbon::today()->subMonths(random_int(1, 6)),
-                    'client_id' => factory(Client::class, 'individual')->create(['account_balance' => 0])->id
+                    'client_id'    => factory(Client::class, 'individual')->create(['account_balance' => 0])->id,
                 ]);
 
                 $this->request->replace($loan->toArray());
@@ -429,10 +428,10 @@ class DeductLoanRepaymentAfterClientDepositTransactionTest extends TestCase
                 ->states('approved', 'disbursed')
                 ->make([
                     'disbursed_at' => Carbon::parse('June 12, 2016'),
-                    'tenure_id' => Tenure::firstOrCreate(['number_of_months' => 3])->id,
-                    'amount' => 2000,
-                    'rate' => 3,
-                    'client_id' => factory(Client::class, 'individual')->create(['account_balance' => 0])->id
+                    'tenure_id'    => Tenure::firstOrCreate(['number_of_months' => 3])->id,
+                    'amount'       => 2000,
+                    'rate'         => 3,
+                    'client_id'    => factory(Client::class, 'individual')->create(['account_balance' => 0])->id,
                 ])
                 ->toArray()
         );
@@ -474,12 +473,12 @@ class DeductLoanRepaymentAfterClientDepositTransactionTest extends TestCase
         $loan = factory(Loan::class, 'customer')
             ->states('approved', 'disbursed')
             ->create([
-                'disbursed_at' => $disbursalDate,
+                'disbursed_at'      => $disbursalDate,
                 'repayment_plan_id' => $repaymentPlan->id,
-                'tenure_id' => Tenure::firstOrCreate(['number_of_months' => 5])->id,
-                'amount' => 6000,
-                'rate' => 4.5,
-                'client_id' => $client->id
+                'tenure_id'         => Tenure::firstOrCreate(['number_of_months' => 5])->id,
+                'amount'            => 6000,
+                'rate'              => 4.5,
+                'client_id'         => $client->id,
             ]);
 
         $schedule = $this->dispatch(new GenerateLoanRepaymentScheduleJob($loan));

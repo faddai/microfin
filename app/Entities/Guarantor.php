@@ -8,7 +8,7 @@ class Guarantor extends Model
 {
     protected $fillable = [
         'name', 'work_phone', 'personal_phone', 'employer', 'job_title', 'years_known', 'email',
-        'residential_address', 'loan_id', 'relationship'
+        'residential_address', 'loan_id', 'relationship',
     ];
 
     public function loan()

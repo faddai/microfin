@@ -2,9 +2,8 @@
 /**
  * Author: Francis Addai <me@faddai.com>
  * Date: 29/03/2017
- * Time: 4:02 PM
+ * Time: 4:02 PM.
  */
-
 use App\Entities\Loan;
 use App\Entities\Permission;
 use App\Entities\Role;
@@ -36,5 +35,4 @@ class NotifyUsersWhoCanDisburseLoanListenerTest extends TestCase
 
         Notification::assertSentTo($accountants, LoanApprovedNotification::class);
     }
-
 }

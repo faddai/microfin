@@ -2,13 +2,11 @@
 /**
  * Author: Francis Addai <me@faddai.com>
  * Date: 03/03/2017
- * Time: 02:02
+ * Time: 02:02.
  */
-
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
-
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class AddIsPaidUpfrontColumnToFeesTable extends Migration
 {

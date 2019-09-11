@@ -2,7 +2,7 @@
 /**
  * Author: Francis Addai <me@faddai.com>
  * Date: 25/04/2017
- * Time: 19:49
+ * Time: 19:49.
  */
 
 namespace App\Traits;
@@ -12,7 +12,6 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 
 trait DecoratesReport
 {
-
     use DispatchesJobs;
 
     /**
@@ -33,7 +32,7 @@ trait DecoratesReport
     }
 
     /**
-     * Normalize the collection dates sent in the request
+     * Normalize the collection dates sent in the request.
      *
      * @return void
      */
@@ -45,17 +44,15 @@ trait DecoratesReport
         $endDate = $this->request->has('endDate') ?
             Carbon::parse($this->request->get('endDate')) : Carbon::today()->endOfMonth();
 
-
         $this->request->merge(compact('startDate', 'endDate'));
     }
 
     /**
-     * Normalize the collection date sent in the request
+     * Normalize the collection date sent in the request.
      **/
     private function normalizeAndSetDate()
     {
         try {
-
             $date = Carbon::today();
 
             if ($this->request->has('date') && $this->request->get('date') !== '') {
@@ -63,7 +60,6 @@ trait DecoratesReport
             }
 
             $this->request->merge(compact('date'));
-
         } catch (\InvalidArgumentException $exception) {
             logger()->error('Collection date couldn\'t be formatted');
         }

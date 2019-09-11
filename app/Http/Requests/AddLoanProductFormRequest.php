@@ -24,8 +24,8 @@ class AddLoanProductFormRequest extends FormRequest
     public function rules()
     {
         return [
-            'code' => 'required',
-            'name' => 'required',
+            'code'            => 'required',
+            'name'            => 'required',
             'min_loan_amount' => 'sometimes|bail|numeric',
             'max_loan_amount' => 'sometimes|bail|numeric',
         ];
@@ -34,8 +34,8 @@ class AddLoanProductFormRequest extends FormRequest
     public function messages()
     {
         return [
-            'code.required' => 'The Product code is required',
-            'name.required' => 'The Product name is required',
+            'code.required'           => 'The Product code is required',
+            'name.required'           => 'The Product name is required',
             'min_loan_amount.numeric' => 'The Minimum Loan Amount must be a number',
             'max_loan_amount.numeric' => 'The Maximum Loan Amount must be a number',
         ];

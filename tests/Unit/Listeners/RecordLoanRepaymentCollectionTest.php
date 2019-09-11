@@ -2,24 +2,22 @@
 /**
  * Author: Francis Addai <me@faddai.com>
  * Date: 29/03/2017
- * Time: 3:50 PM
+ * Time: 3:50 PM.
  */
-
 use App\Entities\Client;
 use App\Entities\Loan;
-use App\Jobs\AutomatedLoanRepaymentJob;
 use App\Entities\LoanRepaymentCollection;
+use App\Jobs\AutomatedLoanRepaymentJob;
 use Carbon\Carbon;
 use Tests\TestCase;
 
 class RecordLoanRepaymentCollectionTest extends TestCase
 {
-
     public function test_can_record_amount_collected_as_loan_repayment()
     {
         $loan = factory(Loan::class, 'customer')->create([
             'amount' => 1000,
-            'rate' => 5
+            'rate'   => 5,
         ]);
 
         $this->request->merge(['disbursed_at' => Carbon::today()->subWeekdays(24)]);
@@ -37,8 +35,8 @@ class RecordLoanRepaymentCollectionTest extends TestCase
         $client = factory(Client::class, 'individual')->create(['account_balance' => 0]);
 
         $loan = factory(Loan::class, 'customer')->create([
-            'amount' => 1000,
-            'rate' => 5,
+            'amount'    => 1000,
+            'rate'      => 5,
             'client_id' => $client->id,
         ]);
 

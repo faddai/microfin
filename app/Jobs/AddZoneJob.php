@@ -24,7 +24,7 @@ class AddZoneJob
      * Create a new job instance.
      *
      * @param Request $request
-     * @param Zone $zone
+     * @param Zone    $zone
      */
     public function __construct(Request $request, Zone $zone = null)
     {
@@ -39,7 +39,7 @@ class AddZoneJob
      */
     public function handle()
     {
-        if (! is_null($this->zone)) {
+        if (!is_null($this->zone)) {
             $this->zone->update(['name' => $this->request->get('name')]);
 
             $loan = $this->zone;

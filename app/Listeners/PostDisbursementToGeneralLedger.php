@@ -2,11 +2,10 @@
 /**
  * Author: Francis Addai <me@faddai.com>
  * Date: 05/03/2017
- * Time: 17:20
+ * Time: 17:20.
  */
 
 namespace App\Listeners;
-
 
 use App\Entities\Accounting\Ledger;
 use App\Entities\Fee;
@@ -31,14 +30,15 @@ class PostDisbursementToGeneralLedger
      * When a loan is disbursed, entries are posted to the
      * 1. The ledger designated to the Loan Product to receive Repayments
      * 2. The Current Account
-     * 3. The Income ledger of each of the upfront fees (if any) applied to the loan
+     * 3. The Income ledger of each of the upfront fees (if any) applied to the loan.
      *
      * @param Loan $loan
+     *
      * @return mixed
      */
     private function postTransactionToLedger(Loan $loan)
     {
-        $narration = 'Loan disbursed - ' . $loan->number;
+        $narration = 'Loan disbursed - '.$loan->number;
 
         $entries = collect([
             [
@@ -48,7 +48,7 @@ class PostDisbursementToGeneralLedger
                 'narration' => $narration,
             ],
             [
-                'cr' => $loan->getPrincipalAmount(false) - $loan->getUpfrontFees(false),
+                'cr'        => $loan->getPrincipalAmount(false) - $loan->getUpfrontFees(false),
                 'ledger_id' => Ledger::whereCode(Ledger::CURRENT_ACCOUNT_CODE)->first()->id, // Current Account
                 'narration' => $narration,
             ],
@@ -61,17 +61,17 @@ class PostDisbursementToGeneralLedger
             })
             ->each(function (Fee $fee) use ($entries, $narration) {
                 $entries->push([
-                    'cr' => (float)$fee->pivot->amount,
+                    'cr'        => (float) $fee->pivot->amount,
                     'ledger_id' => $fee->incomeLedger->id,
-                    'narration' => $narration. ' - '. $fee->name,
+                    'narration' => $narration.' - '.$fee->name,
                 ]);
             });
 
         return dispatch_now(new AddLedgerTransactionJob(new Request([
-            'user_id' => $loan->disbursedBy->id,
+            'user_id'   => $loan->disbursedBy->id,
             'branch_id' => $loan->disbursedBy->branch->id,
-            'loan_id' => $loan->id,
-            'entries' => $entries,
+            'loan_id'   => $loan->id,
+            'entries'   => $entries,
         ])));
     }
 }

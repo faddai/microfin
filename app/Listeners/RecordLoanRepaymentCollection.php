@@ -11,7 +11,8 @@ class RecordLoanRepaymentCollection
     /**
      * Handle the event.
      *
-     * @param  LoanRepaymentDeductedEvent  $event
+     * @param LoanRepaymentDeductedEvent $event
+     *
      * @return void
      */
     public function handle(LoanRepaymentDeductedEvent $event)
@@ -24,9 +25,9 @@ class RecordLoanRepaymentCollection
 
         if ($totalPaid > 0) {
             LoanRepaymentCollection::create([
-                'collected_at' => Carbon::now(),
+                'collected_at'      => Carbon::now(),
                 'loan_repayment_id' => $event->currentRepaymentDeduction->id,
-                'amount' => $totalPaid,
+                'amount'            => $totalPaid,
             ]);
         }
     }

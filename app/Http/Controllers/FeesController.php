@@ -2,7 +2,7 @@
 /**
  * Author: Francis Addai <me@faddai.com>
  * Date: 03/03/2017
- * Time: 02:06
+ * Time: 02:06.
  */
 
 namespace App\Http\Controllers;
@@ -18,6 +18,7 @@ class FeesController extends Controller
      * Store a newly created resource in storage.
      *
      * @param AddFeeFormRequest|Request $request
+     *
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function store(AddFeeFormRequest $request)
@@ -27,7 +28,7 @@ class FeesController extends Controller
         } catch (\Exception $exception) {
             logger()->error('An error occurred while creating fee', compact('exception'));
 
-            flash()->error('The fee could not be created. Error: '. $exception->getMessage());
+            flash()->error('The fee could not be created. Error: '.$exception->getMessage());
 
             return redirect(route_with_hash('settings.index', '#fees'))->withInput();
         }
@@ -41,7 +42,8 @@ class FeesController extends Controller
      * Update the specified resource in storage.
      *
      * @param AddFeeFormRequest $request
-     * @param Fee $fee
+     * @param Fee               $fee
+     *
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|\Illuminate\Routing\Redirector
      */
     public function update(AddFeeFormRequest $request, Fee $fee)
@@ -51,7 +53,7 @@ class FeesController extends Controller
         } catch (\Exception $exception) {
             logger()->error('An error occurred while updating fee', compact('exception'));
 
-            flash()->error('The fee could not be updated. Error: '. $exception->getMessage());
+            flash()->error('The fee could not be updated. Error: '.$exception->getMessage());
 
             return redirect(route_with_hash('settings.index', '#fees'))->withInput();
         }
@@ -65,6 +67,7 @@ class FeesController extends Controller
      * Remove the specified resource from storage.
      *
      * @param Fee $fee
+     *
      * @return \Illuminate\Http\Response
      */
     public function destroy(Fee $fee)

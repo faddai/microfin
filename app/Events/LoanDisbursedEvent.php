@@ -2,13 +2,12 @@
 /**
  * Author: Francis Addai <me@faddai.com>
  * Date: 17/01/2017
- * Time: 4:24 PM
+ * Time: 4:24 PM.
  */
 
 namespace App\Events;
 
 use App\Entities\Loan;
-
 
 class LoanDisbursedEvent
 {

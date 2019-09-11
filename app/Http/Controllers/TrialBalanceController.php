@@ -18,7 +18,9 @@ class TrialBalanceController extends Controller
 
     /**
      * @todo Finish implementation of trial balance export
+     *
      * @param Request $request
+     *
      * @return mixed
      */
     public function download(Request $request)
@@ -26,7 +28,7 @@ class TrialBalanceController extends Controller
         $today = Carbon::today();
 
         $options = [
-            'filename' => 'trial-balance-'. $today->format('d-m-Y'),
+            'filename' => 'trial-balance-'.$today->format('d-m-Y'),
         ];
 
         $trial = $this->dispatch(new GetTrialBalanceJob($request));
@@ -35,15 +37,14 @@ class TrialBalanceController extends Controller
         $totalDr = 0;
 
         $trial->transform(function (Ledger $ledger) use (&$totalCr, &$totalDr) {
-
             $closingBalance = $ledger->getClosingBalance(false);
 
             $arr = [
-                'Code' => $ledger->code,
+                'Code'     => $ledger->code,
                 'Category' => $ledger->category->name,
-                'Ledger' => $ledger->name,
-                'Dr' => '',
-                'Cr' => '',
+                'Ledger'   => $ledger->name,
+                'Dr'       => '',
+                'Cr'       => '',
             ];
 
             if ($ledger->isCreditAccount()) {
@@ -68,16 +69,16 @@ class TrialBalanceController extends Controller
         });
 
         $trial->push([
-            'Code' => '',
+            'Code'     => '',
             'Category' => '',
-            'Ledger' => '',
-            'Dr' => number_format($totalDr, 2),
-            'Cr' => number_format($totalCr, 2)
+            'Ledger'   => '',
+            'Dr'       => number_format($totalDr, 2),
+            'Cr'       => number_format($totalCr, 2),
         ]);
 
         $trial->meta = collect([
             'Trial Balance' => '',
-            'Date' => sprintf('"%s"', $today->format(config('microfin.dateFormat'))),
+            'Date'          => sprintf('"%s"', $today->format(config('microfin.dateFormat'))),
         ]);
 
         return $this->export($request, $trial, $options);

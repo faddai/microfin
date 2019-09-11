@@ -5,7 +5,6 @@ use App\Entities\Loan;
 use App\Jobs\AddGuarantorJob;
 use Tests\TestCase;
 
-
 class AddGuarantorJobTest extends TestCase
 {
     public function setUp()
@@ -48,8 +47,8 @@ class AddGuarantorJobTest extends TestCase
 
         $this->request->merge([
             'guarantor_id' => $guarantor->id,
-            'years_known' => 30,
-            'job_title' => 'Web Developer'
+            'years_known'  => 30,
+            'job_title'    => 'Web Developer',
         ]);
 
         $updatedGuarantor = $this->dispatch(new AddGuarantorJob($this->request, $loan));
@@ -62,14 +61,14 @@ class AddGuarantorJobTest extends TestCase
     private function setGuarantorDetails()
     {
         $this->request->merge([
-            'name' => 'Jacob Danso',
-            'work_phone' => faker()->phoneNumber,
-            'personal_phone' => faker()->phoneNumber,
-            'employer' => faker()->company,
-            'job_title' => faker()->jobTitle,
-            'years_known' => random_int(3, 40),
-            'email' => 'jacob@example.com',
-            'residential_address' => faker()->address
+            'name'                => 'Jacob Danso',
+            'work_phone'          => faker()->phoneNumber,
+            'personal_phone'      => faker()->phoneNumber,
+            'employer'            => faker()->company,
+            'job_title'           => faker()->jobTitle,
+            'years_known'         => random_int(3, 40),
+            'email'               => 'jacob@example.com',
+            'residential_address' => faker()->address,
         ]);
     }
 }
