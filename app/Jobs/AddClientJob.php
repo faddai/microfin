@@ -8,7 +8,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
-
 class AddClientJob
 {
     /**
@@ -30,23 +29,24 @@ class AddClientJob
      * Create a new job instance.
      *
      * @param Request $request
-     * @param Client $client
+     * @param Client  $client
      */
     public function __construct(Request $request, Client $client = null)
     {
         $this->request = $request;
         $this->user = $request->user();
         $this->client = $client ?? new Client([
-                'created_by' => $this->user->id,
-                'account_number' => $this->generateClientAccountNumber()
+                'created_by'     => $this->user->id,
+                'account_number' => $this->generateClientAccountNumber(),
             ]);
     }
 
     /**
      * Execute the job.
      *
-     * @return Client
      * @throws \Symfony\Component\HttpKernel\Exception\BadRequestHttpException
+     *
+     * @return Client
      */
     public function handle()
     {
@@ -77,12 +77,13 @@ class AddClientJob
         }
 
         $this->client->save();
-        
+
         return $this->client;
     }
 
     /**
      * @param $client
+     *
      * @throws \Symfony\Component\HttpKernel\Exception\BadRequestHttpException
      *
      * @return Client
@@ -113,10 +114,10 @@ class AddClientJob
 
     private function setIndividualClientName(Client $client)
     {
-        $name = $this->request->get('firstname') .' ';
+        $name = $this->request->get('firstname').' ';
 
         if ($middlename = $this->request->get('middlename')) {
-            $name .= $middlename. ' ';
+            $name .= $middlename.' ';
         }
 
         $name .= $this->request->get('lastname');
@@ -137,14 +138,14 @@ class AddClientJob
     {
         if ($this->request->hasFile('photo')) {
             $photo = $this->request->file('photo');
-            $filename = 'photo_'. $client->account_number. '.' .$photo->extension();
+            $filename = 'photo_'.$client->account_number.'.'.$photo->extension();
 
             $client->update(['photo' => $photo->storeAs('clients', $filename)]);
         }
 
         if ($this->request->hasFile('signature')) {
             $signature = $this->request->file('signature');
-            $filename = 'sign_'. $client->account_number. '.' .$signature->extension();
+            $filename = 'sign_'.$client->account_number.'.'.$signature->extension();
 
             $client->update(['signature' => $signature->storeAs('signatures', $filename)]);
         }
@@ -154,7 +155,7 @@ class AddClientJob
 
     public function generateClientAccountNumber()
     {
-        $lastClient =  Client::all()->last();
+        $lastClient = Client::all()->last();
 
         return null === $lastClient ?
             sprintf('%s00001', $this->request->user()->branch->code) : sprintf('00%d', $lastClient->account_number + 1);

@@ -35,7 +35,7 @@ class GenerateCollateralReportJob implements ReportsInterface
     }
 
     /**
-     * Add logic to retrieve data for this report
+     * Add logic to retrieve data for this report.
      *
      * @return Collection
      */
@@ -44,25 +44,24 @@ class GenerateCollateralReportJob implements ReportsInterface
         Collateral::with('loan.client.clientable', 'loan.product', 'loan.type')
             ->get()
             ->each(function (Collateral $collateral) {
-
                 $this->report->push(collect([
                     'loan' => collect([
-                        'id' => $collateral->loan->id,
-                        'number' => $collateral->loan->number,
+                        'id'             => $collateral->loan->id,
+                        'number'         => $collateral->loan->number,
                         'disbursed_date' => $collateral->loan->disbursed_at ?
                             $collateral->loan->disbursed_at->format(config('microfin.dateFormat')) : 'n/a',
-                        'amount' => $collateral->loan->getPrincipalAmount(),
+                        'amount'  => $collateral->loan->getPrincipalAmount(),
                         'product' => $collateral->loan->product->name,
-                        'type' => $collateral->loan->type->label,
+                        'type'    => $collateral->loan->type->label,
                     ]),
 
                     'client' => collect([
                         'name' => $collateral->loan->client->getFullName(),
-                        'id' => $collateral->loan->client->id
+                        'id'   => $collateral->loan->client->id,
                     ]),
 
-                    'collateral_type' => $collateral->label,
-                    'collateral_value' => number_format($collateral->market_value, 2),
+                    'collateral_type'     => $collateral->label,
+                    'collateral_value'    => number_format($collateral->market_value, 2),
                     'percentage_coverage' => round(($collateral->market_value / $collateral->loan->getPrincipalAmount(false)) * 100, 2),
                 ]));
             });
@@ -75,7 +74,7 @@ class GenerateCollateralReportJob implements ReportsInterface
     }
 
     /**
-     * Returns the title of this report
+     * Returns the title of this report.
      *
      * @return string
      */
@@ -85,7 +84,7 @@ class GenerateCollateralReportJob implements ReportsInterface
     }
 
     /**
-     * Returns the description of this report
+     * Returns the description of this report.
      *
      * @return string
      */
@@ -96,7 +95,7 @@ class GenerateCollateralReportJob implements ReportsInterface
 
     /**
      * Returns the heading used to display report data in HTML table
-     * or exported file formats (CSV, Excel, PDF)
+     * or exported file formats (CSV, Excel, PDF).
      *
      * @return array
      */
@@ -125,28 +124,26 @@ class GenerateCollateralReportJob implements ReportsInterface
         $report->shift();
 
         $_report = $report->map(function (Collection $collection) {
-
             $loan = $collection->get('loan');
 
             return [
-                'Customer Name' => data_get($collection, 'client.name'),
-                'Loan Number' => sprintf('\'%s', $loan->get('number')),
-                'Product' => $loan->get('product'),
-                'Type' => $loan->get('type'),
-                'Disbursed Date' => $loan->get('disbursed_date'),
-                'Loan Amount' => $loan->get('amount'),
-                'Collateral type' => $collection->get('collateral_type'),
+                'Customer Name'     => data_get($collection, 'client.name'),
+                'Loan Number'       => sprintf('\'%s', $loan->get('number')),
+                'Product'           => $loan->get('product'),
+                'Type'              => $loan->get('type'),
+                'Disbursed Date'    => $loan->get('disbursed_date'),
+                'Loan Amount'       => $loan->get('amount'),
+                'Collateral type'   => $collection->get('collateral_type'),
                 'Collaterial Value' => $collection->get('collateral_value'),
-                '% Coverage' => $collection->get('percentage_coverage'),
+                '% Coverage'        => $collection->get('percentage_coverage'),
             ];
         });
 
         $_report->meta = collect([
             $this->getTitle() => '',
-            'Date' => sprintf('"%s"', Carbon::today()->format(config('microfin.dateFormat'))),
+            'Date'            => sprintf('"%s"', Carbon::today()->format(config('microfin.dateFormat'))),
         ]);
 
         return $_report;
     }
-
 }

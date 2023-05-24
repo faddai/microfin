@@ -2,7 +2,7 @@
 /**
  * Author: Francis Addai <me@faddai.com>
  * Date: 17/04/2017
- * Time: 19:57
+ * Time: 19:57.
  */
 
 namespace App\Http\Controllers;
@@ -41,7 +41,6 @@ class IncomeStatementController extends Controller
         $csv->insertOne(',Balance,Budgeted');
 
         $incomeStatement->reverse()->each(function ($group, $ledgerCategoryType) use ($csv) {
-
             $csv->insertOne(sprintf('%s,,', $ledgerCategoryType));
 
             $group->get('ledgers')->each(function (Collection $ledger, $ledgerName) use ($csv) {
@@ -55,16 +54,15 @@ class IncomeStatementController extends Controller
             $csv->insertOne(vsprintf('Total %s,"%s","%s"', [
                 $ledgerCategoryType,
                 number_format($group->get('total'), 2),
-                number_format($group->get('total_budgeted'), 2)
+                number_format($group->get('total_budgeted'), 2),
             ]));
-
         });
 
         $csv->insertOne(',');
 
         $csv->insertOne(vsprintf('Net Profit/Loss,"%s","%s"', [
             number_format($incomeStatement->net_profit->get('balance'), 2),
-            number_format($incomeStatement->net_profit->get('budgeted'), 2)
+            number_format($incomeStatement->net_profit->get('budgeted'), 2),
         ]));
 
         $csv->output($filename);

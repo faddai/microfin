@@ -2,11 +2,10 @@
 /**
  * Author: Francis Addai <me@faddai.com>
  * Date: 03/04/2017
- * Time: 16:41
+ * Time: 16:41.
  */
 
 namespace App\Listeners;
-
 
 use App\Entities\Accounting\Ledger;
 use App\Entities\Fee;
@@ -18,7 +17,6 @@ use Illuminate\Http\Request;
 
 class PostRepaymentDeductionToGeneralLedger
 {
-
     use DispatchesJobs;
 
     /**
@@ -58,24 +56,23 @@ class PostRepaymentDeductionToGeneralLedger
         $this->anActualDeductionHasHappened() && $this->postLedgerTransaction();
     }
 
-
     /**
-     * When a deduction happens, record interest, principal and fee in gl
+     * When a deduction happens, record interest, principal and fee in gl.
      */
     private function postLedgerTransaction()
     {
         logger('Deduction payload:', [
             'principalPaid' => $this->principalPaid,
-            'interestPaid' => $this->interestPaid,
-            'feesPaid' => $this->feesPaid
+            'interestPaid'  => $this->interestPaid,
+            'feesPaid'      => $this->feesPaid,
         ]);
 
-        $narration = 'Loan installment receipt - '. $this->currentDeduction->loan->number;
+        $narration = 'Loan installment receipt - '.$this->currentDeduction->loan->number;
         $sumOfAlreadyPaidFeeAmount = 0;
         $entries = collect();
 
         $entries->push([
-            'dr' => array_sum([$this->principalPaid, $this->interestPaid, $this->feesPaid]),
+            'dr'        => array_sum([$this->principalPaid, $this->interestPaid, $this->feesPaid]),
             'ledger_id' => Ledger::whereCode(Ledger::CURRENT_ACCOUNT_CODE)->first()->id,
             'narration' => $narration,
         ]);
@@ -85,7 +82,7 @@ class PostRepaymentDeductionToGeneralLedger
                 'cr' => $this->interestPaid,
                 // Ledger to collect interest income depending on loan product
                 'ledger_id' => $this->currentDeduction->loan->product->interestReceivableLedger->id,
-                'narration' => $narration .' - interest',
+                'narration' => $narration.' - interest',
             ]);
         }
 
@@ -94,12 +91,12 @@ class PostRepaymentDeductionToGeneralLedger
                 'cr' => $this->principalPaid,
                 // Ledger to collect principal depending on loan product
                 'ledger_id' => $this->currentDeduction->loan->product->principalLedger->id,
-                'narration' => $narration .' - principal',
+                'narration' => $narration.' - principal',
             ]);
         }
 
         // add entries for individual amortized fees
-         $this->feesPaid > 0 && $this->currentDeduction->loan->fees
+        $this->feesPaid > 0 && $this->currentDeduction->loan->fees
             ->reject(function (Fee $fee) use (&$sumOfAlreadyPaidFeeAmount) {
                 return $fee->pivot->is_paid_upfront || $this->feeAmountIsAlreadyPaidInFull($fee, $sumOfAlreadyPaidFeeAmount);
             })
@@ -108,9 +105,9 @@ class PostRepaymentDeductionToGeneralLedger
 
                 $entries->push([
                     // get the individual fee component for repayment
-                    'cr' => $feeDeducted,
+                    'cr'        => $feeDeducted,
                     'ledger_id' => $fee->incomeLedger->id,
-                    'narration' => $narration . ' - ' . $fee->name,
+                    'narration' => $narration.' - '.$fee->name,
                 ]);
 
                 $this->feesPaid -= $feeDeducted;
@@ -118,13 +115,14 @@ class PostRepaymentDeductionToGeneralLedger
 
         $this->dispatch(new AddLedgerTransactionJob(new Request([
             'branch_id' => $this->currentDeduction->loan->createdBy->branch->id,
-            'entries' => $entries,
-            'loan_id' => $this->currentDeduction->loan->id
+            'entries'   => $entries,
+            'loan_id'   => $this->currentDeduction->loan->id,
         ])));
     }
 
     /**
      * @param Fee $fee
+     *
      * @return float|int
      */
     private function getFeeAmountDeducted(Fee $fee)
@@ -135,7 +133,8 @@ class PostRepaymentDeductionToGeneralLedger
     }
 
     /**
-     * Avoid posting 0s to the GL
+     * Avoid posting 0s to the GL.
+     *
      * @return bool
      */
     private function anActualDeductionHasHappened()
@@ -146,8 +145,10 @@ class PostRepaymentDeductionToGeneralLedger
     /**
      * Identify fees which have been paid from previous deduction(s). We don't want to post entries
      * for such fees multiple times.
+     *
      * @param Fee $fee
      * @param $sumOfAlreadyPaidFeeAmount
+     *
      * @return bool
      */
     private function feeAmountIsAlreadyPaidInFull(Fee $fee, &$sumOfAlreadyPaidFeeAmount): bool

@@ -57,7 +57,7 @@ return [
 
     'from' => [
         'address' => 'no-reply@mail.faddai.com',
-        'name' => 'microfin',
+        'name'    => 'microfin',
     ],
 
     /*

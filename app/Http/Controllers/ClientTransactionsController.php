@@ -9,7 +9,6 @@ use App\Jobs\Exports\GetDataForClientTransactionsExport;
 use App\Jobs\GetClientTransactionsJob;
 use Illuminate\Http\Request;
 
-
 class ClientTransactionsController extends Controller
 {
     public function index(Request $request)
@@ -23,14 +22,14 @@ class ClientTransactionsController extends Controller
 
     public function downloadClientTransactions(Request $request, Client $client)
     {
-        $options['filename'] = 'client-transactions-'. $client->account_number;
+        $options['filename'] = 'client-transactions-'.$client->account_number;
         $options['view'] = 'pdf.client_transactions';
         $options['dataKey'] = 'transactions';
 
         $transactions = $this->dispatch(new GetDataForClientTransactionsExport($request, $client));
 
-        if (! $transactions->count()) {
-            throw new NoDataAvailableForExportException;
+        if (!$transactions->count()) {
+            throw new NoDataAvailableForExportException();
         }
 
         return $this->export($request, $transactions, $options);

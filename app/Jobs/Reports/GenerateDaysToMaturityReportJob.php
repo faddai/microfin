@@ -38,7 +38,7 @@ class GenerateDaysToMaturityReportJob implements ReportsInterface
     }
 
     /**
-     * Add logic to retrieve data for this report
+     * Add logic to retrieve data for this report.
      *
      * @return Collection
      */
@@ -46,27 +46,26 @@ class GenerateDaysToMaturityReportJob implements ReportsInterface
     {
         Loan::daysToMaturity($this->request)
             ->each(function (Loan $loan) {
-
                 $diffInDays = Carbon::today()->diffInWeekdays($loan->maturity_date, false);
 
                 $this->report->push(collect([
                     'loan' => collect([
-                        'id' => $loan->id,
-                        'number' => $loan->number,
+                        'id'             => $loan->id,
+                        'number'         => $loan->number,
                         'disbursed_date' => $loan->disbursed_at ?
                             $loan->disbursed_at->format(config('microfin.dateFormat')) : 'n/a',
-                        'amount' => $loan->getPrincipalAmount(),
-                        'product' => $loan->product->name,
-                        'type' => $loan->type->label,
+                        'amount'   => $loan->getPrincipalAmount(),
+                        'product'  => $loan->product->name,
+                        'type'     => $loan->type->label,
                         'maturity' => $loan->maturity_date->format(config('microfin.dateFormat')),
                     ]),
 
                     'client' => collect([
                         'name' => $loan->client->getFullName(),
-                        'id' => $loan->client->id
+                        'id'   => $loan->client->id,
                     ]),
 
-                    'days' => $diffInDays
+                    'days' => $diffInDays,
                 ]));
 
                 $this->report->totals->put('amount', $this->report->totals->get('amount') + $loan->amount);
@@ -80,7 +79,7 @@ class GenerateDaysToMaturityReportJob implements ReportsInterface
     }
 
     /**
-     * Returns the title of this report
+     * Returns the title of this report.
      *
      * @return string
      */
@@ -90,18 +89,18 @@ class GenerateDaysToMaturityReportJob implements ReportsInterface
     }
 
     /**
-     * Returns the description of this report
+     * Returns the description of this report.
      *
      * @return string
      */
     public function getDescription(): string
     {
-        return $this->getTitle(). ' as at '. $this->request->get('date')->format(config('microfin.dateFormat'));
+        return $this->getTitle().' as at '.$this->request->get('date')->format(config('microfin.dateFormat'));
     }
 
     /**
      * Returns the heading used to display report data in HTML table
-     * or exported file formats (CSV, Excel, PDF)
+     * or exported file formats (CSV, Excel, PDF).
      *
      * @return array
      */
@@ -129,18 +128,17 @@ class GenerateDaysToMaturityReportJob implements ReportsInterface
         $report->shift();
 
         $_report = $report->map(function (Collection $collection) {
-
             $loan = $collection->get('loan');
 
             return [
-                'Customer Name' => data_get($collection, 'client.name'),
-                'Loan Number' => sprintf('\'%s', $loan->get('number')),
-                'Product' => $loan->get('product'),
-                'Type' => $loan->get('type'),
-                'Disbursed Date' => $loan->get('disbursed_date'),
-                'Loan Amount' => $loan->get('amount'),
+                'Customer Name'    => data_get($collection, 'client.name'),
+                'Loan Number'      => sprintf('\'%s', $loan->get('number')),
+                'Product'          => $loan->get('product'),
+                'Type'             => $loan->get('type'),
+                'Disbursed Date'   => $loan->get('disbursed_date'),
+                'Loan Amount'      => $loan->get('amount'),
                 'Days to Maturity' => $collection->get('days'),
-                'Maturity date' => $loan->get('maturity'),
+                'Maturity date'    => $loan->get('maturity'),
             ];
         });
 
@@ -153,5 +151,4 @@ class GenerateDaysToMaturityReportJob implements ReportsInterface
 
         return $_report;
     }
-
 }

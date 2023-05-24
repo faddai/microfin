@@ -6,7 +6,6 @@ use App\Entities\Accounting\LedgerCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-
 class AddLedgerCategoryJob
 {
     /**
@@ -22,13 +21,13 @@ class AddLedgerCategoryJob
     /**
      * Create a new job instance.
      *
-     * @param Request $request
+     * @param Request        $request
      * @param LedgerCategory $category
      */
     public function __construct(Request $request, LedgerCategory $category = null)
     {
         $this->request = $request;
-        $this->category = $category ?? new LedgerCategory;
+        $this->category = $category ?? new LedgerCategory();
     }
 
     /**

@@ -2,7 +2,7 @@
 /**
  * Author: Francis Addai <me@faddai.com>
  * Date: 05/02/2017
- * Time: 1:57 PM
+ * Time: 1:57 PM.
  */
 
 namespace App\Entities\InterestCalculations;
@@ -12,7 +12,6 @@ use App\Jobs\AddLoanRepaymentJob;
 use App\Traits\LoanInterestCalculation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
-
 
 class StraightLineInterestCalculationStrategy implements LoanInterestCalculationStrategyInterface
 {
@@ -25,6 +24,7 @@ class StraightLineInterestCalculationStrategy implements LoanInterestCalculation
 
     /**
      * StraightLineInterestCalculationStrategy constructor.
+     *
      * @param Loan $loan
      */
     public function __construct(Loan $loan)
@@ -34,7 +34,7 @@ class StraightLineInterestCalculationStrategy implements LoanInterestCalculation
 
     /**
      * Generate a repayment schedule for this Loan using Straight
-     * Line to calculate interest
+     * Line to calculate interest.
      *
      * @return Collection
      */
@@ -54,12 +54,12 @@ class StraightLineInterestCalculationStrategy implements LoanInterestCalculation
             $principal = $this->getPrincipalOnRepayment($repaymentAmount, $interest);
 
             $request = new Request([
-                'loan_id' => $this->loan->id,
-                'amount' => $repaymentAmount,
+                'loan_id'   => $this->loan->id,
+                'amount'    => $repaymentAmount,
                 'principal' => $principal,
-                'interest' => $interest,
-                'fees' => $this->loan->getFeesComponentOnRepayment(),
-                'due_date' => $dueDate
+                'interest'  => $interest,
+                'fees'      => $this->loan->getFeesComponentOnRepayment(),
+                'due_date'  => $dueDate,
             ]);
 
             $repayments->push($this->dispatch(new AddLoanRepaymentJob($request)));

@@ -3,7 +3,7 @@
 /**
  * Author: Francis Addai <me@faddai.com>
  * Date: 28/10/2016
- * Time: 23:21
+ * Time: 23:21.
  */
 
 namespace App\ViewComposers;
@@ -14,14 +14,13 @@ use App\Entities\Fee;
 use App\Entities\LoanProduct;
 use Illuminate\View\View;
 
-
 class AuthPagesViewComposer
 {
-
     /**
-     * Cache common data needed in the view
+     * Cache common data needed in the view.
      *
      * @param View $view
+     *
      * @return View
      */
     public function compose(View $view)
@@ -52,5 +51,4 @@ class AuthPagesViewComposer
 
         return $view->with(compact('authUser', 'branches', 'identificationTypes', 'countries', 'currency', 'products'));
     }
-
 }

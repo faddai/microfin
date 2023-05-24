@@ -2,13 +2,11 @@
 /**
  * Author: Francis Addai <me@faddai.com>
  * Date: 26/02/2017
- * Time: 16:39
+ * Time: 16:39.
  */
-
 use App\Entities\LoanProduct;
 use App\Jobs\AddLoanProductJob;
 use Tests\TestCase;
-
 
 class AddLoanProductJobTest extends TestCase
 {
@@ -33,7 +31,7 @@ class AddLoanProductJobTest extends TestCase
 
         $this->request->merge([
             'name' => 'Government Officials',
-            'code' => 11122
+            'code' => 11122,
         ]);
 
         $product = $this->dispatch(new AddLoanProductJob($this->request, $product));

@@ -2,9 +2,8 @@
 /**
  * Author: Francis Addai <me@faddai.com>
  * Date: 27/02/2017
- * Time: 16:30
+ * Time: 16:30.
  */
-
 use App\Entities\Accounting\LedgerTransaction;
 use App\Entities\Loan;
 use App\Entities\LoanProduct;
@@ -14,7 +13,6 @@ use App\Jobs\AddLoanJob;
 use App\Jobs\PostDailyInterestAccruedToGeneralLedgerJob;
 use Carbon\Carbon;
 use Tests\TestCase;
-
 
 class PostDailyInterestAccruedToGeneralLedgerJobTest extends TestCase
 {
@@ -27,10 +25,10 @@ class PostDailyInterestAccruedToGeneralLedgerJobTest extends TestCase
             factory(Loan::class, 'customer')
                 ->states('approved', 'disbursed')
                 ->make([
-                    'amount' => 10000,
-                    'disbursed_at' => Carbon::parse('Nov 15, 2016'),
-                    'rate' => 9,
-                    'tenure_id' => Tenure::firstOrCreate(['number_of_months' => 3])->id,
+                    'amount'                        => 10000,
+                    'disbursed_at'                  => Carbon::parse('Nov 15, 2016'),
+                    'rate'                          => 9,
+                    'tenure_id'                     => Tenure::firstOrCreate(['number_of_months' => 3])->id,
                     'interest_calculation_strategy' => Loan::REDUCING_BALANCE_STRATEGY,
                 ])
                 ->toArray()
@@ -48,7 +46,7 @@ class PostDailyInterestAccruedToGeneralLedgerJobTest extends TestCase
 
     public function test_does_not_auto_accrue_interest_on_loans_that_have_reached_their_maturity_date()
     {
-        /**
+        /*
          * Create a backdated (matured) loan and attempt to accrue its daily interest
          * No accrual date is passed, defaults to today
          */
@@ -59,10 +57,10 @@ class PostDailyInterestAccruedToGeneralLedgerJobTest extends TestCase
             factory(Loan::class, 'customer')
                 ->states('approved', 'disbursed')
                 ->make([
-                    'amount' => 10000,
-                    'disbursed_at' => Carbon::parse('Nov 15, 2016'),
-                    'rate' => 9,
-                    'tenure_id' => Tenure::firstOrCreate(['number_of_months' => 3])->id,
+                    'amount'                        => 10000,
+                    'disbursed_at'                  => Carbon::parse('Nov 15, 2016'),
+                    'rate'                          => 9,
+                    'tenure_id'                     => Tenure::firstOrCreate(['number_of_months' => 3])->id,
                     'interest_calculation_strategy' => Loan::REDUCING_BALANCE_STRATEGY,
                 ])
                 ->toArray()
@@ -73,7 +71,7 @@ class PostDailyInterestAccruedToGeneralLedgerJobTest extends TestCase
         self::assertInstanceOf(Loan::class, $loan);
         self::assertCount(1, Loan::running());
 
-        $processed = $this->dispatch(new PostDailyInterestAccruedToGeneralLedgerJob);
+        $processed = $this->dispatch(new PostDailyInterestAccruedToGeneralLedgerJob());
 
         self::assertEquals(0, $processed);
     }
@@ -88,14 +86,15 @@ class PostDailyInterestAccruedToGeneralLedgerJobTest extends TestCase
         factory(Loan::class, 'customer', 3)
             ->states('approved', 'disbursed')
             ->make([
-                'amount' => 10000,
-                'disbursed_at' => $disbursedAt,
-                'rate' => 9,
-                'tenure_id' => Tenure::firstOrCreate(['number_of_months' => 3])->id,
+                'amount'                        => 10000,
+                'disbursed_at'                  => $disbursedAt,
+                'rate'                          => 9,
+                'tenure_id'                     => Tenure::firstOrCreate(['number_of_months' => 3])->id,
                 'interest_calculation_strategy' => Loan::REDUCING_BALANCE_STRATEGY,
             ])
             ->map(function (Loan $loan) {
                 $loan->amount = faker()->randomNumber(6);
+
                 return $loan;
             })
             ->each(function (Loan $loan) {
@@ -129,13 +128,13 @@ class PostDailyInterestAccruedToGeneralLedgerJobTest extends TestCase
             factory(Loan::class)
                 ->states('approved', 'disbursed')
                 ->make([
-                    'amount' => 10000,
-                    'disbursed_at' => Carbon::parse('3 months ago'),
-                    'rate' => 9,
-                    'tenure_id' => Tenure::firstOrCreate(['number_of_months' => 5])->id,
-                    'repayment_plan_id' => RepaymentPlan::firstOrCreate(['label' => RepaymentPlan::MONTHLY])->id,
+                    'amount'                        => 10000,
+                    'disbursed_at'                  => Carbon::parse('3 months ago'),
+                    'rate'                          => 9,
+                    'tenure_id'                     => Tenure::firstOrCreate(['number_of_months' => 5])->id,
+                    'repayment_plan_id'             => RepaymentPlan::firstOrCreate(['label' => RepaymentPlan::MONTHLY])->id,
                     'interest_calculation_strategy' => Loan::REDUCING_BALANCE_STRATEGY,
-                    'loan_product_id' => factory(LoanProduct::class)->create(['name' => 'ZZZ', 'code' => 2119])->id,
+                    'loan_product_id'               => factory(LoanProduct::class)->create(['name' => 'ZZZ', 'code' => 2119])->id,
                 ])
                 ->toArray()
         );
@@ -145,6 +144,6 @@ class PostDailyInterestAccruedToGeneralLedgerJobTest extends TestCase
         // let's make sure there is at least 1 running loan
         self::assertCount(1, Loan::running());
 
-        $this->dispatch(new PostDailyInterestAccruedToGeneralLedgerJob);
+        $this->dispatch(new PostDailyInterestAccruedToGeneralLedgerJob());
     }
 }

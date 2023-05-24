@@ -3,7 +3,7 @@
 /**
  * Author: Francis Addai <me@faddai.com>
  * Date: 15/10/2016
- * Time: 23:14
+ * Time: 23:14.
  */
 
 namespace App\Jobs;
@@ -28,13 +28,13 @@ class AddLoanRepaymentJob
     /**
      * Create a new job instance.
      *
-     * @param Request $request
+     * @param Request       $request
      * @param LoanRepayment $repayment
      */
     public function __construct(Request $request, LoanRepayment $repayment = null)
     {
         $this->request = $request;
-        $this->repayment = $repayment ?? new LoanRepayment;
+        $this->repayment = $repayment ?? new LoanRepayment();
     }
 
     /**

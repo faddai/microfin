@@ -2,11 +2,10 @@
 /**
  * Author: Francis Addai <me@faddai.com>
  * Date: 08/04/2017
- * Time: 19:51
+ * Time: 19:51.
  */
 
 namespace App\Listeners;
-
 
 use App\Events\LoanRepaymentDeductedEvent;
 use App\Jobs\AddLoanStatementEntryJob;
@@ -15,12 +14,13 @@ use Illuminate\Http\Request;
 
 class PostLoanRepaymentDeductionToLoanAccountStatement
 {
-
     use DispatchesJobs;
 
     /**
-     * When a loan repayment is deducted, record total amount paid as Credit
+     * When a loan repayment is deducted, record total amount paid as Credit.
+     *
      * @param LoanRepaymentDeductedEvent $event
+     *
      * @return mixed
      */
     public function handle(LoanRepaymentDeductedEvent $event)
@@ -32,7 +32,7 @@ class PostLoanRepaymentDeductionToLoanAccountStatement
         $totalPaid = array_sum([$paidPrincipal, $paidInterest, $paidFees]);
 
         $request = new Request([
-            'cr' => $totalPaid,
+            'cr'        => $totalPaid,
             'narration' => 'Loan installment receipt',
         ]);
 

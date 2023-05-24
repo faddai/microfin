@@ -8,7 +8,6 @@ use App\Jobs\AddClientWithdrawalJob;
 use Carbon\Carbon;
 use Tests\TestCase;
 
-
 class AddClientWithdrawalJobTest extends TestCase
 {
     public function test_withdrawals_fires_appropriate_event()

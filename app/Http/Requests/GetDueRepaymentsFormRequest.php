@@ -24,9 +24,9 @@ class GetDueRepaymentsFormRequest extends FormRequest
     public function rules()
     {
         return [
-            'startDate' => 'date',
-            'endDate' => 'date',
-            'credit_officer' => 'numeric|exists:users,id'
+            'startDate'      => 'date',
+            'endDate'        => 'date',
+            'credit_officer' => 'numeric|exists:users,id',
         ];
     }
 }

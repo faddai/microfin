@@ -6,7 +6,6 @@ use App\Entities\LoanProduct;
 use App\Http\Requests\AddLoanProductFormRequest;
 use App\Jobs\AddLoanProductJob;
 
-
 class LoanProductsController extends Controller
 {
     public function store(AddLoanProductFormRequest $request)
@@ -16,7 +15,7 @@ class LoanProductsController extends Controller
         } catch (\Exception $exception) {
             logger()->error('Loan product could not be added.', compact('exception'));
 
-            flash()->error('Loan product could not be added. Please try again. Error: '. $exception->getMessage());
+            flash()->error('Loan product could not be added. Please try again. Error: '.$exception->getMessage());
 
             return back()->withInput();
         }
@@ -33,7 +32,7 @@ class LoanProductsController extends Controller
         } catch (\Exception $exception) {
             logger()->error('Loan product could not be updated.', compact('exception'));
 
-            flash()->error('Loan product could not be updated. Please try again. Error: '. $exception->getMessage());
+            flash()->error('Loan product could not be updated. Please try again. Error: '.$exception->getMessage());
 
             return back()->withInput();
         }
@@ -52,7 +51,7 @@ class LoanProductsController extends Controller
         } catch (\Exception $exception) {
             logger()->error('Loan product could not be deleted.', compact('exception'));
 
-            flash()->error('Loan product could not be deleted. Please try again. Error: ' . $exception->getMessage());
+            flash()->error('Loan product could not be deleted. Please try again. Error: '.$exception->getMessage());
         }
 
         flash()->success('Loan product has been successfully deleted');

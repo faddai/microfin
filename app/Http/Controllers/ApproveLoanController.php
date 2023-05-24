@@ -4,10 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Entities\Loan;
 use App\Jobs\ApproveLoanJob;
-use App\Jobs\GetApprovedLoansJob;
 use App\Jobs\LoanSearchJob;
 use Illuminate\Http\Request;
-
 
 class ApproveLoanController extends Controller
 {

@@ -2,11 +2,10 @@
 /**
  * Author: Francis Addai <me@faddai.com>
  * Date: 15/04/2017
- * Time: 22:34
+ * Time: 22:34.
  */
 
 namespace App\Scopes;
-
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -21,6 +20,7 @@ class OrderByCreatedAtScope implements Scope
 
     /**
      * OrderByCreatedAtScope constructor.
+     *
      * @param string $direction
      */
     public function __construct(string $direction = 'ASC')
@@ -31,8 +31,9 @@ class OrderByCreatedAtScope implements Scope
     /**
      * Apply the scope to a given Eloquent query builder.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder $builder
-     * @param  \Illuminate\Database\Eloquent\Model $model
+     * @param \Illuminate\Database\Eloquent\Builder $builder
+     * @param \Illuminate\Database\Eloquent\Model   $model
+     *
      * @return void
      */
     public function apply(Builder $builder, Model $model)

@@ -5,7 +5,6 @@ namespace App\Jobs\Reports;
 use App\Contracts\ReportsInterface;
 use App\Entities\Loan;
 use App\Traits\DecoratesReport;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 
@@ -37,7 +36,7 @@ class GenerateBusinessSectorReportJob implements ReportsInterface
     }
 
     /**
-     * Add logic to retrieve data for this report
+     * Add logic to retrieve data for this report.
      *
      * @return Collection
      */
@@ -49,18 +48,18 @@ class GenerateBusinessSectorReportJob implements ReportsInterface
             ->each(function (Loan $loan) {
                 $this->report->push(collect([
                     'loan' => collect([
-                        'id' => $loan->id,
-                        'number' => $loan->number,
-                        'amount' => $loan->getPrincipalAmount(),
+                        'id'           => $loan->id,
+                        'number'       => $loan->number,
+                        'amount'       => $loan->getPrincipalAmount(),
                         'disbursed_at' => $loan->disbursed_at->format(config('microfin.dateFormat')),
-                        'product' => $loan->product->getDisplayName(),
-                        'maturity' => $loan->maturity_date->format(config('microfin.dateFormat')),
-                        'sector' => $loan->sector->name,
-                        'type' => $loan->type->label,
+                        'product'      => $loan->product->getDisplayName(),
+                        'maturity'     => $loan->maturity_date->format(config('microfin.dateFormat')),
+                        'sector'       => $loan->sector->name,
+                        'type'         => $loan->type->label,
                     ]),
 
                     'client' => collect([
-                        'id' => $loan->id,
+                        'id'   => $loan->id,
                         'name' => $loan->client->getFullName(),
                     ]),
                 ]));
@@ -75,11 +74,10 @@ class GenerateBusinessSectorReportJob implements ReportsInterface
         $this->prependHeaderToReport();
 
         return $this->report;
-
     }
 
     /**
-     * Returns the title of this report
+     * Returns the title of this report.
      *
      * @return string
      */
@@ -89,18 +87,18 @@ class GenerateBusinessSectorReportJob implements ReportsInterface
     }
 
     /**
-     * Returns the description of this report
+     * Returns the description of this report.
      *
      * @return string
      */
     public function getDescription(): string
     {
-        return $this->getTitle(). ' for Disbursed Loans as at '. $this->request->get('date')->format(config('microfin.dateFormat'));
+        return $this->getTitle().' for Disbursed Loans as at '.$this->request->get('date')->format(config('microfin.dateFormat'));
     }
 
     /**
      * Returns the heading used to display report data in HTML table
-     * or exported file formats (CSV, Excel, PDF)
+     * or exported file formats (CSV, Excel, PDF).
      *
      * @return array
      */
@@ -128,18 +126,17 @@ class GenerateBusinessSectorReportJob implements ReportsInterface
         $report->shift();
 
         $_report = $report->map(function (Collection $collection) {
-
             $loan = $collection->get('loan');
 
             return [
-                'Name' => data_get($collection, 'client.name'),
-                'Loan Number' => sprintf("'%s", $loan->get('number')),
-                'Product' => $loan->get('product'),
-                'Type' => $loan->get('type'),
+                'Name'           => data_get($collection, 'client.name'),
+                'Loan Number'    => sprintf("'%s", $loan->get('number')),
+                'Product'        => $loan->get('product'),
+                'Type'           => $loan->get('type'),
                 'Disbursed Date' => $loan->get('disbursed_at'),
-                'Loan Amount' => $loan->get('amount'),
-                'Sector' => $loan->get('sector'),
-                'Maturity' => $loan->get('maturity'),
+                'Loan Amount'    => $loan->get('amount'),
+                'Sector'         => $loan->get('sector'),
+                'Maturity'       => $loan->get('maturity'),
             ];
         });
 
@@ -152,5 +149,4 @@ class GenerateBusinessSectorReportJob implements ReportsInterface
 
         return $_report;
     }
-
 }

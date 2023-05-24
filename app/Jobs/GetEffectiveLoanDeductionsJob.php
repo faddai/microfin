@@ -6,7 +6,6 @@ use App\Entities\LoanRepayment;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
-
 class GetEffectiveLoanDeductionsJob
 {
     /**

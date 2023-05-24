@@ -6,14 +6,13 @@ use App\Entities\Collateral;
 use App\Entities\Loan;
 use Illuminate\Http\Request;
 
-
 class AddCollateralJob
 {
     /**
      * @var Request
      */
     private $request;
-    
+
     /**
      * @var Loan
      */
@@ -23,7 +22,7 @@ class AddCollateralJob
      * Create a new job instance.
      *
      * @param Request $request
-     * @param Loan $loan
+     * @param Loan    $loan
      */
     public function __construct(Request $request, Loan $loan)
     {
@@ -53,6 +52,5 @@ class AddCollateralJob
         $collateral->save();
 
         return $collateral;
-
     }
 }

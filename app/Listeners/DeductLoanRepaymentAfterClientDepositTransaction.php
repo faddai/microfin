@@ -8,28 +8,26 @@ use App\Events\LoanRepaymentDeductedEvent;
 
 class DeductLoanRepaymentAfterClientDepositTransaction
 {
-
     /**
      * Handle the event.
      *
-     * @param  DepositAddedEvent $event
-     * @return void
+     * @param DepositAddedEvent $event
+     *
      * @throws \App\Exceptions\InsufficientAccountBalanceException
+     *
+     * @return void
      */
     public function handle(DepositAddedEvent $event)
     {
         // get repayments belonging to the client in this transaction
         LoanRepayment::getDueRepaymentsForAClient($event->transaction->client)->each(function (LoanRepayment $repayment) {
-
             if ($repayment->loan->client->isDeductable()) {
-
                 $repaymentBeforeDeduction = $repayment->replicate();
 
                 $repayment->deductFromClientAccountBalance();
 
                 event(new LoanRepaymentDeductedEvent($repaymentBeforeDeduction, $repayment));
             }
-
         });
     }
 }

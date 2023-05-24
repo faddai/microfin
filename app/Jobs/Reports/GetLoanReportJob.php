@@ -10,7 +10,6 @@ use Illuminate\Support\Str;
 
 class GetLoanReportJob
 {
-
     use DispatchesJobs;
 
     /**
@@ -26,7 +25,7 @@ class GetLoanReportJob
      * Create a new job instance.
      *
      * @param Request $request
-     * @param string $report
+     * @param string  $report
      */
     public function __construct(Request $request, string $report)
     {
@@ -37,25 +36,26 @@ class GetLoanReportJob
     /**
      * Execute the job.
      *
-     * @return Collection
      * @throws \Exception
      * @throws ReportJobClassNotDefinedException
+     *
+     * @return Collection
      */
     public function handle()
     {
         // look up for the job that needs to work on this report
-        $job = 'App\\Jobs\\Reports\\'. Str::studly(sprintf('generate_%s_report_job', $this->report));
+        $job = 'App\\Jobs\\Reports\\'.Str::studly(sprintf('generate_%s_report_job', $this->report));
 
-        if (! class_exists($job)) {
+        if (!class_exists($job)) {
             throw new ReportJobClassNotDefinedException($job);
         }
 
         // a download request
         if ($this->isReportDownloadRequest()) {
             $object = new $job($this->request);
-            $method = 'downloadAs'. ucfirst(strtolower($this->request->get('format')));
+            $method = 'downloadAs'.ucfirst(strtolower($this->request->get('format')));
 
-            if (! method_exists($object, $method)) {
+            if (!method_exists($object, $method)) {
                 throw new \Exception(sprintf('Method "%s" has not been defined', $method));
             }
 

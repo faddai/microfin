@@ -35,8 +35,8 @@ class ResetPasswordController extends Controller
     public function rules()
     {
         return [
-            'token' => 'required',
-            'email' => 'required|email',
+            'token'    => 'required',
+            'email'    => 'required|email',
             'password' => 'required|confirmed|min:8|case_diff|symbols|numbers|letters',
         ];
     }

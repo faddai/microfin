@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Entities\BusinessSector;
 use App\Entities\LoanType;
 use App\Entities\User;
-use App\Jobs\Reports\GenerateLoanBookReportJob;
 use App\Jobs\Reports\GetLoanReportJob;
 use App\Jobs\Reports\GetLoanReportListJob;
 use Carbon\Carbon;
@@ -36,9 +35,9 @@ class LoanReportsController extends Controller
     public function download(Request $request, $report)
     {
         $options = [
-            'view' => 'pdf.'. str_slug($report, '_'),
-            'dataKey' => 'report',
-            'filename' => sprintf('%s-%s', $report, Carbon::today()->format('Y-m-d'))
+            'view'     => 'pdf.'.str_slug($report, '_'),
+            'dataKey'  => 'report',
+            'filename' => sprintf('%s-%s', $report, Carbon::today()->format('Y-m-d')),
         ];
 
         $report = $this->dispatch(new GetLoanReportJob($request, $report));

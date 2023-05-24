@@ -13,6 +13,7 @@ class BranchesController extends Controller
      * Store a newly created resource in storage.
      *
      * @param AddBranchFormRequest|Request $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function store(AddBranchFormRequest $request)
@@ -36,7 +37,8 @@ class BranchesController extends Controller
      * Remove the specified resource from storage.
      *
      * @param AddBranchFormRequest $request
-     * @param Branch $branch
+     * @param Branch               $branch
+     *
      * @return \Illuminate\Http\Response
      */
     public function destroy(AddBranchFormRequest $request, Branch $branch)

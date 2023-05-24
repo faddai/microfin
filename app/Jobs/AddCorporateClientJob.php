@@ -23,7 +23,7 @@ class AddCorporateClientJob
     /**
      * Create a new job instance.
      *
-     * @param Request $request
+     * @param Request         $request
      * @param CorporateClient $client
      */
     public function __construct(Request $request, CorporateClient $client = null)

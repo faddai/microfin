@@ -2,8 +2,9 @@
 /**
  * Author: Francis Addai <me@faddai.com>
  * Date: 06/11/2016
- * Time: 1:49 PM
+ * Time: 1:49 PM.
  */
+
 namespace Tests\Unit;
 
 use App\Entities\Loan;
@@ -23,12 +24,12 @@ class ReducingBalanceInterestCalculationStrategyTest extends TestCase
         $repaymentPlan = RepaymentPlan::firstOrCreate(['label' => RepaymentPlan::MONTHLY]);
 
         $loan = factory(Loan::class)->make([
-            'amount' => 10000,
-            'tenure_id' => Tenure::firstOrCreate(['number_of_months' => 24])->id,
-            'repayment_plan_id' => $repaymentPlan->id,
-            'rate' => 9,
+            'amount'                        => 10000,
+            'tenure_id'                     => Tenure::firstOrCreate(['number_of_months' => 24])->id,
+            'repayment_plan_id'             => $repaymentPlan->id,
+            'rate'                          => 9,
             'interest_calculation_strategy' => Loan::REDUCING_BALANCE_STRATEGY,
-            'fees' => [['rate' => 17, 'id' => 2]],
+            'fees'                          => [['rate' => 17, 'id' => 2]],
         ]);
 
         $this->request->merge($loan->toArray());
@@ -62,12 +63,12 @@ class ReducingBalanceInterestCalculationStrategyTest extends TestCase
         $repaymentPlan = RepaymentPlan::firstOrCreate(['label' => RepaymentPlan::WEEKLY]);
 
         $loan = factory(Loan::class)->make([
-            'amount' => 10000,
-            'tenure_id' => Tenure::firstOrCreate(['number_of_months' => 24])->id,
-            'repayment_plan_id' => $repaymentPlan->id,
-            'rate' => 9,
+            'amount'                        => 10000,
+            'tenure_id'                     => Tenure::firstOrCreate(['number_of_months' => 24])->id,
+            'repayment_plan_id'             => $repaymentPlan->id,
+            'rate'                          => 9,
             'interest_calculation_strategy' => Loan::REDUCING_BALANCE_STRATEGY,
-            'fees' => [['rate' => 17, 'id' => 2]],
+            'fees'                          => [['rate' => 17, 'id' => 2]],
         ]);
 
         $this->request->merge($loan->toArray());
@@ -99,9 +100,9 @@ class ReducingBalanceInterestCalculationStrategyTest extends TestCase
         $this->request->merge(
             factory(Loan::class, 'staff')
                 ->make([
-                    'amount' => 6000,
-                    'rate' => 2,
-                    'tenure_id' => Tenure::whereNumberOfMonths(6)->first()->id,
+                    'amount'                        => 6000,
+                    'rate'                          => 2,
+                    'tenure_id'                     => Tenure::whereNumberOfMonths(6)->first()->id,
                     'interest_calculation_strategy' => Loan::REDUCING_BALANCE_STRATEGY,
                 ])
                 ->toArray()
@@ -115,8 +116,8 @@ class ReducingBalanceInterestCalculationStrategyTest extends TestCase
     /**
      * @todo fix test
      */
-    public function _able_to_generate_correct_loan_repayments_schedule_for_after_disbursing_loan() {
-
+    public function _able_to_generate_correct_loan_repayments_schedule_for_after_disbursing_loan()
+    {
         $this->setAuthenticatedUserForRequest();
 
         $reducingBalanceSchedule = $this->getSampleReducingBalanceSchedule();
@@ -124,13 +125,13 @@ class ReducingBalanceInterestCalculationStrategyTest extends TestCase
         $loan = factory(Loan::class)
             ->states('approved', 'disbursed')
             ->make([
-                'disbursed_at' => Carbon::parse('Jan 03, 2017'),
-                'amount' => 10000,
-                'tenure_id' => Tenure::firstOrCreate(['number_of_months' => 24])->id,
-                'repayment_plan_id' => RepaymentPlan::firstOrCreate(['label' => RepaymentPlan::MONTHLY])->id,
-                'rate' => 9,
+                'disbursed_at'                  => Carbon::parse('Jan 03, 2017'),
+                'amount'                        => 10000,
+                'tenure_id'                     => Tenure::firstOrCreate(['number_of_months' => 24])->id,
+                'repayment_plan_id'             => RepaymentPlan::firstOrCreate(['label' => RepaymentPlan::MONTHLY])->id,
+                'rate'                          => 9,
                 'interest_calculation_strategy' => Loan::REDUCING_BALANCE_STRATEGY,
-                'fees' => [['rate' => 17, 'id' => 2]],
+                'fees'                          => [['rate' => 17, 'id' => 2]],
             ]);
 
         $this->request->merge($loan->toArray());
@@ -144,14 +145,13 @@ class ReducingBalanceInterestCalculationStrategyTest extends TestCase
         $principal = 0;
 
         $schedule->each(function (LoanRepayment $repayment, $_) use ($reducingBalanceSchedule, &$cummulativeInterest, &$principal) {
-
             $openingBalance = 10000 - $principal;
 
             logger('Repayment', [
                 'openingBalance' => $openingBalance,
-                'principal' => $principal,
-                'interest' => $repayment->getInterest(),
-                'fees' => $repayment->getFees(),
+                'principal'      => $principal,
+                'interest'       => $repayment->getInterest(),
+                'fees'           => $repayment->getFees(),
             ]);
 
             self::assertEquals(round($reducingBalanceSchedule[$_][0], 2), $openingBalance, '', 0.1);
@@ -203,7 +203,7 @@ class ReducingBalanceInterestCalculationStrategyTest extends TestCase
             [3337.62, 729.84, 300.39, 70.83, 14242.61],
             [2607.78, 795.52, 234.71, 70.83, 14477.32],
             [1812.26, 867.12, 163.11, 70.83, 14640.43],
-            [45.14,   945.14, 85.07,  70.83, 14725.50]
+            [45.14,   945.14, 85.07,  70.83, 14725.50],
         ];
     }
 }

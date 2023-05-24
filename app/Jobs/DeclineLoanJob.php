@@ -8,7 +8,6 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-
 class DeclineLoanJob
 {
     /**
@@ -24,7 +23,7 @@ class DeclineLoanJob
      * Create a new job instance.
      *
      * @param Request $request
-     * @param Loan $loan
+     * @param Loan    $loan
      */
     public function __construct(Request $request, Loan $loan)
     {
@@ -51,9 +50,9 @@ class DeclineLoanJob
     private function decline()
     {
         $this->loan->forceFill([
-            'status' => Loan::DECLINED,
+            'status'      => Loan::DECLINED,
             'declined_by' => $this->request->user()->id,
-            'declined_at' => Carbon::now()
+            'declined_at' => Carbon::now(),
         ])->save();
 
         return $this->loan;

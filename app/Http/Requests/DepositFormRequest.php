@@ -26,9 +26,9 @@ class DepositFormRequest extends FormRequest
         return [
             'client_id' => 'bail|required|numeric|exists:clients,id',
             'ledger_id' => 'bail|required|exists:ledgers,id',
-            'cr' => 'sometimes|bail|required|numeric',
-            'dr' => 'sometimes|bail|required|numeric',
-            'narration' => ''
+            'cr'        => 'sometimes|bail|required|numeric',
+            'dr'        => 'sometimes|bail|required|numeric',
+            'narration' => '',
         ];
     }
 
@@ -36,13 +36,13 @@ class DepositFormRequest extends FormRequest
     {
         return [
             'client_id.required' => 'You must select a Client',
-            'client_id.exists' => 'The Client you selected could not be found',
-            'cr.required' => 'You must enter an Amount',
-            'cr.min' => 'The Amount cannot be less than 1',
-            'dr.required' => 'You must enter an Amount',
-            'dr.min' => 'The Amount cannot be less than 1',
+            'client_id.exists'   => 'The Client you selected could not be found',
+            'cr.required'        => 'You must enter an Amount',
+            'cr.min'             => 'The Amount cannot be less than 1',
+            'dr.required'        => 'You must enter an Amount',
+            'dr.min'             => 'The Amount cannot be less than 1',
             'ledger_id.required' => 'You must select a Ledger to post the transaction to',
-            'ledger_id.exists' => 'The Ledger you selected could not be found.',
+            'ledger_id.exists'   => 'The Ledger you selected could not be found.',
         ];
     }
 }

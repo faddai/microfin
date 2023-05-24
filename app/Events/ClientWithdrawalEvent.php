@@ -2,11 +2,10 @@
 /**
  * Author: Francis Addai <me@faddai.com>
  * Date: 24/02/2017
- * Time: 09:16
+ * Time: 09:16.
  */
 
 namespace App\Events;
-
 
 use App\Entities\ClientTransaction;
 
@@ -19,6 +18,7 @@ class ClientWithdrawalEvent
 
     /**
      * ClientWithdrawalEvent constructor.
+     *
      * @param ClientTransaction $clientTransaction
      */
     public function __construct(ClientTransaction $clientTransaction)

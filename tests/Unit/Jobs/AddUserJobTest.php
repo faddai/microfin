@@ -6,7 +6,6 @@ use App\Notifications\NewUserAccountCreatedNotification;
 use Illuminate\Support\Facades\Notification;
 use Tests\TestCase;
 
-
 class AddUserJobTest extends TestCase
 {
     public function test_that_user_is_successfully_created()
@@ -14,9 +13,9 @@ class AddUserJobTest extends TestCase
         Notification::fake();
 
         $this->request->merge([
-            'name' => 'Francis Addai',
-            'email' => 'me@name.com',
-            'password' => 'secret'
+            'name'     => 'Francis Addai',
+            'email'    => 'me@name.com',
+            'password' => 'secret',
         ]);
 
         $user = $this->dispatch(new AddUserJob($this->request));
@@ -30,9 +29,9 @@ class AddUserJobTest extends TestCase
         Notification::fake();
 
         $this->request->merge([
-            'name' => 'Francis Addai',
-            'email' => 'me@name.com',
-            'password' => 'secret'
+            'name'     => 'Francis Addai',
+            'email'    => 'me@name.com',
+            'password' => 'secret',
         ]);
 
         $user = $this->dispatch(new AddUserJob($this->request, null, false));

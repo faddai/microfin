@@ -2,7 +2,7 @@
 /**
  * Author: Francis Addai <me@faddai.com>
  * Date: 04/12/2016
- * Time: 9:12 PM
+ * Time: 9:12 PM.
  */
 
 namespace App\Jobs;
@@ -11,7 +11,6 @@ use App\Entities\InterestCalculations\LoanInterestCalculationStrategyInterface;
 use App\Entities\Loan;
 use App\Entities\LoanRepayment;
 use Illuminate\Support\Collection;
-
 
 class GenerateLoanRepaymentScheduleJob
 {
@@ -52,12 +51,13 @@ class GenerateLoanRepaymentScheduleJob
 
     /**
      * Execute the job.
+     *
      * @throws \Exception
      */
     public function handle(): Collection
     {
         // don't bother re-generating the schedule if it was previously generated
-        if (! $this->regenerate && LoanRepayment::schedule($this->loan)->count()) {
+        if (!$this->regenerate && LoanRepayment::schedule($this->loan)->count()) {
             return LoanRepayment::schedule($this->loan);
         }
 
@@ -70,8 +70,12 @@ class GenerateLoanRepaymentScheduleJob
         // set status of the repayments due as defaulted repayments
         if ($this->isBackdatedLoan) {
             $schedule
-                ->filter(function (LoanRepayment $repayment) { return $repayment->isDue(); })
-                ->transform(function (LoanRepayment $repayment) { return $repayment->markAsDefaulted(); });
+                ->filter(function (LoanRepayment $repayment) {
+                    return $repayment->isDue();
+                })
+                ->transform(function (LoanRepayment $repayment) {
+                    return $repayment->markAsDefaulted();
+                });
         }
 
         return $schedule;

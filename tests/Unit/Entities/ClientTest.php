@@ -2,9 +2,8 @@
 /**
  * Author: Francis Addai <me@faddai.com>
  * Date: 15/10/2016
- * Time: 23:14
+ * Time: 23:14.
  */
-
 use App\Entities\Branch;
 use App\Entities\Client;
 use App\Entities\ClientTransaction;

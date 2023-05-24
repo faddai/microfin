@@ -11,7 +11,7 @@ class UnapprovedLedgerTransaction extends Model
     protected $fillable = ['user_id', 'branch_id', 'entries', 'value_date'];
 
     protected $casts = [
-        'entries' => 'collection'
+        'entries' => 'collection',
     ];
 
     protected $dates = ['value_date'];

@@ -3,17 +3,15 @@
 /**
  * Author: Francis Addai <me@faddai.com>
  * Date: 15/10/2016
- * Time: 23:14
+ * Time: 23:14.
  */
 
 namespace App\Entities;
-
 
 use Illuminate\Database\Eloquent\Model;
 
 class Branch extends Model
 {
-
     /**
      * @const STATUS_ACTIVE
      */

@@ -2,9 +2,8 @@
 /**
  * Author: Francis Addai <me@faddai.com>
  * Date: 15/10/2016
- * Time: 23:14
+ * Time: 23:14.
  */
-
 use App\Entities\Role;
 use App\Entities\User;
 use Tests\TestCase;
@@ -25,12 +24,12 @@ class UsersControllerTest extends TestCase
     public function test_add_user()
     {
         $params = [
-            'name' => faker()->name,
-            'branch_id' => factory(\App\Entities\Branch::class)->create()->id,
-            'roles' => [Role::firstOrCreate(['display_name' => Role::ACCOUNT_MANAGER])->id],
-            'email' => faker()->unique()->email,
-            'password' => 'secret1234',
-            'password_confirmation' => 'secret1234'
+            'name'                  => faker()->name,
+            'branch_id'             => factory(\App\Entities\Branch::class)->create()->id,
+            'roles'                 => [Role::firstOrCreate(['display_name' => Role::ACCOUNT_MANAGER])->id],
+            'email'                 => faker()->unique()->email,
+            'password'              => 'secret1234',
+            'password_confirmation' => 'secret1234',
         ];
 
         $this->post('users/store', $params)
@@ -44,16 +43,16 @@ class UsersControllerTest extends TestCase
 
     /**
      * Create 2 roles and make a PUT request to assign them
-     * to the user
+     * to the user.
      */
     public function test_add_user_roles()
     {
         $roles = [
             Role::firstOrCreate(['display_name' => Role::ACCOUNT_MANAGER])->id,
-            Role::firstOrCreate(['display_name' => Role::CASHIER])->id
+            Role::firstOrCreate(['display_name' => Role::CASHIER])->id,
         ];
 
-        $this->put('users/'. $this->user->id, compact('roles'))
+        $this->put('users/'.$this->user->id, compact('roles'))
             ->assertRedirect(route_with_hash('settings.index', '#users'))
             ->assertSessionHas('flash_notification.message', 'User details updated');
 
@@ -62,20 +61,20 @@ class UsersControllerTest extends TestCase
 
     /**
      * Add a user with 2 roles
-     * Replace these roles with a new one
+     * Replace these roles with a new one.
      */
     public function test_update_user_roles()
     {
         $roles = [
             Role::firstOrCreate(['display_name' => Role::ACCOUNT_MANAGER])->id,
-            Role::firstOrCreate(['display_name' => Role::CASHIER])->id
+            Role::firstOrCreate(['display_name' => Role::CASHIER])->id,
         ];
 
         $this->user->syncRoles($roles);
 
         $branchManager = Role::firstOrCreate(['display_name' => Role::BRANCH_MANAGER])->id;
 
-        $this->put('users/'. $this->user->id, ['roles' => [$branchManager]])
+        $this->put('users/'.$this->user->id, ['roles' => [$branchManager]])
             ->assertRedirect(route_with_hash('settings.index', '#users'))
             ->assertSessionHas('flash_notification.message', 'User details updated');
 
@@ -86,7 +85,7 @@ class UsersControllerTest extends TestCase
     {
         $params = ['is_active' => 0];
 
-        $this->put('users/'. $this->user->id, $params)
+        $this->put('users/'.$this->user->id, $params)
             ->assertRedirect(route_with_hash('settings.index', '#users'))
             ->assertSessionHas('flash_notification.message', 'User details updated');
 
@@ -97,7 +96,7 @@ class UsersControllerTest extends TestCase
     {
         $params = ['is_active' => 1];
 
-        $this->put('users/'. $this->user->id, $params)
+        $this->put('users/'.$this->user->id, $params)
             ->assertRedirect(route_with_hash('settings.index', '#users'))
             ->assertSessionHas('flash_notification.message', 'User details updated');
 

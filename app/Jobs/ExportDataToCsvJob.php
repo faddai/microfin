@@ -22,7 +22,7 @@ class ExportDataToCsvJob
      * Create a new job instance.
      *
      * @param Collection $data
-     * @param null $filename
+     * @param null       $filename
      */
     public function __construct(Collection $data, $filename = null)
     {
@@ -32,13 +32,15 @@ class ExportDataToCsvJob
 
     /**
      * Execute the job.
-     * @return void
+     *
      * @throws \Exception
+     *
+     * @return void
      */
     public function handle()
     {
-        if (! $this->data->count()) {
-            throw new NoDataAvailableForExportException;
+        if (!$this->data->count()) {
+            throw new NoDataAvailableForExportException();
         }
 
         $writer = Writer::createFromFileObject(new \SplTempFileObject());
@@ -47,18 +49,16 @@ class ExportDataToCsvJob
 
         // write meta information
         if ($meta->count()) {
-
             $writer->insertAll(
                 $meta->map(function ($value, $key) {
                     return sprintf('%s, %s', $key, $value);
                 })
                 ->prepend(' ')
-                ->prepend('"'. config('app.address') .'"')
+                ->prepend('"'.config('app.address').'"')
                 ->prepend(config('app.company'))
                 ->push(' ') // insert a blank line
                 ->toArray()
             );
-
         }
 
         $this->data->prepend(array_keys($this->data->first()));

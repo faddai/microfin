@@ -41,10 +41,10 @@ class ApproveLoanPayoffJobTest extends TestCase
         $this->setAuthenticatedUserForRequest();
 
         $loan = $this->createLoan([
-            'amount' => 1000,
-            'rate' => 9,
-            'tenure_id' => Tenure::whereNumberOfMonths(5)->first()->id,
-            'disbursed_at' => Carbon::today()->subWeekdays(24 * 3)
+            'amount'       => 1000,
+            'rate'         => 9,
+            'tenure_id'    => Tenure::whereNumberOfMonths(5)->first()->id,
+            'disbursed_at' => Carbon::today()->subWeekdays(24 * 3),
         ]);
 
         // repayments for the first 3 months
@@ -70,7 +70,7 @@ class ApproveLoanPayoffJobTest extends TestCase
 
     public function test_can_approve_loan_payoff_before_maturity_without_penalty()
     {
-        /**
+        /*
          * Scenario:
          *
          * Client takes a facility of 1000 for 5 months. He has a monthly repayment amount of 290
@@ -79,10 +79,10 @@ class ApproveLoanPayoffJobTest extends TestCase
         $this->setAuthenticatedUserForRequest();
 
         $loan = $this->createLoan([
-            'amount' => 1000,
-            'rate' => 9,
-            'tenure_id' => Tenure::whereNumberOfMonths(5)->first()->id,
-            'disbursed_at' => Carbon::today()->subWeekdays(24 * 3)
+            'amount'       => 1000,
+            'rate'         => 9,
+            'tenure_id'    => Tenure::whereNumberOfMonths(5)->first()->id,
+            'disbursed_at' => Carbon::today()->subWeekdays(24 * 3),
         ]);
 
         // repayments for the first 3 months
@@ -121,7 +121,7 @@ class ApproveLoanPayoffJobTest extends TestCase
 
     public function test_can_approve_loan_payoff_for_a_loan_with_defaulted_repayments()
     {
-        /**
+        /*
          * Scenario:
          *
          * Client takes a facility of 1000 for 5 months. He has a monthly repayment amount of 290
@@ -131,10 +131,10 @@ class ApproveLoanPayoffJobTest extends TestCase
         $this->setAuthenticatedUserForRequest();
 
         $loan = $this->createLoan([
-            'amount' => 1000,
-            'rate' => 9,
-            'tenure_id' => Tenure::whereNumberOfMonths(5)->first()->id,
-            'disbursed_at' => Carbon::today()->subWeekdays(24 * 6)
+            'amount'       => 1000,
+            'rate'         => 9,
+            'tenure_id'    => Tenure::whereNumberOfMonths(5)->first()->id,
+            'disbursed_at' => Carbon::today()->subWeekdays(24 * 6),
         ]);
 
         // make available funds that can settle 3 repayments available in Client's account
@@ -145,7 +145,6 @@ class ApproveLoanPayoffJobTest extends TestCase
                 $this->artisan('microfin:repay', ['dueDate' => $repayment->due_date]);
             })
             ->each(function (LoanRepayment $repayment, $key) {
-
                 $rep = $repayment->fresh();
 
                 if ($key < 3) {
@@ -153,7 +152,6 @@ class ApproveLoanPayoffJobTest extends TestCase
                 } else {
                     self::assertEquals(LoanRepayment::DEFAULTED, $rep->status);
                 }
-
             });
 
         $loan = $loan->fresh();
@@ -165,7 +163,7 @@ class ApproveLoanPayoffJobTest extends TestCase
 
         /**
          * Clients comes to payoff loan. Principal and Interest that needs to be paid have been negotiated
-         * Client has negotiated to pay less than what has been scheduled for him to pay
+         * Client has negotiated to pay less than what has been scheduled for him to pay.
          */
         $payoff = $this->payoffLoan($loan, ['principal' => 300, 'interest' => 180, 'penalty' => 200]);
 
@@ -189,9 +187,9 @@ class ApproveLoanPayoffJobTest extends TestCase
         $this->doesntExpectEvents(DepositAddedEvent::class);
 
         $loan = $this->createLoan([
-            'amount' => 1000,
-            'rate' => 9,
-            'client_id' => factory(Client::class, 'individual')->create(['account_balance' => 2402.4902])->id
+            'amount'    => 1000,
+            'rate'      => 9,
+            'client_id' => factory(Client::class, 'individual')->create(['account_balance' => 2402.4902])->id,
         ]);
 
         $payoff = $this->payoffLoan($loan, ['principal' => 180, 'interest' => 500]);
@@ -218,21 +216,21 @@ class ApproveLoanPayoffJobTest extends TestCase
         $loan = $loan->fresh();
 
         self::assertEquals(680, $loan->statement->entries->last()->cr);
-        self::assertEquals('Loan payoff - ' . $loan->number, $loan->statement->entries->last()->narration);
+        self::assertEquals('Loan payoff - '.$loan->number, $loan->statement->entries->last()->narration);
     }
 
     public function test_can_mark_repayments_as_paid_after_successfully_paying_off_a_loan()
     {
-        /**
+        /*
          * Create a loan and fulfil 2 payments normally
          * The remaining repayments should be taken care of after payoff
          */
         $this->setAuthenticatedUserForRequest();
 
         $loan = $this->createLoan([
-            'amount' => 1000,
-            'rate' => 9,
-            'tenure_id' => Tenure::whereNumberOfMonths(5)->first()->id,
+            'amount'       => 1000,
+            'rate'         => 9,
+            'tenure_id'    => Tenure::whereNumberOfMonths(5)->first()->id,
             'disbursed_at' => Carbon::today()->subWeekdays(24 * 4),
         ]);
 
@@ -261,7 +259,7 @@ class ApproveLoanPayoffJobTest extends TestCase
         $loan = $loan->fresh();
 
         self::assertEquals(680, $loan->statement->entries->last()->cr);
-        self::assertEquals('Loan payoff - ' . $loan->number, $loan->statement->entries->last()->narration);
+        self::assertEquals('Loan payoff - '.$loan->number, $loan->statement->entries->last()->narration);
         self::assertNotNull($loan->client->transactions->last()->value_date);
         self::assertEquals(0, $loan->client->getAccountBalance());
 
@@ -270,5 +268,4 @@ class ApproveLoanPayoffJobTest extends TestCase
             self::assertEquals('<span class="label label-success">Paid</span>', $repayment->getStatus()->get('label'));
         });
     }
-
 }

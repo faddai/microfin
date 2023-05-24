@@ -4,7 +4,6 @@ namespace App\Events;
 
 use App\Entities\Loan;
 
-
 class LoanApprovedEvent
 {
     /**

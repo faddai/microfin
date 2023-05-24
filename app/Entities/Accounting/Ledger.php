@@ -4,7 +4,6 @@ namespace App\Entities\Accounting;
 
 use Illuminate\Database\Eloquent\Model;
 
-
 class Ledger extends Model
 {
     protected $fillable = ['category_id', 'name', 'code', 'is_bank_or_cash', 'is_left', 'is_right'];
@@ -14,7 +13,7 @@ class Ledger extends Model
     const CURRENT_ACCOUNT_CODE = 3001;
 
     protected $casts = [
-        'is_left' => 'boolean',
+        'is_left'  => 'boolean',
         'is_right' => 'boolean',
     ];
 
@@ -44,9 +43,10 @@ class Ledger extends Model
 
     /**
      * Do credit/debit calculation and arrive at a number that will be used as the
-     * closing balance on the account/ledger
+     * closing balance on the account/ledger.
      *
      * @param bool $format
+     *
      * @return float|string
      */
     public function getClosingBalance($format = true)
@@ -64,7 +64,7 @@ class Ledger extends Model
 
     /**
      * Do credit/debit calculation and arrive at a number that will be used as the
-     * closing balance on the account/ledger
+     * closing balance on the account/ledger.
      *
      * @return string
      */

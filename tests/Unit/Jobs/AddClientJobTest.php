@@ -8,24 +8,22 @@ use App\Entities\User;
 use App\Jobs\AddClientJob;
 use Tests\TestCase;
 
-
 class AddClientJobTest extends TestCase
 {
-
     public function setUp()
     {
         parent::setUp();
 
         $this->request->merge([
             'relationship_manager' => factory(User::class)->create()->id,
-            'branch_id' => factory(Branch::class)->create()->id
+            'branch_id'            => factory(Branch::class)->create()->id,
         ]);
 
         $this->setAuthenticatedUserForRequest();
     }
 
     /**
-     * To create a client, the type of client must be specified
+     * To create a client, the type of client must be specified.
      *
      * @expectedException \Symfony\Component\HttpKernel\Exception\BadRequestHttpException
      */
@@ -35,31 +33,31 @@ class AddClientJobTest extends TestCase
     }
 
     /**
-     * Create a client of type Individual
+     * Create a client of type Individual.
      */
     public function test_create_individual_client()
     {
         $this->request->merge([
-            'type' => 'individual',
+            'type'      => 'individual',
             'firstname' => faker()->firstName,
-            'lastname' => faker()->lastName,
+            'lastname'  => faker()->lastName,
         ]);
 
         $client = $this->dispatch(new AddClientJob($this->request));
 
         self::assertInstanceOf(Client::class, $client);
         self::assertInstanceOf(IndividualClient::class, $client->clientable);
-        self::assertEquals($this->request->firstname. ' '. $this->request->lastname, $client->name);
+        self::assertEquals($this->request->firstname.' '.$this->request->lastname, $client->name);
     }
 
     /**
-     * Create a client of type Corporate
+     * Create a client of type Corporate.
      */
     public function test_create_corporate_client()
     {
         $this->request->merge([
-            'type' => 'corporate',
-            'company_name' => faker()->company,
+            'type'                  => 'corporate',
+            'company_name'          => faker()->company,
             'date_of_incorporation' => faker()->date(),
         ]);
 
@@ -71,13 +69,13 @@ class AddClientJobTest extends TestCase
     }
 
     /**
-     * Update the company name of a  Corporate client
+     * Update the company name of a  Corporate client.
      **/
     public function test_update_info_of_a_corporate_client()
     {
         $this->request->merge([
-            'type' => 'corporate',
-            'company_name' => faker()->company,
+            'type'                  => 'corporate',
+            'company_name'          => faker()->company,
             'date_of_incorporation' => faker()->date(),
         ]);
 
@@ -95,14 +93,14 @@ class AddClientJobTest extends TestCase
     }
 
     /**
-     * Update the firstname and lastname of an Individual client
+     * Update the firstname and lastname of an Individual client.
      */
     public function test_update_info_of_a_individual_client()
     {
         $this->request->merge([
-            'type' => 'individual',
+            'type'      => 'individual',
             'firstname' => faker()->firstName,
-            'lastname' => faker()->lastName,
+            'lastname'  => faker()->lastName,
         ]);
 
         $client = $this->dispatch(new AddClientJob($this->request));
@@ -122,7 +120,7 @@ class AddClientJobTest extends TestCase
     public function test_client_name_property_is_set_after_save()
     {
         $this->request->merge([
-            'type' => 'individual',
+            'type'      => 'individual',
             'firstname' => 'Francis',
             'lastname'  => 'Addai',
         ]);
@@ -135,7 +133,7 @@ class AddClientJobTest extends TestCase
     public function test_client_name_property_is_updated_after_update()
     {
         $this->request->merge([
-            'type' => 'individual',
+            'type'      => 'individual',
             'firstname' => 'Francis',
             'lastname'  => 'Addai',
         ]);
@@ -145,7 +143,7 @@ class AddClientJobTest extends TestCase
         self::assertEquals('Francis Addai', $client->name);
 
         $this->request->merge([
-            'lastname' => 'Agyei'
+            'lastname' => 'Agyei',
         ]);
 
         $updatedClient = $this->dispatch(new AddClientJob($this->request, $client));
@@ -157,7 +155,7 @@ class AddClientJobTest extends TestCase
     public function test_client_with_hyphenated_name_has_valid_full_name()
     {
         $this->request->merge([
-            'type' => 'individual',
+            'type'      => 'individual',
             'firstname' => 'Francis',
             'lastname'  => 'Akwasi-Addai',
         ]);
@@ -173,7 +171,7 @@ class AddClientJobTest extends TestCase
         $filepath = __FILE__;
 
         $this->request->merge([
-            'type' => 'individual',
+            'type'  => 'individual',
             'photo' => new \Illuminate\Http\UploadedFile($filepath, 'photo.jpeg', 121212, null, true),
         ]);
 

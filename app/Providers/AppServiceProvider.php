@@ -8,7 +8,6 @@ use App\Entities\IndividualClient;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\ServiceProvider;
 
-
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -22,7 +21,7 @@ class AppServiceProvider extends ServiceProvider
 
         // Enable foreign key checks for sqlite database
         // Also makes sure data being saved, matches the data type of the column
-        if (config("database.connections.{$connection}.driver") === "sqlite") {
+        if (config("database.connections.{$connection}.driver") === 'sqlite') {
             $db = app()->make('db');
             $db->connection()->getPdo()->exec('pragma foreign_keys=1');
         }
@@ -37,8 +36,8 @@ class AppServiceProvider extends ServiceProvider
     {
         Relation::morphMap([
             'MorphIndividual' => IndividualClient::class,
-            'MorphCorporate' => CorporateClient::class,
-            'MorphGroup' => GroupClient::class
+            'MorphCorporate'  => CorporateClient::class,
+            'MorphGroup'      => GroupClient::class,
         ]);
     }
 }

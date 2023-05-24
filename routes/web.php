@@ -7,7 +7,7 @@ Auth::routes();
 
 Route::get('logout', 'Auth\LoginController@logout');
 
-Route::get('password/reset/{token}',['as' => 'password.reset', 'uses' => 'Auth\ResetPasswordController@showResetForm']);
+Route::get('password/reset/{token}', ['as' => 'password.reset', 'uses' => 'Auth\ResetPasswordController@showResetForm']);
 
 // make registration page inaccessible
 Route::get('/register', function () {
@@ -15,7 +15,6 @@ Route::get('/register', function () {
 });
 
 Route::group(['as' => '', 'middleware' => ['auth']], function () {
-
     Route::get('/', 'DashboardController@index');
     Route::get('/home', function () { // get around the annoying /home path
         return redirect('/');
@@ -30,7 +29,7 @@ Route::group(['as' => '', 'middleware' => ['auth']], function () {
         Route::put('{client}', ['as' => 'update', 'uses' => 'ClientsController@update']);
         Route::get('{client}/edit', ['as' => 'edit', 'uses' => 'ClientsController@edit']);
         Route::get('{client}/transactions/download', [
-            'as' => 'transactions.download', 'uses' => 'ClientTransactionsController@downloadClientTransactions'
+            'as' => 'transactions.download', 'uses' => 'ClientTransactionsController@downloadClientTransactions',
         ]);
     });
 

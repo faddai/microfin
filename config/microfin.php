@@ -2,7 +2,7 @@
 /**
  * Author: Francis Addai <me@faddai.com>
  * Date: 06/03/2017
- * Time: 02:36
+ * Time: 02:36.
  */
 
 return [
@@ -19,31 +19,31 @@ return [
              * PAR
              */
             [
-                'title' => 'Portfolio At Risk',
-                'description' => ''
+                'title'       => 'Portfolio At Risk',
+                'description' => '',
             ],
 
             /*
              * Loan Book
              */
             [
-                'title' => 'Loan Book',
-                'description' => ''
+                'title'       => 'Loan Book',
+                'description' => '',
             ],
 
             /*
              * Ageing Analysis
              */
             [
-                'title' => 'Ageing Analysis',
-                'description' => ''
+                'title'       => 'Ageing Analysis',
+                'description' => '',
             ],
 
             /*
              * CRB
              */
             [
-                'title' => 'CRB Monthly Report',
+                'title'       => 'CRB Monthly Report',
                 'description' => '',
             ],
 
@@ -51,7 +51,7 @@ return [
              * Loan Collections Report
              */
             [
-                'title' => 'Collections Report',
+                'title'       => 'Collections Report',
                 'description' => 'A report on actual Loan repayment collections',
             ],
 
@@ -59,7 +59,7 @@ return [
              * Maturity Ladder Report
              */
             [
-                'title' => 'Maturity Ladder Report',
+                'title'       => 'Maturity Ladder Report',
                 'description' => '',
             ],
 
@@ -67,7 +67,7 @@ return [
              * Recovery Projections Report
              */
             [
-                'title' => 'Monthly Collection Projections',
+                'title'       => 'Monthly Collection Projections',
                 'description' => '',
             ],
 
@@ -75,7 +75,7 @@ return [
              * Customer Data Report
              */
             [
-                'title' => 'Customer Data Report',
+                'title'       => 'Customer Data Report',
                 'description' => '',
             ],
 
@@ -83,7 +83,7 @@ return [
              * Gender Ratio
              */
             [
-                'title' => 'Gender Ratio',
+                'title'       => 'Gender Ratio',
                 'description' => '',
             ],
 
@@ -91,7 +91,7 @@ return [
              * Age group
              */
             [
-                'title' => 'Age group',
+                'title'       => 'Age group',
                 'description' => '',
             ],
 
@@ -99,7 +99,7 @@ return [
              * Collateral report
              */
             [
-                'title' => 'Collateral Report',
+                'title'       => 'Collateral Report',
                 'description' => '',
             ],
 
@@ -107,7 +107,7 @@ return [
              * Sector report
              */
             [
-                'title' => 'Business Sector Report',
+                'title'       => 'Business Sector Report',
                 'description' => '',
             ],
 
@@ -115,7 +115,7 @@ return [
              * Days to Maturity
              */
             [
-                'title' => 'Days to Maturity',
+                'title'       => 'Days to Maturity',
                 'description' => '',
             ],
 
@@ -123,21 +123,21 @@ return [
              * Classification Report
              */
             [
-                'title' => 'Classification Report',
+                'title'       => 'Classification Report',
                 'description' => 'Classification of Loans based on their maturity dates',
-                'hide' => true
+                'hide'        => true,
             ],
 
             /*
              * Early settlement report
              */
             [
-                'title' => 'Early settlement report',
+                'title'       => 'Early settlement report',
                 'description' => '',
-                'hide' => true
+                'hide'        => true,
             ],
 
-        ]
+        ],
 
     ],
 ];

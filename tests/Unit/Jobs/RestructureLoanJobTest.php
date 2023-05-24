@@ -86,6 +86,7 @@ class RestructureLoanJobTest extends TestCase
 
     /**
      * @param array $data
+     *
      * @return mixed
      */
     private function createLoanApplication(array $data = [])
@@ -93,10 +94,10 @@ class RestructureLoanJobTest extends TestCase
         $this->request->merge(
             factory(Loan::class, 'customer')
                 ->make([
-                    'amount' => 1000,
-                    'rate' => 5,
+                    'amount'       => 1000,
+                    'rate'         => 5,
                     'disbursed_at' => Carbon::today()->subWeekdays(23 * 6),
-                    'tenure_id' => Tenure::whereNumberOfMonths(5)->first()->id,
+                    'tenure_id'    => Tenure::whereNumberOfMonths(5)->first()->id,
                 ])
                 ->toArray()
         );
@@ -109,7 +110,7 @@ class RestructureLoanJobTest extends TestCase
 
         $loan->client()->update(['account_balance' => 0]);
 
-        $this->dispatch(new DeductRepaymentForLoansWithMissedDeductionWindowJob);
+        $this->dispatch(new DeductRepaymentForLoansWithMissedDeductionWindowJob());
 
         $loan = $loan->fresh('schedule');
 
@@ -117,15 +118,16 @@ class RestructureLoanJobTest extends TestCase
     }
 
     /**
-     * @param Loan $loan
+     * @param Loan  $loan
      * @param array $data
+     *
      * @return Loan
      */
     private function restructureLoan(Loan $loan, array $data = []): Loan
     {
         $this->request->merge([
-            'amount' => $loan->getBalance(false),
-            'rate' => 4.5,
+            'amount'                        => $loan->getBalance(false),
+            'rate'                          => 4.5,
             'interest_calculation_strategy' => Loan::STRAIGHT_LINE_STRATEGY,
         ]);
 
@@ -133,5 +135,4 @@ class RestructureLoanJobTest extends TestCase
 
         return $this->dispatch(new RestructureLoanJob($this->request, $loan));
     }
-
 }

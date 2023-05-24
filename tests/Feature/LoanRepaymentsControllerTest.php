@@ -2,7 +2,7 @@
 /**
  * Author: Francis Addai <me@faddai.com>
  * Date: 29/10/2016
- * Time: 4:44 PM
+ * Time: 4:44 PM.
  */
 use App\Entities\Loan;
 use App\Entities\RepaymentPlan;
@@ -44,10 +44,10 @@ class LoanRepaymentsControllerTest extends TestCase
     {
         return collect([
             factory(Loan::class)->make([
-                'start_date' => Carbon::parse('Last week'),
+                'start_date'        => Carbon::parse('Last week'),
                 'repayment_plan_id' => RepaymentPlan::firstOrCreate(['label' => RepaymentPlan::WEEKLY])->id,
-                'tenure_id' => Tenure::firstOrCreate(['number_of_months' => 2])->id,
-                'rate' => 4,
+                'tenure_id'         => Tenure::firstOrCreate(['number_of_months' => 2])->id,
+                'rate'              => 4,
             ]),
 
         ]);

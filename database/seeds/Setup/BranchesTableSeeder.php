@@ -3,7 +3,7 @@
 /**
  * Author: Francis Addai <me@faddai.com>
  * Date: 28/10/2016
- * Time: 10:22
+ * Time: 10:22.
  */
 
 namespace Setup;
@@ -13,7 +13,6 @@ use Illuminate\Database\Seeder;
 
 class BranchesTableSeeder extends Seeder
 {
-
     /**
      * Run the database seeds.
      *
@@ -23,14 +22,14 @@ class BranchesTableSeeder extends Seeder
     {
         $branches = [
             [
-                'name' => 'Accra Central',
-                'code' => '001',
-                'location' => 'Accra Central'
+                'name'     => 'Accra Central',
+                'code'     => '001',
+                'location' => 'Accra Central',
             ],
             [
-                'name' => 'Ring Road',
-                'code' => '002',
-                'location' => 'No. 1 Street, Ring Road'
+                'name'     => 'Ring Road',
+                'code'     => '002',
+                'location' => 'No. 1 Street, Ring Road',
             ],
         ];
 

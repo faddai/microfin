@@ -2,7 +2,7 @@
 /**
  * Author: Francis Addai <me@faddai.com>
  * Date: 24/02/2017
- * Time: 11:36
+ * Time: 11:36.
  */
 
 namespace App\Jobs;
@@ -16,7 +16,6 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Ramsey\Uuid\Uuid;
-
 
 class AddClientDepositJob
 {
@@ -44,8 +43,9 @@ class AddClientDepositJob
      * Create a new job instance.
      *
      * @param Request $request
-     * @param Client $client
-     * @param bool $nominal A flag to determine whether transaction should be posted to the General Ledger
+     * @param Client  $client
+     * @param bool    $nominal A flag to determine whether transaction should be posted to the General Ledger
+     *
      * @throws ClientTransactionException
      */
     public function __construct(Request $request, Client $client, $nominal = false)
@@ -53,7 +53,7 @@ class AddClientDepositJob
         $this->request = $request;
         $this->client = $client;
         $narration = $request->filled('narration') ?
-            $request->get('narration') : 'Client deposit - '. $this->client->account_number;
+            $request->get('narration') : 'Client deposit - '.$this->client->account_number;
         $this->nominal = $nominal;
 
         if ($this->request->user()->branch === null) {
@@ -61,26 +61,27 @@ class AddClientDepositJob
         }
 
         $this->transaction = new ClientTransaction([
-            'user_id' => $request->user()->id,
-            'narration' => $narration,
-            'branch_id' => $request->user()->branch->id,
-            'uuid' => $request->get('uuid', Uuid::uuid4()->toString()),
+            'user_id'    => $request->user()->id,
+            'narration'  => $narration,
+            'branch_id'  => $request->user()->branch->id,
+            'uuid'       => $request->get('uuid', Uuid::uuid4()->toString()),
             'value_date' => $request->get('value_date', Carbon::now()),
         ]);
     }
 
     /**
      * Execute the job.
-     * @return ClientTransaction
+     *
      * @throws \App\Exceptions\ClientDepositException
+     *
+     * @return ClientTransaction
      */
     public function handle(): ClientTransaction
     {
         logger('Add a Client Deposit', ['request' => $this->request->all()]);
 
         return DB::transaction(function () {
-
-            if (! $this->isValidCreditTransaction()) {
+            if (!$this->isValidCreditTransaction()) {
                 throw new ClientDepositException('Invalid amount specified for the transaction');
             }
 
@@ -90,7 +91,7 @@ class AddClientDepositJob
 
             // don't fire event if this is a nominal entry because
             // the event has a listener that posts ledger entries
-            ! $this->nominal && event(new DepositAddedEvent($deposit));
+            !$this->nominal && event(new DepositAddedEvent($deposit));
 
             return $deposit;
         });
